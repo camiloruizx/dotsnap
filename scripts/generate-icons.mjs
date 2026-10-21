@@ -1,7 +1,7 @@
 import { Resvg } from '@resvg/resvg-js';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 const svg = await readFile(
-  new URL('../assets/icon-provisional.svg', import.meta.url),
+  new URL('../assets/dotsnap-icon.svg', import.meta.url),
   'utf8',
 );
 await mkdir(new URL('../public/icon/', import.meta.url), { recursive: true });
@@ -14,6 +14,4 @@ for (const size of [16, 32, 48, 128]) {
     image,
   );
 }
-console.log(
-  'Icono provisional original: PNG 16/32/48/128 generados desde SVG local.',
-);
+console.log('Icono DotSnap: PNG 16/32/48/128 generados desde SVG local.');

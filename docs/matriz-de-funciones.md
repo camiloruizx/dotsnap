@@ -12,7 +12,7 @@ Estados posibles: Pendiente · Implementado · Probado.
 | B-02 | Popup con 4 modos y Ajustes/Historial deshabilitados | M0             | Implementado   | Probado (validacion-m0.md)                       | Modos de B-02 son placeholders                         |
 | B-03 | Preferencias locales de idioma y tema                | M0             | Implementado   | Probado (validacion-m0.md)                       |                                                        |
 | B-04 | ES/EN, tema claro/oscuro/Sistema, tokens             | M0             | Implementado   | Probado (validacion-m0.md)                       |                                                        |
-| B-05 | Icono provisional original SVG/PNG                   | M0             | Implementado   | Probado (validacion-m0.md)                       | Definitivo pendiente en M6                             |
+| B-05 | Ícono original SVG/PNG de la familia Dot             | M0             | Implementado   | Probado (validacion-m0.md)                       | Revisión de marca pendiente en M6                      |
 | B-06 | Validación de mensaje `health` y remitente           | M0             | Implementado   | Probado: unitaria e integración                  |                                                        |
 | B-07 | Geometría CSS → píxeles con escala medida por eje    | M0             | Implementado   | Probado en Vitest; no hay captura real           | Cierre de M0: `captureScale`                           |
 | B-08 | Preferencias aplicadas antes del primer render       | M0             | Implementado   | Pendiente de repetir `test:browser` en el equipo | Evita destello de tema/idioma; el destello no se midió |

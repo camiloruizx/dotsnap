@@ -2,7 +2,7 @@
 
 Base local de una extensión Chrome MV3. Captura exactamente lo que necesitas, explica con claridad y exporta con control. **M1 implementa Área visible → editor (flecha, rectángulo, texto, censura) → PNG.** Región, elemento inteligente, página completa, JPEG/WebP/PDF, historial y portapapeles siguen pendientes.
 
-M0 incluye popup honesto con cuatro modos deshabilitados, Ajustes/Historial «Próximamente», enlace funcional a preferencias de idioma/tema, ES/EN, tema Sistema/Claro/Oscuro, icono provisional original, arquitectura y planificación. No usa CDN, fuentes remotas, cuentas ni analítica.
+M0 incluye popup honesto con cuatro modos deshabilitados, Ajustes/Historial «Próximamente», enlace funcional a preferencias de idioma/tema, ES/EN, tema Sistema/Claro/Oscuro, ícono original de DotSnap, arquitectura y planificación. No usa CDN, fuentes remotas, cuentas ni analítica.
 
 ## Compilación reproducible
 
@@ -55,7 +55,7 @@ Estado de las pruebas, salidas reales y límites en [docs/validacion-m0.md](docs
 - `src/shared/config/product.ts`: **única constante del nombre visible**. Cambiarla y recompilar actualiza UI y manifest/locales; los IDs técnicos y documentos se mantienen por separado.
 - `src/shared/i18n/{es,en}.json`: catálogo único para React y `_locales/*/messages.json` generado. Chrome usa el idioma del navegador para el manifest; React permite override.
 - `src/shared/theme/tokens.css`: única fuente de valores visuales de UI; `layout.css` compone con esos tokens.
-- `assets/icon-provisional.svg`: original editable; `npm run icons` genera PNG 16/32/48/128 locales con resvg, sin copiar la marca DotPilot.
+- `assets/dotsnap-icon.svg`: original editable del ícono (ver `assets/ICON.md`); `npm run icons` genera PNG 16/32/48/128 locales con resvg, sin copiar la marca DotPilot.
 - `docs/`: decisiones, riesgos de API con fuentes, arquitectura, matriz de funciones, hitos y propuesta de librerías.
 - `tests/`: pruebas puras. `scripts/verify-browser.mjs`: verificación real de la extensión compilada.
 

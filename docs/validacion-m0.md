@@ -22,7 +22,7 @@ Las salidas completas reales de la última ejecución se guardan en `evidence/bu
 | Preferencias        | Guardado por selectores, recarga conserva EN/oscuro; Sistema sigue idioma de chrome.i18n y apariencia simulada light/dark     |
 | Mensajes            | health válido funciona desde página propia; remitente/esquema rechazados en unitarias                                         |
 | Red y errores       | 0 errores de consola de páginas y 0 solicitudes HTTP(S) de popup/opciones durante prueba                                      |
-| Iconos              | PNG locales 16/32/48/128 generados desde SVG original provisional                                                             |
+| Iconos              | PNG locales 16/32/48/128 generados desde SVG original (reemplazado por el ícono de la familia Dot el 21/10/2026)              |
 
 Chrome muestra un aviso de procedencia no verificada para la extensión local en el perfil de prueba: es una carga descomprimida, no un paquete firmado de tienda. No se ha ocultado ese aviso. No hay errores de manifest o runtime.
 
