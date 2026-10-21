@@ -1,6 +1,6 @@
 # Plan de implementación
 
-Solo M0 autorizado (cierre de M0 aplicado el 21/10/2026). Estados y evidencia: matriz-de-funciones.md y validacion-m0.md. El reparto de funciones sin versión explícita en la especificación (temporizador, importación, guardado directo, onboarding, formato de proyecto) está en la matriz como propuesta.
+M0 cerrado y M1 implementado y autorizado el 21/10/2026 (validacion-m1.md). Estados y evidencia: matriz-de-funciones.md y validacion-m0.md. El reparto de funciones sin versión explícita en la especificación (temporizador, importación, guardado directo, onboarding, formato de proyecto) está en la matriz como propuesta.
 
 | Hito | Alcance                                                               | Criterios de aceptación verificables                                                                                                                                                                                                                                                               |
 | ---- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

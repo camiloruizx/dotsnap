@@ -1,0 +1,57 @@
+{
+  "browser": "141.0.7390.37",
+  "runs": [
+    {
+      "dpr": 1,
+      "viewport": {
+        "w": 1000,
+        "h": 600,
+        "dpr": 1
+      },
+      "bitmap": {
+        "width": 1000,
+        "height": 600
+      },
+      "measuredScale": 1,
+      "language": "en"
+    },
+    {
+      "dpr": 2,
+      "viewport": {
+        "w": 1000,
+        "h": 600,
+        "dpr": 2
+      },
+      "bitmap": {
+        "width": 1000,
+        "height": 600
+      },
+      "measuredScale": 1,
+      "language": "en"
+    }
+  ],
+  "checks": [
+    "DPR 1: dos capturas simultáneas → una ok y otra busy",
+    "DPR 1: bitmap 1000×600 para viewport 1000×600 → escala medida 1",
+    "DPR 1: PNG real (firma) con dimensiones nativas 1000×600",
+    "DPR 1: censura aplanada, 0 píxeles originales visibles en el área",
+    "DPR 1: contenido bajo/alrededor intacto y anotaciones presentes",
+    "DPR 1: deshacer restaura el píxel original (rojo)",
+    "seleccionar y mover un rectángulo cambia su posición en el PNG",
+    "Delete elimina el objeto seleccionado",
+    "Ctrl+Z restaura el objeto eliminado",
+    "doble clic reabre el texto y la edición persiste",
+    "editor: axe WCAG A/AA sin infracciones",
+    "página restringida (chrome://) → código restricted, sin editor",
+    "popup muestra el error accionable",
+    "DPR 2: dos capturas simultáneas → una ok y otra busy",
+    "DPR 2: bitmap 1000×600 para viewport 1000×600 → escala medida 1",
+    "DPR 2: PNG real (firma) con dimensiones nativas 1000×600",
+    "DPR 2: censura aplanada, 0 píxeles originales visibles en el área",
+    "DPR 2: contenido bajo/alrededor intacto y anotaciones presentes",
+    "DPR 2: deshacer restaura el píxel original (rojo)",
+    "0 solicitudes a hosts distintos de la página local y 0 errores de consola"
+  ],
+  "externalRequests": [],
+  "consoleErrors": []
+}

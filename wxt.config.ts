@@ -3,8 +3,16 @@ import { product } from './src/shared/config/product';
 import es from './src/shared/i18n/es.json';
 import en from './src/shared/i18n/en.json';
 
+/**
+ * Variante SOLO para pruebas automatizadas: añade <all_urls> para poder capturar sin el
+ * gesto de la barra de herramientas, que Playwright no puede producir. Nunca es el paquete
+ * de producción (otro directorio de salida y otro build).
+ */
+const testBuild = process.env.DOTSNAP_TEST_BUILD === '1';
+
 export default defineConfig({
   srcDir: 'src',
+  outDir: testBuild ? '.output-test' : '.output',
   modules: ['@wxt-dev/module-react'],
   imports: false,
   manifest: ({ command }) => ({
@@ -13,6 +21,7 @@ export default defineConfig({
     default_locale: 'es',
     minimum_chrome_version: '120',
     permissions: ['activeTab', 'scripting', 'storage'],
+    ...(testBuild ? { host_permissions: ['<all_urls>'] } : {}),
     incognito: 'split',
     action: { default_title: '__MSG_productName__' },
     content_security_policy: {

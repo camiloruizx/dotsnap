@@ -6,13 +6,13 @@
     "message": "Capture. Explain. Share."
   },
   "phase": {
-    "message": "M0 foundation"
+    "message": "M1 base"
   },
   "chooseMode": {
     "message": "Choose a capture mode"
   },
   "unavailable": {
-    "message": "Capture will be available in a future milestone."
+    "message": "Visible area is available. Other modes arrive in later milestones."
   },
   "visible": {
     "message": "Visible area"
@@ -115,5 +115,128 @@
   },
   "loading": {
     "message": "Loading…"
+  },
+  "available": {
+    "message": "Available"
+  },
+  "capturing": {
+    "message": "Capturing…"
+  },
+  "errorRestricted": {
+    "message": "This tab can't be captured. Chrome doesn't allow internal pages or the web store; open a regular web page and try again."
+  },
+  "errorQuota": {
+    "message": "Chrome limits how often you can capture. Wait a second and try again."
+  },
+  "errorBusy": {
+    "message": "A capture is already in progress. Wait for it to finish."
+  },
+  "errorTabChanged": {
+    "message": "You switched tabs during the capture, so it was discarded to avoid mixing pages. Try again without switching tabs."
+  },
+  "errorNoTab": {
+    "message": "No active tab found. Click a tab and try again."
+  },
+  "errorTooLarge": {
+    "message": "The capture is too large"
+  },
+  "errorTooLargeHint": {
+    "message": "It exceeds 8192 px per side or 33.2 million pixels. Reduce browser zoom or window size and try again."
+  },
+  "errorFailed": {
+    "message": "Couldn't capture. Reload the page and try again."
+  },
+  "editorTitle": {
+    "message": "Editor"
+  },
+  "toolbarLabel": {
+    "message": "Annotation tools"
+  },
+  "toolSelect": {
+    "message": "Select"
+  },
+  "toolArrow": {
+    "message": "Arrow"
+  },
+  "toolRect": {
+    "message": "Rectangle"
+  },
+  "toolText": {
+    "message": "Text"
+  },
+  "toolRedact": {
+    "message": "Redact"
+  },
+  "color": {
+    "message": "Color"
+  },
+  "colorRed": {
+    "message": "Red"
+  },
+  "colorBlue": {
+    "message": "Blue"
+  },
+  "colorYellow": {
+    "message": "Yellow"
+  },
+  "colorGreen": {
+    "message": "Green"
+  },
+  "colorBlack": {
+    "message": "Black"
+  },
+  "colorWhite": {
+    "message": "White"
+  },
+  "undo": {
+    "message": "Undo"
+  },
+  "redo": {
+    "message": "Redo"
+  },
+  "deleteItem": {
+    "message": "Delete"
+  },
+  "downloadPng": {
+    "message": "Download PNG"
+  },
+  "discard": {
+    "message": "Discard"
+  },
+  "discardConfirm": {
+    "message": "Discard? Press again"
+  },
+  "discardHint": {
+    "message": "Removes the capture from this device"
+  },
+  "discarded": {
+    "message": "Capture discarded"
+  },
+  "discardedHint": {
+    "message": "The capture was removed from this device. You can close this tab."
+  },
+  "editorMissing": {
+    "message": "Capture not found"
+  },
+  "editorMissingHint": {
+    "message": "Temporary captures are kept for 24 hours on this device. Capture again from the extension icon."
+  },
+  "canvasLabel": {
+    "message": "Captured image with annotations. Edit with a mouse or touch; PNG export includes every annotation."
+  },
+  "textFieldLabel": {
+    "message": "Annotation text"
+  },
+  "redactNote": {
+    "message": "Redact replaces pixels with opaque black in the exported PNG."
+  },
+  "exporting": {
+    "message": "Generating PNG…"
+  },
+  "exported": {
+    "message": "PNG generated:"
+  },
+  "exportError": {
+    "message": "Couldn't generate the PNG. Try again."
   }
 }

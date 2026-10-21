@@ -201,6 +201,107 @@ select {
 .error {
   color: var(--error);
 }
+button[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--control-hover);
+}
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+button.primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+button:disabled:not(.mode) {
+  opacity: var(--disabled-opacity);
+}
+.mode:disabled:not([aria-describedby]) {
+  cursor: default;
+}
+.mode:not(:disabled):hover {
+  background: var(--control-hover);
+}
+.inline-field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin: 0;
+  font-size: var(--font-small);
+}
+.inline-field select {
+  width: auto;
+}
+.status {
+  min-height: var(--space-10);
+  margin: var(--space-5) 0 0;
+}
+[data-surface='editor'] body {
+  min-width: var(--editor-min-width);
+}
+.editor-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.editor-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-8);
+  border-bottom: var(--border-width) solid var(--border);
+  background: var(--surface-card);
+}
+.tool-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.editor-main {
+  flex: 1;
+  display: flex;
+  padding: var(--space-10);
+  overflow: auto;
+}
+.canvas-frame {
+  margin: auto;
+  max-width: 100%;
+  border: var(--border-width) solid var(--border);
+  background: var(--surface-card);
+}
+.canvas-host {
+  position: relative;
+  line-height: 0;
+}
+.text-editor {
+  position: absolute;
+  min-width: var(--editor-text-min-width);
+  min-height: var(--control-height);
+  margin: 0;
+  padding: 0;
+  border: var(--focus-width) solid var(--focus);
+  background: transparent;
+  font-family: var(--font-family);
+  line-height: 1.2;
+  resize: none;
+  overflow: hidden;
+  white-space: pre;
+}
+.editor-status {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-8);
+  border-top: var(--border-width) solid var(--border);
+  color: var(--muted);
+  font-size: var(--font-small);
+}
+.status-line {
+  min-height: var(--space-10);
+}
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none;

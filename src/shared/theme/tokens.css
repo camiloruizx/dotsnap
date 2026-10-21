@@ -42,6 +42,9 @@
   --options-margin: 48px;
   --shadow: none;
   --transition: 0.12s;
+  --disabled-opacity: 0.55;
+  --editor-min-width: 720px;
+  --editor-text-min-width: 120px;
   --surface: #f5f6f8;
   --surface-card: #ffffff;
   --text: #24282e;

@@ -1,15 +1,51 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePreferences, type MessageKey } from '../../shared/i18n';
 import { product } from '../../shared/config/product';
+import {
+  parseCaptureResponse,
+  type CaptureErrorCode,
+} from '../../shared/messaging';
 import { Brand } from '../../shared/ui/Brand';
 import { Icon } from '../../shared/ui/Icon';
 
-const modes = ['visible', 'region', 'element', 'fullPage'] as const;
+const futureModes = ['region', 'element', 'fullPage'] as const;
+const errorKey: Record<CaptureErrorCode, MessageKey> = {
+  restricted: 'errorRestricted',
+  quota: 'errorQuota',
+  busy: 'errorBusy',
+  tabChanged: 'errorTabChanged',
+  noTab: 'errorNoTab',
+  tooLarge: 'errorTooLarge',
+  failed: 'errorFailed',
+};
+
 export function Popup() {
   const { t } = usePreferences();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<CaptureErrorCode | null>(null);
   useEffect(() => {
     document.title = product.name;
   }, []);
+
+  async function captureVisible() {
+    setBusy(true);
+    setError(null);
+    try {
+      const response = parseCaptureResponse(
+        await chrome.runtime.sendMessage({
+          version: 1,
+          type: 'capture-visible',
+        }),
+      );
+      if (response.ok) window.close();
+      else setError(response.code);
+    } catch {
+      setError('failed');
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <div className="shell">
       <Brand />
@@ -19,7 +55,18 @@ export function Popup() {
           {t('unavailable')}
         </p>
         <div className="mode-grid">
-          {modes.map((mode) => (
+          <button
+            className="mode"
+            disabled={busy}
+            title={t('visibleHint')}
+            onClick={() => void captureVisible()}
+          >
+            <Icon name="visible" />
+            <span className="mode-title">{t('visible')}</span>
+            <span className="hint">{t('visibleHint')}</span>
+            <span className="soon">{t(busy ? 'capturing' : 'available')}</span>
+          </button>
+          {futureModes.map((mode) => (
             <button
               key={mode}
               className="mode"
@@ -34,6 +81,9 @@ export function Popup() {
             </button>
           ))}
         </div>
+        <p role="alert" className={error ? 'status error' : 'status'}>
+          {error ? t(errorKey[error]) : ''}
+        </p>
         <nav className="future-nav" aria-label={t('phase')}>
           {(['settings', 'history'] as const).map((item) => (
             <button key={item} disabled title={t('soon')}>

@@ -12,6 +12,14 @@ El bitmap de captureVisibleTab no siempre mide `innerWidth × devicePixelRatio` 
 
 El CSP de producción incluye `connect-src 'none'`: `fetch(dataUrl)` y cualquier otra petición desde páginas de la extensión quedan bloqueadas. Para convertir el resultado de captureVisibleTab (data URL) en bitmap en M1, decodificar el base64 a bytes manualmente o cargarlo con `Image`/`createImageBitmap`; no usar `fetch`. En `wxt` (desarrollo) la directiva se omite solo para el HMR; el manifest de producción la conserva.
 
+## Hallazgos de M1 sobre captureVisibleTab
+
+- Requiere `<all_urls>` o `activeTab`; un permiso de host concreto no basta (error observado en Chromium 141). Las pruebas automatizadas usan por eso una variante solo de pruebas.
+- Con emulación de DPR 2 el bitmap midió igual que el viewport CSS (1000×600): no asumir `innerWidth × devicePixelRatio`; usar `captureScale`. Sin probar en hardware real de alta densidad.
+- Presupuesto de M1 (supuesto, no medido): lado ≤ 8192 px y área ≤ 33 177 600 px (8K UHD). Sustituye al presupuesto previo de 16 777 216 px para la captura visible porque una ventana a pantalla completa en 4K–6K lo superaría. Una captura mayor se rechaza con `tooLarge`.
+- Concurrencia: candado en `chrome.storage.session` + guarda en memoria + intervalo mínimo de 600 ms entre capturas; una segunda petición simultánea recibe `busy` (probado).
+- Si la pestaña activa cambia durante la captura, el resultado se descarta (`tabChanged`); esta rama tiene lógica pero no prueba automatizada.
+
 ## Canvas: lado y área
 
 No existe un máximo portable garantizado. Depende de navegador, OS, GPU y memoria. No se ha medido aquí un máximo de lado o área de Chrome; no se trasladan límites de vídeo/GPU al canvas HTML. Presupuesto conservador inicial **supuesto**: lado máximo de producto ≤8192px y área máxima de producto ≤16777216 px (64MiB RGBA por buffer, antes de copias/cachés). Son límites de producto propuestos, no capacidad garantizada del dispositivo.

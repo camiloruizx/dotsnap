@@ -31,3 +31,7 @@ La censura segura es responsabilidad del pipeline: aplanar máscaras opacas sobr
 - [Canvas toBlob](https://html.spec.whatwg.org/multipage/canvas.html#dom-canvas-toblob-dev).
 
 Antes de instalación: fijar versiones, inspeccionar archivos LICENSE y dependencias transitivas, generar avisos, medir bundle de producción y memoria en corpus reproducible. No hay decisión de costes ni servicio externo.
+
+## Decisión aplicada en M1
+
+Se instaló **konva 10.9.0** (MIT, `node_modules/konva/LICENSE` comprobado) **directamente, sin react-konva**: el modelo de documento y el historial por comandos son propios (`src/editor/model.ts`, probados en Node) y Konva solo dibuja y gestiona selección/transformador (`EditorCanvas`). Motivo: control exacto del ciclo de vida, de la exportación en un stage aparte y de la actualización del lienzo, sin una capa declarativa extra. Reversible: cambiar de librería afecta a `nodes.ts` y `EditorCanvas.ts`. Tamaño medido: el chunk del editor pesa 207 kB sin comprimir en producción; no se midió gzip ni memoria. pdf-lib/UPNG siguen sin instalarse.

@@ -7,6 +7,7 @@ export default tseslint.config(
   {
     ignores: [
       '.output/**',
+      '.output-test/**',
       '.wxt/**',
       '.browser-profile/**',
       'test-results/**',

@@ -1,5 +1,9 @@
 # Arquitectura
 
+## Estado M1: captura visible → editor → PNG
+
+Popup → worker (`{version:1,type:'capture-visible'}`, solo desde popup.html/options.html del mismo id) → `captureVisible()`: candado en `chrome.storage.session`, intervalo mínimo 600 ms, pestaña activa, `captureVisibleTab`, comprobación de que la pestaña activa no cambió, decodificación del data URL sin `fetch`, presupuesto de píxeles, blob en IndexedDB y apertura de `editor.html?capture=<uuid>`. El editor valida el id, lee el blob y dibuja con Konva sobre un modelo de documento propio (`src/editor/model.ts`); la exportación usa un stage aparte a tamaño nativo, sin elementos de selección. No se inyecta ningún script en la página capturada en M1: el content script de selección sigue sin usarse.
+
 ## Estado M0
 
 Entrypoints WXT en src/entrypoints: background.ts (worker sin estado global mutable), popup/ (React), options/ (React), selection.content.ts (registration runtime; no declaración content_scripts en producción; no inyección en M0). Compartidos: config, i18n, theme, ui, storage, messaging y geometry. Los módulos funcionales siguientes son diseño, no implementaciones vacías que aparenten actividad.

@@ -14,11 +14,14 @@
     "typecheck": "wxt prepare && tsc --noEmit",
     "test": "vitest run",
     "test:browser": "node scripts/verify-browser.mjs",
+    "build:test": "node scripts/build-test.mjs",
+    "test:m1": "node scripts/build-test.mjs && node scripts/verify-m1.mjs",
     "icons": "node scripts/generate-icons.mjs",
     "format": "prettier --write .",
     "postinstall": "wxt prepare"
   },
   "dependencies": {
+    "konva": "10.9.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },

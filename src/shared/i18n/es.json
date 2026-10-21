@@ -6,13 +6,13 @@
     "message": "Captura. Explica. Comparte."
   },
   "phase": {
-    "message": "Base M0"
+    "message": "Base M1"
   },
   "chooseMode": {
     "message": "Elige cómo capturar"
   },
   "unavailable": {
-    "message": "La captura estará disponible en un próximo hito."
+    "message": "Área visible disponible. Los demás modos llegan en próximos hitos."
   },
   "visible": {
     "message": "Área visible"
@@ -115,5 +115,128 @@
   },
   "loading": {
     "message": "Cargando…"
+  },
+  "available": {
+    "message": "Disponible"
+  },
+  "capturing": {
+    "message": "Capturando…"
+  },
+  "errorRestricted": {
+    "message": "No se puede capturar esta pestaña. Chrome no permite acceder a páginas internas ni a la tienda; abre una página web normal e inténtalo de nuevo."
+  },
+  "errorQuota": {
+    "message": "Chrome limita la frecuencia de capturas. Espera un segundo e inténtalo de nuevo."
+  },
+  "errorBusy": {
+    "message": "Ya hay una captura en curso. Espera a que termine."
+  },
+  "errorTabChanged": {
+    "message": "Cambiaste de pestaña durante la captura y se descartó para no mezclar páginas. Inténtalo de nuevo sin cambiar de pestaña."
+  },
+  "errorNoTab": {
+    "message": "No se encontró una pestaña activa. Haz clic en una pestaña y vuelve a intentarlo."
+  },
+  "errorTooLarge": {
+    "message": "La captura es demasiado grande"
+  },
+  "errorTooLargeHint": {
+    "message": "Supera el límite de 8192 px por lado o 33,2 millones de píxeles. Reduce el zoom del navegador o el tamaño de la ventana e inténtalo de nuevo."
+  },
+  "errorFailed": {
+    "message": "No se pudo capturar. Recarga la página e inténtalo de nuevo."
+  },
+  "editorTitle": {
+    "message": "Editor"
+  },
+  "toolbarLabel": {
+    "message": "Herramientas de anotación"
+  },
+  "toolSelect": {
+    "message": "Seleccionar"
+  },
+  "toolArrow": {
+    "message": "Flecha"
+  },
+  "toolRect": {
+    "message": "Rectángulo"
+  },
+  "toolText": {
+    "message": "Texto"
+  },
+  "toolRedact": {
+    "message": "Censurar"
+  },
+  "color": {
+    "message": "Color"
+  },
+  "colorRed": {
+    "message": "Rojo"
+  },
+  "colorBlue": {
+    "message": "Azul"
+  },
+  "colorYellow": {
+    "message": "Amarillo"
+  },
+  "colorGreen": {
+    "message": "Verde"
+  },
+  "colorBlack": {
+    "message": "Negro"
+  },
+  "colorWhite": {
+    "message": "Blanco"
+  },
+  "undo": {
+    "message": "Deshacer"
+  },
+  "redo": {
+    "message": "Rehacer"
+  },
+  "deleteItem": {
+    "message": "Eliminar"
+  },
+  "downloadPng": {
+    "message": "Descargar PNG"
+  },
+  "discard": {
+    "message": "Descartar"
+  },
+  "discardConfirm": {
+    "message": "¿Descartar? Pulsa de nuevo"
+  },
+  "discardHint": {
+    "message": "Elimina la captura de este dispositivo"
+  },
+  "discarded": {
+    "message": "Captura descartada"
+  },
+  "discardedHint": {
+    "message": "La captura se eliminó de este dispositivo. Puedes cerrar esta pestaña."
+  },
+  "editorMissing": {
+    "message": "No se encontró la captura"
+  },
+  "editorMissingHint": {
+    "message": "Las capturas temporales se conservan 24 horas en este dispositivo. Vuelve a capturar desde el icono de la extensión."
+  },
+  "canvasLabel": {
+    "message": "Imagen capturada con anotaciones. Edición con ratón o pantalla táctil; la exportación a PNG incluye todas las anotaciones."
+  },
+  "textFieldLabel": {
+    "message": "Texto de la anotación"
+  },
+  "redactNote": {
+    "message": "Censurar sustituye los píxeles por negro opaco en el PNG exportado."
+  },
+  "exporting": {
+    "message": "Generando PNG…"
+  },
+  "exported": {
+    "message": "PNG generado:"
+  },
+  "exportError": {
+    "message": "No se pudo generar el PNG. Inténtalo de nuevo."
   }
 }
