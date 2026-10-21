@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <title>Icono provisional: marco de selección con punto</title>
+  <rect width="128" height="128" rx="24" fill="#181b20"/>
+  <path d="M48 29H29v23m51-23h19v23M29 76v23h23m24 0h23V80" fill="none" stroke="#3794ff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M48 48h32v32H48Z" fill="#75beff"/>
+  <circle cx="99" cy="29" r="9" fill="#75beff"/>
+</svg>

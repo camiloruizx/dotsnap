@@ -1,0 +1,13 @@
+
+> dotsnap@0.0.1 test
+> vitest run
+
+
+ RUN  v5.0.5 C:/Proyectos/dotsnap
+
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  16:11:02
+   Duration  393ms (transform 51%, import 37%, tests 7%, worker 5%)
+

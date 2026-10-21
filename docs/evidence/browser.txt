@@ -1,0 +1,150 @@
+
+> dotsnap@0.0.1 test:browser
+> node scripts/verify-browser.mjs
+
+{
+  "browser": "156.0.8078.48",
+  "extensionId": "lefccjfcjlmmbjgkaknikgcjbbcnbopf",
+  "checks": [
+    "8 vistas ES/EN × claro/oscuro × popup/opciones; axe WCAG AA sin infracciones; teclado, foco, mensajes health y sin desbordamiento horizontal",
+    "Persistencia chrome.storage.local después de recargar opciones",
+    "Enlace de preferencias abre la página real de opciones",
+    "storage.onChanged actualiza un popup abierto al cambiar tema desde opciones",
+    "Tema Sistema responde a prefers-color-scheme e idioma Sistema a chrome.i18n.getUILanguage",
+    "chrome://extensions: DotSnap, ENABLED, UNPACKED; 0 errores de runtime/manifest",
+    "0 errores de consola y 0 peticiones HTTP(S) desde popup/opciones durante la prueba"
+  ],
+  "views": [
+    {
+      "surface": "popup",
+      "language": "es",
+      "theme": "light",
+      "axeViolations": 0,
+      "screenshot": "popup-es-light.png"
+    },
+    {
+      "surface": "options",
+      "language": "es",
+      "theme": "light",
+      "axeViolations": 0,
+      "screenshot": "options-es-light.png"
+    },
+    {
+      "surface": "popup",
+      "language": "es",
+      "theme": "dark",
+      "axeViolations": 0,
+      "screenshot": "popup-es-dark.png"
+    },
+    {
+      "surface": "options",
+      "language": "es",
+      "theme": "dark",
+      "axeViolations": 0,
+      "screenshot": "options-es-dark.png"
+    },
+    {
+      "surface": "popup",
+      "language": "en",
+      "theme": "light",
+      "axeViolations": 0,
+      "screenshot": "popup-en-light.png"
+    },
+    {
+      "surface": "options",
+      "language": "en",
+      "theme": "light",
+      "axeViolations": 0,
+      "screenshot": "options-en-light.png"
+    },
+    {
+      "surface": "popup",
+      "language": "en",
+      "theme": "dark",
+      "axeViolations": 0,
+      "screenshot": "popup-en-dark.png"
+    },
+    {
+      "surface": "options",
+      "language": "en",
+      "theme": "dark",
+      "axeViolations": 0,
+      "screenshot": "options-en-dark.png"
+    }
+  ],
+  "contrastRatios": [
+    {
+      "theme": "light",
+      "foreground": "text",
+      "background": "surface",
+      "ratio": 13.7,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "muted",
+      "background": "surface-card",
+      "ratio": 6.56,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "link",
+      "background": "surface",
+      "ratio": 5.44,
+      "minimum": 4.5
+    },
+    {
+      "theme": "light",
+      "foreground": "focus",
+      "background": "surface",
+      "ratio": 4.19,
+      "minimum": 3
+    },
+    {
+      "theme": "light",
+      "foreground": "control-border",
+      "background": "control",
+      "ratio": 4.1,
+      "minimum": 3
+    },
+    {
+      "theme": "dark",
+      "foreground": "text",
+      "background": "surface",
+      "ratio": 11.98,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "muted",
+      "background": "surface-card",
+      "ratio": 7.1,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "link",
+      "background": "surface",
+      "ratio": 5.79,
+      "minimum": 4.5
+    },
+    {
+      "theme": "dark",
+      "foreground": "focus",
+      "background": "surface",
+      "ratio": 5.79,
+      "minimum": 3
+    },
+    {
+      "theme": "dark",
+      "foreground": "control-border",
+      "background": "control",
+      "ratio": 3.67,
+      "minimum": 3
+    }
+  ],
+  "consoleErrors": [],
+  "externalRequests": [],
+  "extensionErrors": []
+}

@@ -1,0 +1,119 @@
+{
+  "productDescription": {
+    "message": "Capture exactly what you need, explain clearly, and export with control."
+  },
+  "tagline": {
+    "message": "Capture. Explain. Share."
+  },
+  "phase": {
+    "message": "M0 foundation"
+  },
+  "chooseMode": {
+    "message": "Choose a capture mode"
+  },
+  "unavailable": {
+    "message": "Capture will be available in a future milestone."
+  },
+  "visible": {
+    "message": "Visible area"
+  },
+  "visibleHint": {
+    "message": "What you see in the tab"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "regionHint": {
+    "message": "Just the area you need"
+  },
+  "element": {
+    "message": "Smart element"
+  },
+  "elementHint": {
+    "message": "A block on the page"
+  },
+  "fullPage": {
+    "message": "Full page"
+  },
+  "fullPageHint": {
+    "message": "Beyond the screen"
+  },
+  "soon": {
+    "message": "Coming soon"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "history": {
+    "message": "History"
+  },
+  "appearance": {
+    "message": "Language and appearance"
+  },
+  "preferencesHint": {
+    "message": "Customize this foundation. Settings are saved only on this device."
+  },
+  "openPreferences": {
+    "message": "Configure language and theme"
+  },
+  "openPreferencesHint": {
+    "message": "Opens the preferences available in M0"
+  },
+  "language": {
+    "message": "Language"
+  },
+  "theme": {
+    "message": "Theme"
+  },
+  "system": {
+    "message": "System"
+  },
+  "spanish": {
+    "message": "Español"
+  },
+  "english": {
+    "message": "English"
+  },
+  "light": {
+    "message": "Light"
+  },
+  "dark": {
+    "message": "Dark"
+  },
+  "saved": {
+    "message": "Saved on this device"
+  },
+  "saving": {
+    "message": "Saving…"
+  },
+  "saveError": {
+    "message": "Could not save. Please try again."
+  },
+  "loadError": {
+    "message": "Could not read your settings."
+  },
+  "retry": {
+    "message": "Retry"
+  },
+  "languageHint": {
+    "message": "Chrome menus keep the browser language."
+  },
+  "themeHint": {
+    "message": "System follows your device appearance."
+  },
+  "localOnly": {
+    "message": "All local. No accounts or analytics."
+  },
+  "provisional": {
+    "message": "Provisional icon"
+  },
+  "back": {
+    "message": "Back to modes"
+  },
+  "settingsTitle": {
+    "message": "Preferences"
+  },
+  "loading": {
+    "message": "Loading…"
+  }
+}

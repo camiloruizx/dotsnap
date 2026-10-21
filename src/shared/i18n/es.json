@@ -1,0 +1,119 @@
+{
+  "productDescription": {
+    "message": "Captura exactamente lo que necesitas, explica con claridad y exporta con control."
+  },
+  "tagline": {
+    "message": "Captura. Explica. Comparte."
+  },
+  "phase": {
+    "message": "Base M0"
+  },
+  "chooseMode": {
+    "message": "Elige cómo capturar"
+  },
+  "unavailable": {
+    "message": "La captura estará disponible en un próximo hito."
+  },
+  "visible": {
+    "message": "Área visible"
+  },
+  "visibleHint": {
+    "message": "Lo que ves en la pestaña"
+  },
+  "region": {
+    "message": "Región"
+  },
+  "regionHint": {
+    "message": "Solo el área que necesitas"
+  },
+  "element": {
+    "message": "Elemento inteligente"
+  },
+  "elementHint": {
+    "message": "Un bloque de la página"
+  },
+  "fullPage": {
+    "message": "Página completa"
+  },
+  "fullPageHint": {
+    "message": "Más allá de la pantalla"
+  },
+  "soon": {
+    "message": "Próximamente"
+  },
+  "settings": {
+    "message": "Ajustes"
+  },
+  "history": {
+    "message": "Historial"
+  },
+  "appearance": {
+    "message": "Idioma y apariencia"
+  },
+  "preferencesHint": {
+    "message": "Personaliza esta base. Los ajustes se guardan solo en este dispositivo."
+  },
+  "openPreferences": {
+    "message": "Configurar idioma y tema"
+  },
+  "openPreferencesHint": {
+    "message": "Abre las preferencias disponibles de M0"
+  },
+  "language": {
+    "message": "Idioma"
+  },
+  "theme": {
+    "message": "Tema"
+  },
+  "system": {
+    "message": "Sistema"
+  },
+  "spanish": {
+    "message": "Español"
+  },
+  "english": {
+    "message": "Inglés"
+  },
+  "light": {
+    "message": "Claro"
+  },
+  "dark": {
+    "message": "Oscuro"
+  },
+  "saved": {
+    "message": "Guardado en este dispositivo"
+  },
+  "saving": {
+    "message": "Guardando…"
+  },
+  "saveError": {
+    "message": "No se pudo guardar. Inténtalo de nuevo."
+  },
+  "loadError": {
+    "message": "No se pudieron leer tus ajustes."
+  },
+  "retry": {
+    "message": "Reintentar"
+  },
+  "languageHint": {
+    "message": "El menú de Chrome conserva el idioma del navegador."
+  },
+  "themeHint": {
+    "message": "Sistema sigue la apariencia del dispositivo."
+  },
+  "localOnly": {
+    "message": "Todo local. Sin cuentas ni analítica."
+  },
+  "provisional": {
+    "message": "Icono provisional"
+  },
+  "back": {
+    "message": "Volver a modos"
+  },
+  "settingsTitle": {
+    "message": "Preferencias"
+  },
+  "loading": {
+    "message": "Cargando…"
+  }
+}

@@ -1,0 +1,9 @@
+node_modules/
+.output/
+.wxt/
+coverage/
+.browser-profile/
+test-results/
+*.log
+.env*
+!.env.example
