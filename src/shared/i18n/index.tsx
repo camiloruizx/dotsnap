@@ -37,9 +37,43 @@ const Context = createContext({
   t: (key: MessageKey) => translate('es', key),
 });
 
-export function PreferencesProvider({ children }: { children: ReactNode }) {
-  const [preferences, setPreferences] = useState<Preferences>({ ...defaults });
-  const [ready, setReady] = useState(false);
+/** Aplica tema e idioma al documento; se llama antes del primer render y al cambiar. */
+export function applyDocumentPreferences(value: Preferences): void {
+  document.documentElement.lang = resolveLanguage(
+    value.language,
+    chrome.i18n.getUILanguage(),
+  );
+  document.documentElement.dataset.theme = value.theme;
+}
+
+/**
+ * Lee las preferencias y las aplica antes de montar React, para que el primer
+ * fotograma ya use el tema e idioma elegidos. Si falla, devuelve undefined y el
+ * proveedor muestra el error con opción de reintentar.
+ */
+export async function loadInitialPreferences(): Promise<
+  Preferences | undefined
+> {
+  try {
+    const value = await readPreferences();
+    applyDocumentPreferences(value);
+    return value;
+  } catch {
+    return undefined;
+  }
+}
+
+export function PreferencesProvider({
+  children,
+  initial,
+}: {
+  children: ReactNode;
+  initial?: Preferences | undefined;
+}) {
+  const [preferences, setPreferences] = useState<Preferences>(
+    initial ?? { ...defaults },
+  );
+  const [ready, setReady] = useState(initial !== undefined);
   const [error, setError] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const language = resolveLanguage(
@@ -76,9 +110,8 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
     };
   }, [attempt]);
   useEffect(() => {
-    document.documentElement.lang = language;
-    document.documentElement.dataset.theme = preferences.theme;
-  }, [language, preferences.theme]);
+    applyDocumentPreferences(preferences);
+  }, [preferences]);
   return (
     <Context.Provider
       value={{

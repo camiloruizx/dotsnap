@@ -44,6 +44,12 @@ No se probaron captura ni inyección (no implementadas), portapapeles, descargas
 - Las páginas propias abiertas en pestañas tienen sender.tab: la validación acepta únicamente ID y URL exactos propios, sin asumir que sender.tab implica página hostil.
 - Se usan perfiles nuevos en cada prueba para evitar código cacheado de una extensión descomprimida tras recompilar.
 
+## Cierre de M0 (revisión del 21/10/2026)
+
+Cambios posteriores a la evidencia de arriba: matriz de funciones reconstruida por secciones de la especificación; CSP sin `connect-src` solo en desarrollo; geometría con escala medida por eje (`captureScale`); preferencias aplicadas antes del primer render. Los archivos de `evidence/` corresponden al estado anterior a estos cambios y no se reescribieron.
+
+Re-ejecutado tras los cambios, en copia limpia con `npm ci` (Linux, Node 22.23): typecheck, ESLint, Prettier, Vitest y build; resultados en el mensaje de entrega del commit. **No re-ejecutado**: `npm run test:browser` (requiere Chrome en Windows). Debe correrse en el equipo del propietario antes de dar por probado B-08; hasta entonces la fila queda como pendiente. `npm run dev` tampoco se ha ejecutado para confirmar el HMR.
+
 ## Pendiente
 
 M1–M6 y V2 según plan. Antes de lanzamiento: revisión comercial del nombre/marca, logo definitivo y decisión de licencia de distribución. No se necesita otra decisión para M0. M1 requiere aprobación explícita.

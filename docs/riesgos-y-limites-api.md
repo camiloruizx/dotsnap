@@ -6,6 +6,12 @@ Fuentes oficiales consultadas el 21/10/2026. Separar contrato documentado, polí
 
 Chrome define MAX_CAPTURE_VISIBLE_TAB_CALLS_PER_SECOND = 2 para captureVisibleTab. Propuesta M3: cola única, al menos 600ms entre inicios de captura, sin ráfagas; backoff acotado al recibir cuota, cancelar/revalidar pestaña antes de reintentar. Persistir progreso/última llamada; suspensión del worker invalida temporizadores. [Referencia tabs](https://developer.chrome.com/docs/extensions/reference/api/tabs#property-MAX_CAPTURE_VISIBLE_TAB_CALLS_PER_SECOND).
 
+## Escala del bitmap y CSP
+
+El bitmap de captureVisibleTab no siempre mide `innerWidth × devicePixelRatio` (zoom del navegador, barras de desplazamiento, pellizco). Los recortes usan `captureScale(bitmap, viewport)` por eje y `toPixelCrop` con esa escala; devicePixelRatio no es entrada de cálculo. Pendiente: pruebas reales con zoom 50–300 % y DPR 1/1.25/2 en M1.
+
+El CSP de producción incluye `connect-src 'none'`: `fetch(dataUrl)` y cualquier otra petición desde páginas de la extensión quedan bloqueadas. Para convertir el resultado de captureVisibleTab (data URL) en bitmap en M1, decodificar el base64 a bytes manualmente o cargarlo con `Image`/`createImageBitmap`; no usar `fetch`. En `wxt` (desarrollo) la directiva se omite solo para el HMR; el manifest de producción la conserva.
+
 ## Canvas: lado y área
 
 No existe un máximo portable garantizado. Depende de navegador, OS, GPU y memoria. No se ha medido aquí un máximo de lado o área de Chrome; no se trasladan límites de vídeo/GPU al canvas HTML. Presupuesto conservador inicial **supuesto**: lado máximo de producto ≤8192px y área máxima de producto ≤16777216 px (64MiB RGBA por buffer, antes de copias/cachés). Son límites de producto propuestos, no capacidad garantizada del dispositivo.

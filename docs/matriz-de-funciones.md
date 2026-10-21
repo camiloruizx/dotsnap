@@ -1,22 +1,87 @@
 # Matriz de funciones
 
-«Implementado» significa presente en código; «probado» exige evidencia ejecutada. Cada fila conserva ambos campos para no equipararlos. Probado (alcance en validacion-m0.md) para alcance real de pruebas.
+Organizada por la especificación original (secciones 2 a 13). «Implementado» significa presente en código; «probado» exige evidencia ejecutada (alcance real en validacion-m0.md). Cada fila conserva ambos campos para no equipararlos. La versión sigue la sección 13 de la especificación; donde la especificación no asigna versión, la columna Nota lo indica como **propuesta** reversible.
 
-| Versión / hito         | Función                                                                          | Implementación       | Pruebas                                            |
-| ---------------------- | -------------------------------------------------------------------------------- | -------------------- | -------------------------------------------------- |
-| Base M0                | Scaffold WXT/React/TS, MV3 y empaquetado                                         | Implementado         | Probado (alcance en validacion-m0.md)              |
-| Base M0                | Popup con 4 modos, Ajustes/Historial disabled                                    | Implementado         | Probado (alcance en validacion-m0.md)              |
-| Base M0                | Preferencias locales idioma/tema                                                 | Implementado         | Probado (alcance en validacion-m0.md)              |
-| Base M0                | ES/EN, tema claro/oscuro/Sistema, tokens                                         | Implementado         | Probado (alcance en validacion-m0.md)              |
-| Base M0                | Icono provisional original SVG/PNG                                               | Implementado         | Probado (alcance en validacion-m0.md)              |
-| Base M0                | Validación de mensaje health y remitente                                         | Implementado         | Probado: unitaria e integración (validacion-m0.md) |
-| Base M0                | Geometría pura CSS → píxeles                                                     | Implementado         | Probado en Vitest; no captura                      |
-| V1 / M1                | Captura visible, editor flecha/rectángulo/texto/censura segura, PNG              | Pendiente            | Pendiente                                          |
-| V1 / M2                | Región y selección de elemento inteligente                                       | Pendiente            | Pendiente                                          |
-| V1 / M3                | Página completa por segmentos                                                    | Pendiente            | Pendiente                                          |
-| V1.1 / M4              | JPEG/WebP/PDF y control de peso real                                             | Pendiente            | Pendiente                                          |
-| V1.1 / M5              | Historial local, ajustes completos y atajos                                      | Pendiente            | Pendiente                                          |
-| V1.1 / M6              | Paquete de tienda, manual, auditoría y matriz navegadores                        | Pendiente            | Pendiente                                          |
-| V2 / sin hito aprobado | Proyectos editables importables/exportables; mejoras de selección/multiselección | Pendiente, propuesta | Pendiente                                          |
+Estados posibles: Pendiente · Implementado · Probado.
 
-V2 no añade propósito nuevo ni sincronización/nube. Publicación incremental de V1 posible tras controles de M6 para su alcance, sin anunciar funciones de V1.1/V2 como disponibles.
+## Base (M0)
+
+| ID   | Función                                              | Versión / hito | Implementación | Pruebas                                          | Nota                           |
+| ---- | ---------------------------------------------------- | -------------- | -------------- | ------------------------------------------------ | ------------------------------ |
+| B-01 | Scaffold WXT/React/TS, MV3 y empaquetado             | M0             | Implementado   | Probado (validacion-m0.md)                       |                                |
+| B-02 | Popup con 4 modos y Ajustes/Historial deshabilitados | M0             | Implementado   | Probado (validacion-m0.md)                       | Modos de B-02 son placeholders |
+| B-03 | Preferencias locales de idioma y tema                | M0             | Implementado   | Probado (validacion-m0.md)                       |                                |
+| B-04 | ES/EN, tema claro/oscuro/Sistema, tokens             | M0             | Implementado   | Probado (validacion-m0.md)                       |                                |
+| B-05 | Icono provisional original SVG/PNG                   | M0             | Implementado   | Probado (validacion-m0.md)                       | Definitivo pendiente en M6     |
+| B-06 | Validación de mensaje `health` y remitente           | M0             | Implementado   | Probado: unitaria e integración                  |                                |
+| B-07 | Geometría CSS → píxeles con escala medida por eje    | M0             | Implementado   | Probado en Vitest; no hay captura real           | Cierre de M0: `captureScale`   |
+| B-08 | Preferencias aplicadas antes del primer render       | M0             | Implementado   | Pendiente de repetir `test:browser` en el equipo | Evita destello de tema/idioma  |
+
+## §2 Modos de captura
+
+| ID   | Función                                                       | Versión / hito | Implementación | Pruebas   | Nota                                                         |
+| ---- | ------------------------------------------------------------- | -------------- | -------------- | --------- | ------------------------------------------------------------ |
+| C-01 | Área visible                                                  | V1 / M1        | Pendiente      | Pendiente |                                                              |
+| C-02 | Región personalizada (tiradores, lupa, teclado, Enter/Escape) | V1 / M2        | Pendiente      | Pendiente |                                                              |
+| C-03 | Selección inteligente de elementos                            | V1 / M2        | Pendiente      | Pendiente |                                                              |
+| C-04 | Página completa por segmentos                                 | V1 / M3        | Pendiente      | Pendiente | Límites y exportación dividida en riesgos-y-limites-api.md   |
+| C-05 | Captura con temporizador (inmediata, 3, 5, 10 s)              | V1 / M2        | Pendiente      | Pendiente | **Propuesta**: la especificación no asigna versión           |
+| C-06 | Importación (selector, arrastrar y soltar, pegar)             | V1 / M5        | Pendiente      | Pendiente | **Propuesta**                                                |
+| C-07 | Contenedor con desplazamiento interno                         | V1.1           | Pendiente      | Pendiente | §13 lo incluye como «avanzado» en V1.1; sin hito aún         |
+| C-08 | Pantalla o ventana del sistema                                | Posterior a V1 | Pendiente      | Pendiente | Requiere verificar viabilidad y permisos antes de planificar |
+
+## §3 Editor de anotaciones
+
+| ID   | Función                                                                | Versión / hito | Implementación | Pruebas   | Nota                                    |
+| ---- | ---------------------------------------------------------------------- | -------------- | -------------- | --------- | --------------------------------------- |
+| E-01 | Flecha, rectángulo, texto y censura segura (conjunto mínimo)           | V1 / M1        | Pendiente      | Pendiente |                                         |
+| E-02 | Resto de herramientas: elipse, línea, dibujo libre, resaltador, globos | V1 / M1–M4     | Pendiente      | Pendiente | Reparto fino al cerrar M1               |
+| E-03 | Pasos numerados, inserción de imágenes, desenfoque y pixelado          | V1 / M1–M4     | Pendiente      | Pendiente |                                         |
+| E-04 | Recorte, rotación 90°, redimensionado con proporción                   | V1 / M1–M4     | Pendiente      | Pendiente |                                         |
+| E-05 | Selección, multiselección, capas, duplicar, deshacer/rehacer, zoom     | V1 / M1–M4     | Pendiente      | Pendiente | Historial por comandos, no instantáneas |
+| E-06 | Fondo, margen, borde y sombra de presentación                          | V1 / M4        | Pendiente      | Pendiente |                                         |
+| E-07 | Censura aplanada sin píxeles originales y aviso en proyectos editables | V1 / M1        | Pendiente      | Pendiente |                                         |
+
+## §4 Formatos y exportación
+
+| ID   | Función                                                           | Versión / hito | Implementación | Pruebas   | Nota                                      |
+| ---- | ----------------------------------------------------------------- | -------------- | -------------- | --------- | ----------------------------------------- |
+| X-01 | PNG con dimensiones correctas                                     | V1 / M1        | Pendiente      | Pendiente |                                           |
+| X-02 | JPEG y WebP con calidad, presets, vista previa y peso real        | V1 / M4        | Pendiente      | Pendiente | Verificar que el codificador produce WebP |
+| X-03 | PNG optimizado y redimensionado (sin control de calidad ficticio) | V1 / M4        | Pendiente      | Pendiente |                                           |
+| X-04 | PDF una o varias páginas (original, A4, Carta, márgenes)          | V1 / M4        | Pendiente      | Pendiente |                                           |
+| X-05 | Formato de proyecto editable, versionado y documentado            | V1 / M4        | Pendiente      | Pendiente | **Propuesta** de hito; §4 lo exige en V1  |
+| X-06 | Peso objetivo aproximado y comparación original/exportada         | V1 / M4        | Pendiente      | Pendiente |                                           |
+| X-07 | Copiar al portapapeles (PNG) y descarga con plantilla de nombre   | V1 / M1–M4     | Pendiente      | Pendiente |                                           |
+
+## §5–§6 Experiencia, historial y almacenamiento
+
+| ID   | Función                                                      | Versión / hito | Implementación | Pruebas   | Nota                           |
+| ---- | ------------------------------------------------------------ | -------------- | -------------- | --------- | ------------------------------ |
+| U-01 | Atajos configurables (máximo 4 sugeridos)                    | V1 / M5        | Pendiente      | Pendiente |                                |
+| U-02 | Guardar directamente sin abrir el editor                     | V1 / M5        | Pendiente      | Pendiente | **Propuesta**                  |
+| U-03 | Onboarding breve con página de práctica                      | V1 / M6        | Pendiente      | Pendiente | **Propuesta**                  |
+| H-01 | Historial local con miniaturas, búsqueda, renombrar y borrar | V1 / M5        | Pendiente      | Pendiente |                                |
+| H-02 | Límite visible, borrado total y recuperación de borradores   | V1 / M5        | Pendiente      | Pendiente |                                |
+| H-03 | Sin persistencia de capturas de incógnito por defecto        | V1 / M5        | Pendiente      | Pendiente | Comportamiento real por probar |
+
+## §12 Tienda
+
+| ID   | Función                                                           | Versión / hito | Implementación | Pruebas   | Nota |
+| ---- | ----------------------------------------------------------------- | -------------- | -------------- | --------- | ---- |
+| S-01 | Paquete, política de privacidad, inventario de permisos y guías   | V1 / M6        | Pendiente      | Pendiente |      |
+| S-02 | Nombre y marca revisados; icono definitivo; licencias y changelog | V1 / M6        | Pendiente      | Pendiente |      |
+
+## §13 Versiones posteriores
+
+| ID   | Función                                             | Versión | Implementación | Pruebas   |
+| ---- | --------------------------------------------------- | ------- | -------------- | --------- |
+| P-01 | Contenedores desplazables avanzados                 | V1.1    | Pendiente      | Pendiente |
+| P-02 | Proyectos reutilizables                             | V1.1    | Pendiente      | Pendiente |
+| P-03 | Exportación por lotes                               | V1.1    | Pendiente      | Pendiente |
+| P-04 | Presets de anotación y herramientas de presentación | V1.1    | Pendiente      | Pendiente |
+| P-05 | OCR local y búsqueda por texto                      | V2      | Pendiente      | Pendiente |
+| P-06 | Comparación visual y marcas de agua                 | V2      | Pendiente      | Pendiente |
+| P-07 | Sincronización optativa y colaboración              | V2      | Pendiente      | Pendiente |
+
+Ni cobros, cuentas, nube ni grabación de vídeo entran en V1 sin decisión expresa. Cada hito debe actualizar esta matriz antes de declararse probado; ninguna función de V1.1 o V2 se anuncia como disponible.

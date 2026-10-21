@@ -7,7 +7,7 @@ export default defineConfig({
   srcDir: 'src',
   modules: ['@wxt-dev/module-react'],
   imports: false,
-  manifest: {
+  manifest: ({ command }) => ({
     name: '__MSG_productName__',
     description: '__MSG_productDescription__',
     default_locale: 'es',
@@ -16,10 +16,15 @@ export default defineConfig({
     incognito: 'split',
     action: { default_title: '__MSG_productName__' },
     content_security_policy: {
+      // Producción: sin conexiones de red. En `wxt` (serve) se omite connect-src
+      // para que el HMR de Vite pueda abrir su WebSocket local; WXT añade solo
+      // script-src para localhost. Nunca llega al paquete de producción.
       extension_pages:
-        "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src 'none'",
+        command === 'serve'
+          ? "script-src 'self'; object-src 'none'; base-uri 'none'"
+          : "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src 'none'",
     },
-  },
+  }),
   hooks: {
     'build:publicAssets': (_wxt, assets) => {
       for (const [locale, messages] of Object.entries({ es, en })) {
