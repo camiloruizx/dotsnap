@@ -167,6 +167,18 @@
   "toolRedact": {
     "message": "Redact"
   },
+  "redactStyle": {
+    "message": "Redaction style"
+  },
+  "redactSolid": {
+    "message": "Solid (safest)"
+  },
+  "redactPixelate": {
+    "message": "Pixelated"
+  },
+  "redactBlur": {
+    "message": "Blurred"
+  },
   "color": {
     "message": "Color"
   },

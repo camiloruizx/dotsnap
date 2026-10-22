@@ -9,14 +9,16 @@ import {
 } from '../../shared/storage/captures';
 import { Brand } from '../../shared/ui/Brand';
 import { Icon, type IconName } from '../../shared/ui/Icon';
+import { ColorCombo } from './ColorCombo';
 import { EditorCanvas } from '../../editor/EditorCanvas';
 import {
   History,
   PALETTE,
   buildFileName,
-  isHexColor,
-  paletteIdOf,
+  REDACT_MODES,
+  isRedactMode,
   type PaletteId,
+  type RedactMode,
   type Tool,
 } from '../../editor/model';
 
@@ -34,6 +36,11 @@ const tools: { id: Tool; label: MessageKey; icon: IconName }[] = [
   { id: 'text', label: 'toolText', icon: 'text' },
   { id: 'redact', label: 'toolRedact', icon: 'redact' },
 ];
+const redactLabel: Record<RedactMode, MessageKey> = {
+  solid: 'redactSolid',
+  pixelate: 'redactPixelate',
+  blur: 'redactBlur',
+};
 const colorLabel: Record<PaletteId, MessageKey> = {
   red: 'colorRed',
   blue: 'colorBlue',
@@ -47,9 +54,13 @@ const colorLabel: Record<PaletteId, MessageKey> = {
 
 export function Editor() {
   const { t } = usePreferences();
+  const colorNames = Object.fromEntries(
+    PALETTE.map((item) => [item.id, t(colorLabel[item.id])]),
+  ) as Record<PaletteId, string>;
   const [load, setLoad] = useState<Load>({ kind: 'loading' });
   const [tool, setTool] = useState<Tool>('select');
   const [color, setColor] = useState<string>(PALETTE[0].value);
+  const [redactMode, setRedactMode] = useState<RedactMode>('solid');
   const [tick, setTick] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [status, setStatus] = useState<{
@@ -113,11 +124,13 @@ export function Editor() {
     canvasRef.current?.setTool(tool);
   }, [tool, ready]);
   useEffect(() => {
+    canvasRef.current?.setRedactMode(redactMode);
+  }, [redactMode, ready]);
+  useEffect(() => {
     canvasRef.current?.setColor(color);
   }, [color, ready]);
 
   void tick;
-  const currentId = paletteIdOf(color);
 
   const onKey = useCallback((event: KeyboardEvent) => {
     const canvas = canvasRef.current;
@@ -238,53 +251,33 @@ export function Editor() {
               <span>{t(item.label)}</span>
             </button>
           ))}
-          <div
-            role="radiogroup"
-            aria-label={t('color')}
-            className="color-row"
-            aria-disabled={tool === 'redact'}
-          >
-            {PALETTE.map((item) => {
-              const name = t(colorLabel[item.id]);
-              return (
-                <button
-                  key={item.id}
-                  role="radio"
-                  aria-checked={currentId === item.id}
-                  className="color-chip"
-                  title={name}
-                  disabled={tool === 'redact'}
-                  onClick={() => setColor(item.value)}
-                >
-                  <span
-                    className="color-swatch"
-                    style={{ backgroundColor: item.value }}
-                    aria-hidden="true"
-                  />
-                  <span>{name}</span>
-                </button>
-              );
-            })}
-            <label
-              className="color-chip color-custom"
-              data-active={currentId === null}
-              title={t('colorPick')}
-            >
-              <input
-                type="color"
-                aria-label={t('colorPick')}
-                value={color}
-                disabled={tool === 'redact'}
+          <ColorCombo
+            label={t('color')}
+            customLabel={t('colorCustom')}
+            pickLabel={t('colorPick')}
+            names={colorNames}
+            value={color}
+            disabled={tool === 'redact'}
+            onChange={setColor}
+          />
+          {tool === 'redact' ? (
+            <label className="inline-field">
+              <span>{t('redactStyle')}</span>
+              <select
+                value={redactMode}
                 onChange={(event) => {
-                  if (isHexColor(event.target.value))
-                    setColor(event.target.value.toLowerCase());
+                  if (isRedactMode(event.target.value))
+                    setRedactMode(event.target.value);
                 }}
-              />
-              <span>
-                {currentId === null ? color.toUpperCase() : t('colorCustom')}
-              </span>
+              >
+                {REDACT_MODES.map((mode) => (
+                  <option key={mode} value={mode}>
+                    {t(redactLabel[mode])}
+                  </option>
+                ))}
+              </select>
             </label>
-          </div>
+          ) : null}
         </div>
         <div className="tool-row">
           <button

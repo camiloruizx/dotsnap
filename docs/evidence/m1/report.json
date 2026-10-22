@@ -41,6 +41,8 @@
     "Delete elimina el objeto seleccionado",
     "Ctrl+Z restaura el objeto eliminado",
     "doble clic reabre el texto y la edición persiste",
+    "censura pixelada y desenfocada: sin borde nítido y opaca",
+    "color: combo con nombre y cuadro, paleta y color personalizado dibujan",
     "editor: axe WCAG A/AA sin infracciones",
     "página restringida (chrome://) → código restricted, sin editor",
     "popup muestra el error accionable",

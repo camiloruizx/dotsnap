@@ -345,19 +345,53 @@ for (const dpr of [1, 2]) {
       check('doble clic reabre el texto y la edición persiste');
     }
     if (dpr === 1) {
-      // Color: fichas con nombre y cuadro, y selector de paleta personalizado.
-      const chips = editor.getByRole('radio');
-      assert.equal(await chips.count(), 8, 'fichas de color');
-      for (const chip of await chips.all())
-        assert.ok(
-          ((await chip.textContent()) ?? '').trim().length > 0,
-          'ficha sin nombre',
-        );
-      await editor.locator('.color-chip[title]').nth(1).click();
-      assert.equal(
-        await editor.locator('[role=radio][aria-checked=true]').count(),
-        1,
+      // Censura pixelada y desenfocada sobre bordes reales de la página (azul/blanco).
+      await tool(L.redact);
+      const style = editor.locator('.inline-field select');
+      await style.selectOption('pixelate');
+      await drag(fr(460, 150), fr(760, 250));
+      await style.selectOption('blur');
+      await drag(fr(540, 250), fr(660, 350));
+      const soft = await decode(popup, (await exportPng()).bytes);
+      const a1 = px(soft, 490, 200);
+      const a2 = px(soft, 505, 200);
+      assert.deepEqual(a1, a2, 'pixelado: bloque de color uniforme');
+      assert.ok(
+        a1[0] > 20 && a1[0] < 235 && a1[3] === 255,
+        `pixelado: bloque mezcla blanco y azul (${a1})`,
       );
+      const above = px(soft, 600, 290);
+      const below = px(soft, 600, 310);
+      assert.ok(
+        above[0] > 5 && below[0] < 250 && above[3] === 255 && below[3] === 255,
+        `desenfoque: el borde se difumina (${above} / ${below})`,
+      );
+      check('censura pixelada y desenfocada: sin borde nítido y opaca');
+      // Color: combo con cuadro y nombre, y selector de paleta personalizado.
+      await tool(L.rect);
+      const combo = editor.locator('.color-combo-button');
+      await combo.click();
+      await editor.screenshot({ path: resolve(evidence, 'editor-combo.png') });
+      const options = editor.getByRole('option');
+      assert.equal(await options.count(), 8, 'opciones de color');
+      for (const option of await options.all()) {
+        assert.ok(
+          ((await option.textContent()) ?? '').trim().length > 0,
+          'opción sin nombre',
+        );
+        assert.ok(
+          await option.locator('.color-swatch').isVisible(),
+          'opción sin cuadro de color',
+        );
+      }
+      await editor.keyboard.press('Escape');
+      assert.equal(await options.count(), 0, 'Escape cierra el combo');
+      await combo.click();
+      await options.nth(1).click();
+      assert.equal(await options.count(), 0, 'elegir cierra el combo');
+      const blueName =
+        (await options.count()) === 0 ? await combo.textContent() : '';
+      assert.ok(/Azul|Blue/.test(blueName ?? ''), 'el combo muestra el nombre');
       const near = (img, x, y, ok) => {
         for (let dx = -4; dx <= 4; dx++)
           for (let dy = -4; dy <= 4; dy++)
@@ -366,11 +400,11 @@ for (const dpr of [1, 2]) {
       };
       await tool(L.rect);
       await drag(fr(900, 60), fr(980, 120));
+      await combo.click();
       await editor.locator('input[type=color]').fill('#00c800');
-      assert.equal(
-        await editor.locator('[role=radio][aria-checked=true]').count(),
-        0,
-        'personalizado desmarca las fichas',
+      assert.ok(
+        /#00C800/.test((await combo.textContent()) ?? ''),
+        'el combo muestra el código personalizado',
       );
       await drag(fr(900, 150), fr(980, 210));
       const colored = await decode(popup, (await exportPng()).bytes);
@@ -382,7 +416,9 @@ for (const dpr of [1, 2]) {
         near(colored, 900, 180, (p) => p[1] > 150 && p[0] < 60 && p[2] < 60),
         'rectángulo con color personalizado',
       );
-      check('color: fichas con nombre, paleta y color personalizado dibujan');
+      check(
+        'color: combo con nombre y cuadro, paleta y color personalizado dibujan',
+      );
       await editor.screenshot({ path: resolve(evidence, 'editor-color.png') });
     }
     if (dpr === 1) {

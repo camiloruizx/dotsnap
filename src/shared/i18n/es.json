@@ -167,6 +167,18 @@
   "toolRedact": {
     "message": "Censurar"
   },
+  "redactStyle": {
+    "message": "Estilo de censura"
+  },
+  "redactSolid": {
+    "message": "Sólido (más seguro)"
+  },
+  "redactPixelate": {
+    "message": "Pixelado"
+  },
+  "redactBlur": {
+    "message": "Desenfocado"
+  },
   "color": {
     "message": "Color"
   },

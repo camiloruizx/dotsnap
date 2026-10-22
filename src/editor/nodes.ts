@@ -1,8 +1,9 @@
 import Konva from 'konva';
 import { REDACT_FILL, type Annotation } from './model';
+import { renderRedaction } from './redaction';
 
 /** Único constructor de nodos: lo usan la vista y la exportación, para que ambas dibujen igual. */
-export function createNode(a: Annotation): Konva.Shape {
+export function createNode(a: Annotation, source: ImageBitmap): Konva.Shape {
   const common = { id: a.id, name: 'annotation' };
   switch (a.type) {
     case 'arrow':
@@ -42,6 +43,16 @@ export function createNode(a: Annotation): Konva.Shape {
         fill: a.color,
       });
     case 'redact':
+      if (a.mode !== 'solid' && a.width >= 1 && a.height >= 1)
+        return new Konva.Image({
+          ...common,
+          x: a.x,
+          y: a.y,
+          width: a.width,
+          height: a.height,
+          image: renderRedaction(source, a, a.mode),
+          opacity: 1,
+        });
       return new Konva.Rect({
         ...common,
         x: a.x,

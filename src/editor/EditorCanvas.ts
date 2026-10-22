@@ -10,6 +10,7 @@ import {
   removeCommand,
   type Annotation,
   type Point,
+  type RedactMode,
   type Tool,
 } from './model';
 import { createNode } from './nodes';
@@ -39,6 +40,7 @@ export class EditorCanvas {
   private handles: Konva.Circle[] = [];
   private tool: Tool = 'select';
   private colorValue = '#e5484d';
+  private redactMode: RedactMode = 'solid';
   private selectedId: string | null = null;
   private draft: { start: Point; node: Konva.Shape } | null = null;
   private textarea: HTMLTextAreaElement | null = null;
@@ -108,6 +110,9 @@ export class EditorCanvas {
       tool === 'select' ? 'default' : tool === 'text' ? 'text' : 'crosshair';
     this.sync();
   }
+  setRedactMode(mode: RedactMode): void {
+    this.redactMode = mode;
+  }
   setColor(value: string): void {
     this.colorValue = value;
   }
@@ -169,7 +174,8 @@ export class EditorCanvas {
           height: this.height,
         }),
       );
-      for (const a of this.history.doc.annotations) layer.add(createNode(a));
+      for (const a of this.history.doc.annotations)
+        layer.add(createNode(a, this.bitmap));
       stage.add(layer);
       layer.draw();
       const blob = await stage.toBlob({ mimeType: 'image/png', pixelRatio: 1 });
@@ -236,7 +242,7 @@ export class EditorCanvas {
   private sync(): void {
     this.layer.destroyChildren();
     for (const a of this.history.doc.annotations) {
-      const node = createNode(a);
+      const node = createNode(a, this.bitmap);
       node.draggable(this.tool === 'select');
       node.on('mousedown touchstart', (event) => {
         if (this.tool !== 'select') return;
@@ -428,7 +434,10 @@ export class EditorCanvas {
     } else this.layer.batchDraw();
   }
   private preview(a: Point, b: Point): Konva.Shape {
-    const node = createNode(this.build(a, b, 'preview', true) ?? this.stub(a));
+    const node = createNode(
+      this.build(a, b, 'preview', true) ?? this.stub(a),
+      this.bitmap,
+    );
     node.listening(false);
     return node;
   }
@@ -436,6 +445,7 @@ export class EditorCanvas {
     return {
       id: 'preview',
       type: 'redact',
+      mode: 'solid',
       x: a.x,
       y: a.y,
       width: 0,
@@ -467,7 +477,8 @@ export class EditorCanvas {
     if (!preview && !isMeaningfulRect(r)) return null;
     if (this.tool === 'rect')
       return { id, type: 'rect', ...r, color, strokeWidth };
-    if (this.tool === 'redact') return { id, type: 'redact', ...r };
+    if (this.tool === 'redact')
+      return { id, type: 'redact', mode: this.redactMode, ...r };
     return null;
   }
 

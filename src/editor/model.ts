@@ -57,8 +57,18 @@ export interface TextAnnotation extends Base {
   color: string;
   fontSize: number;
 }
+/** 'solid' es el único modo que no deja rastro; los otros dos conservan una versión borrosa. */
+export type RedactMode = 'solid' | 'pixelate' | 'blur';
+export const REDACT_MODES: readonly RedactMode[] = [
+  'solid',
+  'pixelate',
+  'blur',
+];
+export const isRedactMode = (value: string): value is RedactMode =>
+  (REDACT_MODES as readonly string[]).includes(value);
 export interface RedactAnnotation extends Base {
   type: 'redact';
+  mode: RedactMode;
   x: number;
   y: number;
   width: number;
