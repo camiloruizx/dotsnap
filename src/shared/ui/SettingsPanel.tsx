@@ -7,6 +7,7 @@ import {
 } from '../storage/preferences';
 import { buildFileName, isValidFileTemplate } from '../../editor/model';
 import { product } from '../config/product';
+import { useToast } from './Toast';
 import type { ExportFormat } from '../export/formats';
 
 const FORMATS: ExportFormat[] = ['png', 'jpeg', 'webp', 'pdf'];
@@ -71,6 +72,7 @@ export function SettingsPanel() {
   const [status, setStatus] = useState<'saved' | 'saving' | 'saveError'>(
     'saved',
   );
+  const toast = useToast();
   const [templateText, setTemplateText] = useState<string | null>(null);
   const template = templateText ?? preferences.fileNameTemplate;
   const templateOk = isValidFileTemplate(template);
@@ -79,8 +81,10 @@ export function SettingsPanel() {
     try {
       await writePreferences({ ...preferences, ...value });
       setStatus('saved');
+      toast(t('toastSaved'), 'success', { id: 'settings' });
     } catch {
       setStatus('saveError');
+      toast(t('saveError'), 'error', { id: 'settings' });
     }
   }
   return (

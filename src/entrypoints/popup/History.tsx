@@ -8,6 +8,7 @@ import {
   type HistoryItem,
 } from '../../shared/storage/captures';
 import { ProjectError, parseProject } from '../../shared/export/project';
+import { useToast } from '../../shared/ui/Toast';
 import { withinBudget } from '../../shared/capture/errors';
 
 const kb = (bytes: number) =>
@@ -32,6 +33,7 @@ function Thumb({ blob }: { blob: Blob | undefined }) {
 
 export function History() {
   const { t, preferences, ready } = usePreferences();
+  const toast = useToast();
   const [items, setItems] = useState<HistoryItem[] | null>(null);
   const [confirmClear, setConfirmClear] = useState(false);
   const [message, setMessage] = useState<MessageKey | null>(null);
@@ -68,15 +70,17 @@ export function History() {
       bitmap.close();
       if (!fits) throw new ProjectError('invalid');
       const id = await putCapture(project.image, project.annotations);
+      toast(t('toastProjectOpened'));
       open(id);
     } catch (error) {
-      setMessage(
+      const key: MessageKey =
         error instanceof ProjectError && error.code === 'newer'
           ? 'projectNewer'
           : error instanceof ProjectError && error.code === 'tooLarge'
             ? 'projectTooLarge'
-            : 'projectInvalid',
-      );
+            : 'projectInvalid';
+      setMessage(key);
+      toast(t(key), 'error');
     } finally {
       if (file.current) file.current.value = '';
     }
@@ -101,6 +105,7 @@ export function History() {
             onClick={async () => {
               if (!confirmClear) return setConfirmClear(true);
               await clearCaptures().catch(() => {});
+              toast(t('toastCleared'));
               setConfirmClear(false);
               void refresh();
             }}
@@ -147,6 +152,7 @@ export function History() {
                     <button
                       onClick={async () => {
                         await deleteCapture(item.id).catch(() => {});
+                        toast(t('toastDeleted'));
                         void refresh();
                       }}
                     >

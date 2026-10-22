@@ -226,12 +226,21 @@ try {
   await editor2.waitForFunction(
     () =>
       /Copied|Copiado/.test(
-        document.querySelector('.status-line')?.textContent ?? '',
+        document.querySelector('.toast-text')?.textContent ?? '',
       ),
     null,
     { timeout: 5000 },
   );
-  ok('botón Copiar en la barra: PNG copiado');
+  const toastBox = await editor2.locator('.toast').first().boundingBox();
+  const vp2 = editor2.viewportSize();
+  assert.ok(toastBox.x + toastBox.width > vp2.width - 40, 'toast a la derecha');
+  assert.ok(toastBox.y + toastBox.height > vp2.height - 40, 'toast abajo');
+  await editor2.screenshot({ path: resolve(evidence, 'toast.png') });
+  await editor2.locator('.toast-close').first().click();
+  await editor2.locator('.toast').first().waitFor({ state: 'detached' });
+  ok(
+    'botón Copiar en la barra: PNG copiado, con toast abajo a la derecha que se puede cerrar',
+  );
 
   // --- proyecto editable: guardar, validar e importar
   await tr(editor2, /^(Export…|Exportar…)$/).click();

@@ -1,5 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { ToastProvider } from '../../shared/ui/Toast';
 import { PreferencesProvider, loadInitialPreferences } from '../../shared/i18n';
 import { Popup } from './Popup';
 import '../../shared/theme/tokens.css';
@@ -9,7 +10,9 @@ const initial = await loadInitialPreferences();
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <PreferencesProvider initial={initial}>
-      <Popup />
+      <ToastProvider>
+        <Popup />
+      </ToastProvider>
     </PreferencesProvider>
   </React.StrictMode>,
 );

@@ -297,7 +297,7 @@ try {
   const copy = editor.getByRole('button', { name: /Copiar PNG|Copy PNG/ });
   await copy.click();
   await editor.waitForTimeout(500);
-  const status = await editor.locator('.status-line').innerText();
+  const status = await editor.locator('.toast-text').innerText();
   report.clipboard = status;
   console.log('portapapeles:', status || '(sin mensaje)');
 

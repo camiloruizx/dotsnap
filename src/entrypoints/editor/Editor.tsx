@@ -10,6 +10,7 @@ import {
 } from '../../shared/storage/captures';
 import { serializeProject } from '../../shared/export/project';
 import { Brand } from '../../shared/ui/Brand';
+import { useToast } from '../../shared/ui/Toast';
 import { Icon, type IconName } from '../../shared/ui/Icon';
 import { ColorCombo } from './ColorCombo';
 import { ExportPanel } from './ExportPanel';
@@ -104,10 +105,18 @@ export function Editor() {
   const [selected, setSelected] = useState<string | null>(null);
   const [font, setFont] = useState<FontId>(DEFAULT_FONT);
   const [selectedFont, setSelectedFont] = useState<FontId | null>(null);
-  const [status, setStatus] = useState<{
-    key: MessageKey;
-    extra?: string;
-  } | null>(null);
+  const toast = useToast();
+  /** Todo aviso al usuario sale como toast; el de exportación reemplaza al «Generando…». */
+  const setStatus = (value: { key: MessageKey; extra?: string }) =>
+    toast(
+      `${t(value.key)}${value.extra ? ` ${value.extra}` : ''}`,
+      /Error/.test(value.key)
+        ? 'error'
+        : value.key === 'exporting'
+          ? 'info'
+          : 'success',
+      { id: /^export/.test(value.key) ? 'export' : value.key },
+    );
   const [exporting, setExporting] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
@@ -559,11 +568,6 @@ export function Editor() {
             : ''}
           {' · '}
           {t('redactNote')}
-        </span>
-        <span role="status" aria-live="polite" className="status-line">
-          {status
-            ? `${t(status.key)}${status.extra ? ` ${status.extra}` : ''}`
-            : ''}
         </span>
       </footer>
     </div>

@@ -517,5 +517,23 @@
   },
   "cmdFullpage": {
     "message": "Capture the full page"
+  },
+  "toastDismiss": {
+    "message": "Dismiss"
+  },
+  "toastDeleted": {
+    "message": "Capture deleted"
+  },
+  "toastCleared": {
+    "message": "History cleared"
+  },
+  "toastSaved": {
+    "message": "Setting saved"
+  },
+  "toastDownloaded": {
+    "message": "Downloaded:"
+  },
+  "toastProjectOpened": {
+    "message": "Project opened"
   }
 }
