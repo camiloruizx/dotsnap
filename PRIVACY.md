@@ -25,7 +25,7 @@ DotSnap is a Chrome extension to capture, annotate and export screenshots. **It 
 - `storage`: save your preferences and the last full-page error message.
   No host permissions are requested, and the extension does not run on pages until you ask it to.
 
-**Children, changes, contact.** DotSnap is not directed at children and collects nothing from anyone. If this policy changes, the new version will be published here with its date. Questions: open an issue at https://github.com/camiloruizx/dotsnap or visit https://acrocode.dev/.
+**Children, changes, contact.** DotSnap is not directed at children and collects nothing from anyone. If this policy changes, the new version will be published here with its date. The popup and settings show links to acrocode.dev, GitHub and Ko-fi (optional donations); they open in a new tab only when you click them, and the extension itself sends nothing. Questions: open an issue at https://github.com/camiloruizx/dotsnap or visit https://acrocode.dev/.
 
 ## Español
 
@@ -50,4 +50,4 @@ DotSnap es una extensión de Chrome para capturar, anotar y exportar pantallas. 
 - `storage`: guardar tus preferencias y el último mensaje de error de página completa.
   No se piden permisos de sitios y la extensión no se ejecuta en las páginas hasta que lo pides.
 
-**Menores, cambios y contacto.** DotSnap no está dirigido a menores y no recopila nada de nadie. Si esta política cambia, se publicará aquí la nueva versión con su fecha. Dudas: abre un issue en https://github.com/camiloruizx/dotsnap o visita https://acrocode.dev/.
+**Menores, cambios y contacto.** DotSnap no está dirigido a menores y no recopila nada de nadie. Si esta política cambia, se publicará aquí la nueva versión con su fecha. El popup y Configurar muestran enlaces a acrocode.dev, GitHub y Ko-fi (donaciones opcionales); se abren en una pestaña nueva solo cuando haces clic, y la extensión no envía nada. Dudas: abre un issue en https://github.com/camiloruizx/dotsnap o visita https://acrocode.dev/.

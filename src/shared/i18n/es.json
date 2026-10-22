@@ -284,9 +284,6 @@
   "textFieldLabel": {
     "message": "Texto de la anotación"
   },
-  "redactNote": {
-    "message": "Censurar sustituye los píxeles por negro opaco en el PNG exportado."
-  },
   "exporting": {
     "message": "Generando PNG…"
   },
@@ -331,6 +328,9 @@
   },
   "fontImpact": {
     "message": "Impact"
+  },
+  "supportKofi": {
+    "message": "Invítame un café en Ko-fi (opcional, DotSnap es gratis)"
   },
   "createdBy": {
     "message": "Creado por"
@@ -577,5 +577,29 @@
   },
   "captureDelayHint": {
     "message": "Para captura visible y página completa; la cuenta regresiva aparece en el icono de la extensión."
+  },
+  "groupSelect": {
+    "message": "Seleccionar"
+  },
+  "groupShapes": {
+    "message": "Formas"
+  },
+  "groupMarks": {
+    "message": "Marcas y texto"
+  },
+  "groupPrivacy": {
+    "message": "Privacidad"
+  },
+  "groupEdit": {
+    "message": "Edición"
+  },
+  "groupDanger": {
+    "message": "Eliminar y descartar"
+  },
+  "groupOptions": {
+    "message": "Opciones de la herramienta"
+  },
+  "groupOutput": {
+    "message": "Salida"
   }
 }

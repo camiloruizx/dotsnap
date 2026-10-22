@@ -579,12 +579,6 @@ button:disabled:not(.mode) {
   }
 }
 
-.tool-actions {
-  flex: 1 1 100%;
-}
-.tool-spacer {
-  flex: 1;
-}
 button.danger {
   color: var(--error);
   border-color: var(--error);
@@ -607,12 +601,59 @@ button.danger:hover:not(:disabled) {
   margin-top: var(--space-5);
 }
 
-.tool-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
 /* Altura fija: al cambiar de herramienta el lienzo no se desplaza. */
 .tool-options {
   min-height: var(--control-height);
+}
+
+/* Barra del editor: una sola fila que se parte por bloques; herramientas solo con icono. */
+.editor-bar {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-5) var(--space-9);
+}
+.bar-tools,
+.bar-end,
+.bar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5);
+}
+.bar-end {
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  gap: var(--space-5) var(--space-9);
+}
+.bar-tools {
+  gap: var(--space-3);
+}
+/* Reserva el sitio de color/fuente/censura: cambiar de herramienta no recoloca la barra. */
+.tool-options {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  min-width: 20rem;
+  min-height: var(--control-height);
+}
+.btn-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+.btn-group > button.icon-only:not([aria-pressed='true']) {
+  border-color: transparent;
+  background: transparent;
+}
+.btn-group > button.icon-only:hover:not(:disabled):not([aria-pressed='true']) {
+  background: color-mix(in srgb, var(--border) 45%, transparent);
+}
+button.icon-only {
+  padding-inline: var(--space-5);
 }

@@ -77,6 +77,10 @@ End-to-end scripts need `DOTSNAP_CHROME` pointing to a Chromium. Validation note
 - `src/editor/`: the Konva canvas and its model/history.
 - `docs/`: architecture, API risks, feature matrix, plan and validation.
 
+## Support
+
+DotSnap is free and open source. If it saves you time, you can [buy me a coffee on Ko-fi](https://ko-fi.com/camiloruizx). It is optional and unlocks nothing.
+
 ## License
 
 [MIT](LICENSE) © 2026 Juan Camilo Ruiz Gallegos. Privacy policy: [PRIVACY.md](PRIVACY.md).

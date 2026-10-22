@@ -48,7 +48,11 @@ try {
     );
   assert.deepEqual(
     links.map((l) => l[1]),
-    ['https://acrocode.dev/', 'https://github.com/camiloruizx'],
+    [
+      'https://acrocode.dev/',
+      'https://github.com/camiloruizx',
+      'https://ko-fi.com/camiloruizx',
+    ],
   );
   assert.ok(
     links.every((l) => l[2] === '_blank' && l[3].includes('noreferrer')),

@@ -37,6 +37,7 @@ TUYO Y LOCAL
 • Solo pide activeTab, scripting y storage; no se ejecuta en ninguna página hasta que se lo pides.
 
 Código abierto (MIT): https://github.com/camiloruizx/dotsnap
+Gratis. Si te sirve, puedes apoyar con un café (opcional): https://ko-fi.com/camiloruizx
 
 ## English
 
@@ -73,6 +74,7 @@ YOURS AND LOCAL
 • Only asks for activeTab, scripting and storage; it does not run on any page until you ask it to.
 
 Open source (MIT): https://github.com/camiloruizx/dotsnap
+Free. If it helps, you can support it with a coffee (optional): https://ko-fi.com/camiloruizx
 
 ## Pestaña «Prácticas de privacidad» / Privacy practices tab
 

@@ -1,8 +1,10 @@
 # Cambios
 
-## Sin publicar
+## 1.0.2 — 2026-10-22
 
-- Hoja de ruta mensual en `docs/hoja-de-ruta.md`.
+- **Barra del editor rediseñada:** herramientas agrupadas en una píldora solo con iconos (el nombre aparece al pasar el cursor), deshacer/rehacer juntos, y acciones de salida a la derecha. El espacio de color/grosor/censura está reservado, así que la barra ya no se mueve al cambiar de herramienta.
+- Enlace opcional a **Ko-fi** en el popup y en Configurar, en el README y en la ficha; `.github/FUNDING.yml` para el botón Sponsor de GitHub. DotSnap sigue siendo gratis y MIT; el diseño de versión Pro quedó descartado.
+- Hoja de ruta mensual (`docs/hoja-de-ruta.md`) y diseño técnico de una versión Pro (`docs/monetizacion.md`, solo propuesta).
 
 ## 1.0.1 — 2026-10-22
 

@@ -284,9 +284,6 @@
   "textFieldLabel": {
     "message": "Annotation text"
   },
-  "redactNote": {
-    "message": "Redact replaces pixels with opaque black in the exported PNG."
-  },
   "exporting": {
     "message": "Generating PNG…"
   },
@@ -331,6 +328,9 @@
   },
   "fontImpact": {
     "message": "Impact"
+  },
+  "supportKofi": {
+    "message": "Buy me a coffee on Ko-fi (optional, DotSnap is free)"
   },
   "createdBy": {
     "message": "Created by"
@@ -577,5 +577,29 @@
   },
   "captureDelayHint": {
     "message": "For visible and full page captures; the countdown shows on the extension icon."
+  },
+  "groupSelect": {
+    "message": "Select"
+  },
+  "groupShapes": {
+    "message": "Shapes"
+  },
+  "groupMarks": {
+    "message": "Marks and text"
+  },
+  "groupPrivacy": {
+    "message": "Privacy"
+  },
+  "groupEdit": {
+    "message": "Edit"
+  },
+  "groupDanger": {
+    "message": "Delete and discard"
+  },
+  "groupOptions": {
+    "message": "Tool options"
+  },
+  "groupOutput": {
+    "message": "Output"
   }
 }

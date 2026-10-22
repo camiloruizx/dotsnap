@@ -77,6 +77,10 @@ Los scripts de extremo a extremo necesitan `DOTSNAP_CHROME` apuntando a un Chrom
 - `src/editor/`: el lienzo Konva con su modelo e historial.
 - `docs/`: arquitectura, riesgos de API, matriz de funciones, plan y validación.
 
+## Apoyo
+
+DotSnap es gratis y de código abierto. Si te ahorra tiempo, puedes [invitarme un café en Ko-fi](https://ko-fi.com/camiloruizx). Es opcional y no desbloquea nada.
+
 ## Licencia
 
 [MIT](LICENSE) © 2026 Juan Camilo Ruiz Gallegos. Política de privacidad: [PRIVACY.md](PRIVACY.md).
