@@ -79,7 +79,9 @@ export class EditorCanvas {
     this.stage.on('mouseleave', () => this.pointerUp(false));
     this.transformer.on('transformend', () => this.transformEnd());
     this.stage.container().addEventListener('dblclick', this.onDoubleClick);
-    this.observer = new ResizeObserver(() => this.refit());
+    // Se difiere a un frame: cambiar el tamaño dentro del callback re-dispara el observer
+    // ("ResizeObserver loop completed with undelivered notifications").
+    this.observer = new ResizeObserver(() => this.scheduleRefit());
     this.observer.observe(container.parentElement ?? container);
     this.sync();
   }
@@ -141,6 +143,7 @@ export class EditorCanvas {
   destroy(): void {
     this.cancelTransient();
     this.observer.disconnect();
+    if (this.refitFrame) cancelAnimationFrame(this.refitFrame);
     this.stage.container().removeEventListener('dblclick', this.onDoubleClick);
     this.stage.destroy();
   }
@@ -182,6 +185,14 @@ export class EditorCanvas {
     const available = (this.container.parentElement ?? this.container)
       .clientWidth;
     return available > 0 ? Math.min(1, available / this.width) : 1;
+  }
+  private refitFrame = 0;
+  private scheduleRefit(): void {
+    if (this.refitFrame) return;
+    this.refitFrame = requestAnimationFrame(() => {
+      this.refitFrame = 0;
+      this.refit();
+    });
   }
   private refit(): void {
     const next = this.fitScale();

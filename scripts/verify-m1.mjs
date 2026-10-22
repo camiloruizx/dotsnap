@@ -345,6 +345,47 @@ for (const dpr of [1, 2]) {
       check('doble clic reabre el texto y la edición persiste');
     }
     if (dpr === 1) {
+      // Color: fichas con nombre y cuadro, y selector de paleta personalizado.
+      const chips = editor.getByRole('radio');
+      assert.equal(await chips.count(), 8, 'fichas de color');
+      for (const chip of await chips.all())
+        assert.ok(
+          ((await chip.textContent()) ?? '').trim().length > 0,
+          'ficha sin nombre',
+        );
+      await editor.locator('.color-chip[title]').nth(1).click();
+      assert.equal(
+        await editor.locator('[role=radio][aria-checked=true]').count(),
+        1,
+      );
+      const near = (img, x, y, ok) => {
+        for (let dx = -4; dx <= 4; dx++)
+          for (let dy = -4; dy <= 4; dy++)
+            if (ok(px(img, x + dx, y + dy))) return true;
+        return false;
+      };
+      await tool(L.rect);
+      await drag(fr(900, 60), fr(980, 120));
+      await editor.locator('input[type=color]').fill('#00c800');
+      assert.equal(
+        await editor.locator('[role=radio][aria-checked=true]').count(),
+        0,
+        'personalizado desmarca las fichas',
+      );
+      await drag(fr(900, 150), fr(980, 210));
+      const colored = await decode(popup, (await exportPng()).bytes);
+      assert.ok(
+        near(colored, 900, 90, (p) => p[2] > 150 && p[0] < 60),
+        'rectángulo azul de la paleta',
+      );
+      assert.ok(
+        near(colored, 900, 180, (p) => p[1] > 150 && p[0] < 60 && p[2] < 60),
+        'rectángulo con color personalizado',
+      );
+      check('color: fichas con nombre, paleta y color personalizado dibujan');
+      await editor.screenshot({ path: resolve(evidence, 'editor-color.png') });
+    }
+    if (dpr === 1) {
       const axe = await new AxeBuilder({ page: editor })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
         .analyze();

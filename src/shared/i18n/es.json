@@ -182,11 +182,23 @@
   "colorGreen": {
     "message": "Verde"
   },
+  "colorOrange": {
+    "message": "Naranja"
+  },
+  "colorPurple": {
+    "message": "Morado"
+  },
   "colorBlack": {
     "message": "Negro"
   },
   "colorWhite": {
     "message": "Blanco"
+  },
+  "colorCustom": {
+    "message": "Personalizado"
+  },
+  "colorPick": {
+    "message": "Elegir de la paleta"
   },
   "undo": {
     "message": "Deshacer"

@@ -9,6 +9,8 @@ export const PALETTE = [
   { id: 'blue', value: '#0078d4' },
   { id: 'yellow', value: '#f5c542' },
   { id: 'green', value: '#30a46c' },
+  { id: 'orange', value: '#f76b15' },
+  { id: 'purple', value: '#8e4ec6' },
   { id: 'black', value: '#000000' },
   { id: 'white', value: '#ffffff' },
 ] as const;
@@ -17,6 +19,11 @@ export const isPaletteId = (value: string): value is PaletteId =>
   PALETTE.some((color) => color.id === value);
 export const colorOf = (id: PaletteId): string =>
   PALETTE.find((color) => color.id === id)!.value;
+export const isHexColor = (value: string): boolean =>
+  /^#[0-9a-f]{6}$/i.test(value);
+/** Id de la paleta con ese valor, o null si es un color personalizado. */
+export const paletteIdOf = (value: string): PaletteId | null =>
+  PALETTE.find((color) => color.value === value.toLowerCase())?.id ?? null;
 
 /** Censura segura: relleno opaco fijo, sin color ni opacidad configurables. */
 export const REDACT_FILL = '#000000';

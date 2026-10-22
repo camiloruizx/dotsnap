@@ -319,3 +319,46 @@ button:disabled:not(.mode) {
     color: GrayText;
   }
 }
+.color-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.color-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-small);
+}
+.color-swatch {
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  flex: none;
+}
+.color-chip[aria-checked='true'],
+.color-custom[data-active='true'] {
+  border-color: var(--accent);
+  outline: 1px solid var(--accent);
+}
+.color-custom {
+  cursor: pointer;
+}
+.color-custom input[type='color'] {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: none;
+  cursor: pointer;
+}
+.color-custom {
+  min-height: var(--control-height);
+  border: var(--border-width) solid var(--control-border);
+  border-radius: var(--radius-button);
+  background: var(--control);
+  padding: var(--space-3) var(--space-7);
+}

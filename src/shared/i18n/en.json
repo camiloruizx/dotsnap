@@ -182,11 +182,23 @@
   "colorGreen": {
     "message": "Green"
   },
+  "colorOrange": {
+    "message": "Orange"
+  },
+  "colorPurple": {
+    "message": "Purple"
+  },
   "colorBlack": {
     "message": "Black"
   },
   "colorWhite": {
     "message": "White"
+  },
+  "colorCustom": {
+    "message": "Custom"
+  },
+  "colorPick": {
+    "message": "Pick from palette"
   },
   "undo": {
     "message": "Undo"

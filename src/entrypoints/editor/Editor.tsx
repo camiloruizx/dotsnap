@@ -14,8 +14,8 @@ import {
   History,
   PALETTE,
   buildFileName,
-  colorOf,
-  isPaletteId,
+  isHexColor,
+  paletteIdOf,
   type PaletteId,
   type Tool,
 } from '../../editor/model';
@@ -41,13 +41,15 @@ const colorLabel: Record<PaletteId, MessageKey> = {
   green: 'colorGreen',
   black: 'colorBlack',
   white: 'colorWhite',
+  orange: 'colorOrange',
+  purple: 'colorPurple',
 };
 
 export function Editor() {
   const { t } = usePreferences();
   const [load, setLoad] = useState<Load>({ kind: 'loading' });
   const [tool, setTool] = useState<Tool>('select');
-  const [colorId, setColorId] = useState<PaletteId>('red');
+  const [color, setColor] = useState<string>(PALETTE[0].value);
   const [tick, setTick] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [status, setStatus] = useState<{
@@ -111,10 +113,11 @@ export function Editor() {
     canvasRef.current?.setTool(tool);
   }, [tool, ready]);
   useEffect(() => {
-    canvasRef.current?.setColor(colorOf(colorId));
-  }, [colorId, ready]);
+    canvasRef.current?.setColor(color);
+  }, [color, ready]);
 
   void tick;
+  const currentId = paletteIdOf(color);
 
   const onKey = useCallback((event: KeyboardEvent) => {
     const canvas = canvasRef.current;
@@ -235,23 +238,53 @@ export function Editor() {
               <span>{t(item.label)}</span>
             </button>
           ))}
-          <label className="inline-field">
-            <span>{t('color')}</span>
-            <select
-              value={colorId}
-              disabled={tool === 'redact'}
-              onChange={(event) => {
-                if (isPaletteId(event.target.value))
-                  setColorId(event.target.value);
-              }}
+          <div
+            role="radiogroup"
+            aria-label={t('color')}
+            className="color-row"
+            aria-disabled={tool === 'redact'}
+          >
+            {PALETTE.map((item) => {
+              const name = t(colorLabel[item.id]);
+              return (
+                <button
+                  key={item.id}
+                  role="radio"
+                  aria-checked={currentId === item.id}
+                  className="color-chip"
+                  title={name}
+                  disabled={tool === 'redact'}
+                  onClick={() => setColor(item.value)}
+                >
+                  <span
+                    className="color-swatch"
+                    style={{ backgroundColor: item.value }}
+                    aria-hidden="true"
+                  />
+                  <span>{name}</span>
+                </button>
+              );
+            })}
+            <label
+              className="color-chip color-custom"
+              data-active={currentId === null}
+              title={t('colorPick')}
             >
-              {PALETTE.map((color) => (
-                <option key={color.id} value={color.id}>
-                  {t(colorLabel[color.id])}
-                </option>
-              ))}
-            </select>
-          </label>
+              <input
+                type="color"
+                aria-label={t('colorPick')}
+                value={color}
+                disabled={tool === 'redact'}
+                onChange={(event) => {
+                  if (isHexColor(event.target.value))
+                    setColor(event.target.value.toLowerCase());
+                }}
+              />
+              <span>
+                {currentId === null ? color.toUpperCase() : t('colorCustom')}
+              </span>
+            </label>
+          </div>
         </div>
         <div className="tool-row">
           <button
