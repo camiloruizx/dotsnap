@@ -17,6 +17,7 @@ import {
   type Tool,
 } from './model';
 import { createNode } from './nodes';
+import { optimizePng } from '../shared/export/png';
 
 /** Colores de la interfaz de selección; nunca se exportan (la exportación usa otro stage). */
 const SELECTION = '#3794ff';
@@ -46,7 +47,9 @@ export class EditorCanvas {
   private fontValue: FontId = DEFAULT_FONT;
   private redactMode: RedactMode = 'solid';
   private selectedId: string | null = null;
-  private draft: { start: Point; node: Konva.Shape } | null = null;
+  private stepPoint: Point | null = null;
+  private draft: { start: Point; node: Konva.Shape | Konva.Group } | null =
+    null;
   private textarea: HTMLTextAreaElement | null = null;
   private textPoint: Point | null = null;
   private scale = 1;
@@ -182,13 +185,13 @@ export class EditorCanvas {
    * transformador. Las censuras se dibujan opacas sobre los píxeles originales, por lo que
    * el PNG resultante no contiene los píxeles ocultos.
    */
-  async exportPng(): Promise<Blob> {
+  async exportPng(optimize = false): Promise<Blob> {
     const canvas = await this.exportCanvas();
     const blob = await new Promise<Blob | null>((resolve) =>
       canvas.toBlob(resolve, 'image/png'),
     );
     if (!blob || blob.type !== 'image/png') throw new Error('export');
-    return blob;
+    return optimize ? optimizePng(canvas, blob) : blob;
   }
 
   /** Lienzo aplanado a tamaño nativo (sin selección ni asas), base de todos los formatos. */
@@ -266,6 +269,7 @@ export class EditorCanvas {
   }
   private cancelTransient(): void {
     this.textPoint = null;
+    this.stepPoint = null;
     this.draft?.node.destroy();
     this.draft = null;
     this.closeTextarea();
@@ -274,7 +278,8 @@ export class EditorCanvas {
   private sync(): void {
     this.layer.destroyChildren();
     for (const a of this.history.doc.annotations) {
-      const node = createNode(a, this.bitmap);
+      const shape = createNode(a, this.bitmap);
+      const node: Konva.Node = shape;
       node.draggable(this.tool === 'select');
       node.on('mousedown touchstart', (event) => {
         if (this.tool !== 'select') return;
@@ -282,7 +287,7 @@ export class EditorCanvas {
         this.select(a.id);
       });
       node.on('dragend', () => this.dragEnd(a.id, node));
-      this.layer.add(node);
+      this.layer.add(shape);
     }
     this.refreshSelectionUi();
     // draw() y no batchDraw(): el lienzo de detección de clics debe estar al día antes del siguiente evento.
@@ -298,7 +303,7 @@ export class EditorCanvas {
       : null;
     if (!selected || !node || this.tool !== 'select') {
       this.transformer.nodes([]);
-    } else if (selected.type === 'arrow') {
+    } else if (selected.type === 'arrow' || selected.type === 'line') {
       this.transformer.nodes([]);
       const radius = 7 / this.scale;
       const ends: [Point, 'start' | 'end'][] = [
@@ -324,9 +329,10 @@ export class EditorCanvas {
       }
     } else {
       this.transformer.nodes([node]);
-      this.transformer.keepRatio(selected.type === 'text');
+      const keep = selected.type === 'text' || selected.type === 'step';
+      this.transformer.keepRatio(keep);
       this.transformer.enabledAnchors(
-        selected.type === 'text'
+        keep
           ? ['top-left', 'top-right', 'bottom-left', 'bottom-right']
           : undefined,
       );
@@ -340,7 +346,7 @@ export class EditorCanvas {
     which: 'start' | 'end',
     handle: Konva.Circle,
   ): void {
-    const arrow = node as Konva.Arrow;
+    const arrow = node as Konva.Line;
     const p = clampPoint(handle.position(), this.width, this.height);
     handle.position(p);
     const points = [...arrow.points()];
@@ -352,8 +358,8 @@ export class EditorCanvas {
   }
   private commitHandle(id: string, node: Konva.Node): void {
     const before = this.find(id);
-    if (before?.type !== 'arrow') return;
-    const [x1, y1, x2, y2] = (node as Konva.Arrow).points() as [
+    if (before?.type !== 'arrow' && before?.type !== 'line') return;
+    const [x1, y1, x2, y2] = (node as Konva.Line).points() as [
       number,
       number,
       number,
@@ -377,7 +383,7 @@ export class EditorCanvas {
     const dx = node.x();
     const dy = node.y();
     let after: Annotation;
-    if (before.type === 'arrow')
+    if (before.type === 'arrow' || before.type === 'line')
       after = {
         ...before,
         x1: before.x1 + dx,
@@ -385,7 +391,13 @@ export class EditorCanvas {
         x2: before.x2 + dx,
         y2: before.y2 + dy,
       };
-    else after = { ...before, x: dx, y: dy };
+    else if (before.type === 'ellipse')
+      after = {
+        ...before,
+        x: node.x() - before.width / 2,
+        y: node.y() - before.height / 2,
+      };
+    else after = { ...before, x: node.x(), y: node.y() };
     this.history.execute({ kind: 'update', before, after });
     this.changed();
   }
@@ -393,7 +405,8 @@ export class EditorCanvas {
   private transformEnd(): void {
     const node = this.transformer.nodes()[0];
     const before = this.selectedId ? this.find(this.selectedId) : undefined;
-    if (!node || !before || before.type === 'arrow') return;
+    if (!node || !before || before.type === 'arrow' || before.type === 'line')
+      return;
     const sx = node.scaleX();
     const sy = node.scaleY();
     node.scale({ x: 1, y: 1 });
@@ -405,7 +418,24 @@ export class EditorCanvas {
         y: node.y(),
         fontSize: Math.max(8, Math.round(before.fontSize * sy)),
       };
-    else
+    else if (before.type === 'step')
+      after = {
+        ...before,
+        x: node.x(),
+        y: node.y(),
+        radius: Math.min(500, Math.max(6, Math.round(before.radius * sx))),
+      };
+    else if (before.type === 'ellipse') {
+      const width = Math.max(4, node.width() * sx);
+      const height = Math.max(4, node.height() * sy);
+      after = {
+        ...before,
+        x: node.x() - width / 2,
+        y: node.y() - height / 2,
+        width,
+        height,
+      };
+    } else
       after = {
         ...before,
         x: node.x(),
@@ -424,6 +454,10 @@ export class EditorCanvas {
     if (!start) return;
     if (this.tool === 'select') {
       if (this.stage.getPointerPosition() && this.hitEmpty()) this.select(null);
+      return;
+    }
+    if (this.tool === 'step') {
+      this.stepPoint = start;
       return;
     }
     if (this.tool === 'text') {
@@ -448,6 +482,12 @@ export class EditorCanvas {
     this.layer.batchDraw();
   }
   private pointerUp(released: boolean): void {
+    if (this.stepPoint) {
+      const at = this.stepPoint;
+      this.stepPoint = null;
+      if (released) this.addStep(at);
+      return;
+    }
     if (this.textPoint) {
       const at = this.textPoint;
       this.textPoint = null;
@@ -465,7 +505,27 @@ export class EditorCanvas {
       this.changed();
     } else this.layer.batchDraw();
   }
-  private preview(a: Point, b: Point): Konva.Shape {
+  private addStep(at: Point): void {
+    const next =
+      this.history.doc.annotations.reduce(
+        (max, a) => (a.type === 'step' ? Math.max(max, a.number) : max),
+        0,
+      ) + 1;
+    if (next > 999) return;
+    this.history.execute(
+      addCommand(this.history.doc, {
+        id: crypto.randomUUID(),
+        type: 'step',
+        x: at.x,
+        y: at.y,
+        number: next,
+        radius: Math.round(Math.max(12, this.sizes.strokeWidth * 4.5)),
+        color: this.colorValue,
+      }),
+    );
+    this.changed();
+  }
+  private preview(a: Point, b: Point): Konva.Shape | Konva.Group {
     const node = createNode(
       this.build(a, b, 'preview', true) ?? this.stub(a),
       this.bitmap,
@@ -492,11 +552,11 @@ export class EditorCanvas {
   ): Annotation | null {
     const color = this.colorValue;
     const { strokeWidth } = this.sizes;
-    if (this.tool === 'arrow')
+    if (this.tool === 'arrow' || this.tool === 'line')
       return preview || isMeaningfulArrow(a, b)
         ? {
             id,
-            type: 'arrow',
+            type: this.tool,
             x1: a.x,
             y1: a.y,
             x2: b.x,
@@ -507,8 +567,10 @@ export class EditorCanvas {
         : null;
     const r = normalizeRect(a, b);
     if (!preview && !isMeaningfulRect(r)) return null;
-    if (this.tool === 'rect')
-      return { id, type: 'rect', ...r, color, strokeWidth };
+    if (this.tool === 'rect' || this.tool === 'ellipse')
+      return { id, type: this.tool, ...r, color, strokeWidth };
+    if (this.tool === 'highlight')
+      return { id, type: 'highlight', ...r, color };
     if (this.tool === 'redact')
       return { id, type: 'redact', mode: this.redactMode, ...r };
     return null;

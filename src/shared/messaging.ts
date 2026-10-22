@@ -1,11 +1,15 @@
 export type SelectionMode = 'region' | 'element';
 export const isSelectionMode = (value: unknown): value is SelectionMode =>
   value === 'region' || value === 'element';
+/** Espera previa a capturar, en segundos (solo captura visible y página completa). */
+export type Delay = 3 | 5 | 10;
+export const isDelay = (value: unknown): value is Delay =>
+  value === 3 || value === 5 || value === 10;
 export type Request =
   | { version: 1; type: 'health' }
-  | { version: 1; type: 'capture-visible' }
+  | { version: 1; type: 'capture-visible'; delay?: Delay }
   | { version: 1; type: 'start-selection'; mode: SelectionMode }
-  | { version: 1; type: 'capture-fullpage' };
+  | { version: 1; type: 'capture-fullpage'; delay?: Delay };
 
 export const captureErrorCodes = [
   'restricted',
@@ -29,6 +33,13 @@ export function parseRequest(value: unknown): Request | null {
   if (keys === 3 && data.type === 'start-selection')
     return isSelectionMode(data.mode)
       ? { version: 1, type: 'start-selection', mode: data.mode }
+      : null;
+  if (
+    keys === 3 &&
+    (data.type === 'capture-visible' || data.type === 'capture-fullpage')
+  )
+    return isDelay(data.delay)
+      ? { version: 1, type: data.type, delay: data.delay }
       : null;
   if (keys !== 2) return null;
   return data.type === 'health' ||

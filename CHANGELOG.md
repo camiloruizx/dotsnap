@@ -1,5 +1,17 @@
 # Cambios
 
+## 1.0.0 — 2026-10-22
+
+Primera versión estable. Reúne todo lo hecho desde 0.4.2 (M4, M5, avisos, barra reordenada) más las mejoras finales.
+
+- **Herramientas de anotación nuevas:** línea, elipse, resaltador (translúcido) y **pasos numerados** (numeración automática, color de número con contraste, redimensionables). Validación estricta al restaurar anotaciones guardadas.
+- **Temporizador** de 3, 5 o 10 s para captura visible y página completa; la cuenta regresiva aparece en el icono de la extensión.
+- **Historial:** renombrar capturas y buscar por nombre o fecha.
+- **PNG optimizado sin pérdida** al descargar y exportar (filtros por fila, paleta cuando hay ≤256 colores); se usa solo si pesa menos que el PNG del navegador.
+- El aviso del proyecto (imagen original incluida) solo aparece cuando hay censuras.
+- La barra del editor mantiene siempre la misma altura al cambiar de herramienta (el lienzo ya no se desplaza).
+- Pendiente para después de 1.0.0: lupa, dibujo libre, recorte y rotación.
+
 ## 0.6.2 — 2026-10-22
 
 - Barra del editor reordenada: Deshacer y Rehacer, luego Descargar PNG, Copiar y Exportar…, y al final a la derecha **Eliminar** y **Descartar** en rojo, separados de las acciones seguras.

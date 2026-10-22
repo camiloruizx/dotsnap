@@ -5,6 +5,8 @@ export type LanguagePreference = 'system' | 'es' | 'en';
 export type ThemePreference = 'system' | 'light' | 'dark';
 export type RetentionDays = 1 | 7 | 30;
 export const RETENTION_OPTIONS: readonly RetentionDays[] = [1, 7, 30];
+export type CaptureDelay = 0 | 3 | 5 | 10;
+export const DELAY_OPTIONS: readonly CaptureDelay[] = [0, 3, 5, 10];
 export interface Preferences {
   language: LanguagePreference;
   theme: ThemePreference;
@@ -15,6 +17,8 @@ export interface Preferences {
   /** 5–100 */
   defaultQuality: number;
   fileNameTemplate: string;
+  /** Segundos de espera antes de capturar (captura visible y página completa). */
+  captureDelay: CaptureDelay;
 }
 export const defaults: Readonly<Preferences> = {
   language: 'system',
@@ -24,6 +28,7 @@ export const defaults: Readonly<Preferences> = {
   defaultFormat: 'png',
   defaultQuality: 92,
   fileNameTemplate: DEFAULT_FILE_TEMPLATE,
+  captureDelay: 0,
 };
 export const preferencesKey = 'preferences.v1';
 
@@ -62,6 +67,12 @@ export function parsePreferences(value: unknown): Preferences {
       typeof template === 'string' && isValidFileTemplate(template)
         ? template
         : DEFAULT_FILE_TEMPLATE,
+    captureDelay:
+      data.captureDelay === 3 ||
+      data.captureDelay === 5 ||
+      data.captureDelay === 10
+        ? data.captureDelay
+        : 0,
   };
 }
 export async function readPreferences(): Promise<Preferences> {

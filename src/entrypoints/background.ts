@@ -1,5 +1,6 @@
 import { defineBackground } from 'wxt/utils/define-background';
-import { isTrustedUi, parseRequest } from '../shared/messaging';
+import { isTrustedUi, parseRequest, type Delay } from '../shared/messaging';
+import { countdown } from '../shared/capture/delay';
 import { captureVisible } from '../shared/capture/visible';
 import {
   handleFullPageMessage,
@@ -17,6 +18,25 @@ const shortcuts: Record<string, () => Promise<unknown>> = {
   'capture-element': () => startSelection('element'),
   'capture-fullpage': () => startFullPage(),
 };
+
+/** Ejecuta la captura tras la cuenta regresiva; responde de inmediato para que el popup se cierre. */
+function afterDelay(
+  delay: Delay,
+  run: () => Promise<unknown>,
+  respond: (response: unknown) => void,
+): void {
+  respond({ version: 1, ok: true });
+  void (async () => {
+    const ok = await countdown(delay, {
+      sleep: (ms) => new Promise((r) => setTimeout(r, ms)),
+      badge: async (text) => {
+        await chrome.action.setBadgeBackgroundColor({ color: '#0078d4' });
+        await chrome.action.setBadgeText({ text });
+      },
+    }).catch(() => false);
+    if (ok) await run().catch(() => {});
+  })();
+}
 
 export default defineBackground(() => {
   chrome.commands.onCommand.addListener((command) => {
@@ -50,8 +70,16 @@ export default defineBackground(() => {
       return true;
     }
     if (request.type === 'capture-fullpage') {
+      if (request.delay) {
+        afterDelay(request.delay, () => startFullPage(), respond);
+        return;
+      }
       void startFullPage().then(respond);
       return true;
+    }
+    if (request.delay) {
+      afterDelay(request.delay, () => captureVisible(), respond);
+      return;
     }
     void captureVisible().then(respond);
     return true;

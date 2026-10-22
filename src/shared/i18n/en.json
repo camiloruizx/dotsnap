@@ -179,8 +179,20 @@
   "toolArrow": {
     "message": "Arrow"
   },
+  "toolLine": {
+    "message": "Line"
+  },
   "toolRect": {
     "message": "Rectangle"
+  },
+  "toolEllipse": {
+    "message": "Ellipse"
+  },
+  "toolHighlight": {
+    "message": "Highlighter"
+  },
+  "toolStep": {
+    "message": "Step"
   },
   "toolText": {
     "message": "Text"
@@ -535,5 +547,29 @@
   },
   "toastProjectOpened": {
     "message": "Project opened"
+  },
+  "historySearch": {
+    "message": "Search history"
+  },
+  "historyRename": {
+    "message": "Rename"
+  },
+  "historyNoMatch": {
+    "message": "No capture matches your search."
+  },
+  "toastRenamed": {
+    "message": "Name updated."
+  },
+  "captureDelay": {
+    "message": "Timer"
+  },
+  "captureDelayNone": {
+    "message": "No delay"
+  },
+  "captureDelaySeconds": {
+    "message": "seconds"
+  },
+  "captureDelayHint": {
+    "message": "For visible and full page captures; the countdown shows on the extension icon."
   }
 }

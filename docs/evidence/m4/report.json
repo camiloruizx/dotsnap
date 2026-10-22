@@ -1,7 +1,7 @@
 {
   "checks": [
-    "PNG real 1000×600, 1745239 B",
-    "JPEG real, 293440 B (< PNG 1745239 B); el peso mostrado coincide con el archivo",
+    "PNG real 1000×600, 1124493 B",
+    "JPEG real, 293440 B (< PNG 1124493 B); el peso mostrado coincide con el archivo",
     "WebP real, 311072 B",
     "calidad 20 % pesa menos (40642 B < 311072 B)",
     "escala 50 % → 500×300 y menos peso",

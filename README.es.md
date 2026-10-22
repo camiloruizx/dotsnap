@@ -9,7 +9,7 @@
 ## Qué hace
 
 - **Cuatro formas de capturar:** área visible, región (arrastra un rectángulo y ajústalo), elemento inteligente (pasa el cursor y elige un bloque de la página) y página completa (se desplaza y une los tramos).
-- **Editor:** flechas, rectángulos, texto (nueve fuentes del sistema) y censura (sólida, pixelada o desenfocada). Seleccionar, mover, redimensionar, borrar, deshacer y rehacer.
+- **Editor:** flechas, líneas, rectángulos, elipses, resaltador, pasos numerados, texto (nueve fuentes del sistema) y censura (sólida, pixelada o desenfocada). Seleccionar, mover, redimensionar, borrar, deshacer y rehacer.
 - **Exportación:** PNG, JPEG, WebP y PDF; escala; calidad de JPEG/WebP; un **peso objetivo** que busca la mayor calidad que cabe; PDF en páginas A4, Carta o del tamaño de la imagen, que reparte las capturas largas en varias páginas sin cortar filas. El peso que se muestra es el del archivo real, junto al del PNG original.
 - **Copiar al portapapeles** como PNG y descarga con un nombre de archivo que puedes personalizar.
 - **Historial:** capturas recientes con miniatura; reábrelas con sus anotaciones, elimina una o todas. Se conservan 1, 7 o 30 días (tú eliges), nunca en incógnito, y se puede desactivar.

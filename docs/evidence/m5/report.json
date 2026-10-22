@@ -3,7 +3,7 @@
     "historial: 1 captura con miniatura, tamaño y anotaciones guardadas automáticamente",
     "reabrir desde el historial restaura las anotaciones: PNG exportado idéntico",
     "botón Copiar en la barra: PNG copiado, con toast abajo a la derecha que se puede cerrar",
-    "proyecto guardado (.dotsnap.json v1) con aviso de que contiene la imagen original",
+    "proyecto guardado (.dotsnap.json v1); sin censuras no se muestra el aviso",
     "proyecto importado: se abre con sus anotaciones y exporta el mismo PNG",
     "proyectos inválidos se rechazan con aviso y sin crear capturas",
     "eliminar una y borrar todo (con segunda pulsación de confirmación)",

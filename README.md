@@ -9,7 +9,7 @@
 ## What it does
 
 - **Four ways to capture:** visible area, region (drag a rectangle and adjust it), smart element (hover and pick a block of the page) and full page (scrolls and stitches).
-- **Editor:** arrows, rectangles, text (nine system fonts), and redaction (solid, pixelate or blur). Select, move, resize, delete, undo and redo.
+- **Editor:** arrows, lines, rectangles, ellipses, highlighter, numbered steps, text (nine system fonts), and redaction (solid, pixelate or blur). Select, move, resize, delete, undo and redo.
 - **Export:** PNG, JPEG, WebP and PDF; scale; JPEG/WebP quality; a **target size** that finds the highest quality that fits; a PDF with A4, Letter or image-size pages that splits long captures across pages without cutting rows. The size shown is that of the real file, next to the original PNG.
 - **Copy to the clipboard** as PNG, and download with a file name you can template.
 - **History:** recent captures with thumbnails; reopen them with their annotations, delete one or all. Kept 1, 7 or 30 days (your choice), never in incognito, and it can be turned off.

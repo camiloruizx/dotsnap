@@ -24,6 +24,7 @@ interface CaptureRecord {
   height?: number;
   thumb?: Blob;
   annotations?: unknown[];
+  name?: string;
 }
 
 export interface HistoryItem {
@@ -34,6 +35,7 @@ export interface HistoryItem {
   height: number;
   bytes: number;
   edited: boolean;
+  name: string | undefined;
   thumb: Blob | undefined;
 }
 
@@ -158,6 +160,55 @@ export async function saveAnnotations(
   }
 }
 
+export const MAX_NAME = 60;
+/** Nombre limpio para el historial: sin caracteres de control, recortado; '' = sin nombre. */
+export function cleanName(value: string): string {
+  let out = '';
+  for (const ch of value) {
+    const code = ch.codePointAt(0)!;
+    out += code < 32 || code === 127 ? ' ' : ch;
+  }
+  return out.replace(/\s+/g, ' ').trim().slice(0, MAX_NAME);
+}
+/** Texto buscable de un elemento del historial: nombre y fecha. */
+export function matchesQuery(
+  item: { name: string | undefined; updatedAt: number },
+  query: string,
+  locale: string,
+): boolean {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  const date = new Date(item.updatedAt).toLocaleString(locale, {
+    dateStyle: 'short',
+    timeStyle: 'short',
+  });
+  return `${item.name ?? ''} ${date}`.toLowerCase().includes(q);
+}
+/** Cambia el nombre de una captura del historial (vacío lo quita). */
+export async function renameCapture(id: string, name: string): Promise<void> {
+  if (!isCaptureId(id)) return;
+  const clean = cleanName(name);
+  const db = await open();
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction(storeName, 'readwrite');
+      const store = tx.objectStore(storeName);
+      const request = store.get(id);
+      request.onsuccess = () => {
+        const record = request.result as CaptureRecord | undefined;
+        if (!record) return;
+        if (clean) record.name = clean;
+        else delete record.name;
+        store.put(record);
+      };
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(new Error('storage'));
+    });
+  } finally {
+    db.close();
+  }
+}
+
 export async function deleteCapture(id: string): Promise<void> {
   if (!isCaptureId(id)) return;
   await run('readwrite', (store) => store.delete(id));
@@ -179,6 +230,7 @@ export async function listHistory(): Promise<HistoryItem[]> {
       height: r.height ?? 0,
       bytes: r.blob.size,
       edited: (r.annotations?.length ?? 0) > 0,
+      name: r.name,
       thumb: r.thumb,
     }))
     .sort((a, b) => b.updatedAt - a.updatedAt);

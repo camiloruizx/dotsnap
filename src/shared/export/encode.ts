@@ -1,3 +1,4 @@
+import { optimizePng } from './png';
 import {
   EXTENSION,
   MIME,
@@ -122,7 +123,8 @@ export async function exportFlat(
     };
   }
   if (options.format === 'png') {
-    const blob = await verified(await toBlob(canvas, MIME.png), 'png');
+    const native = await verified(await toBlob(canvas, MIME.png), 'png');
+    const blob = await optimizePng(canvas, native);
     return {
       ...base,
       blob,

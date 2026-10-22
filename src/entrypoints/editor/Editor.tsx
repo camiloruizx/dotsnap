@@ -45,7 +45,11 @@ type Load =
 const tools: { id: Tool; label: MessageKey; icon: IconName }[] = [
   { id: 'select', label: 'toolSelect', icon: 'select' },
   { id: 'arrow', label: 'toolArrow', icon: 'arrow' },
+  { id: 'line', label: 'toolLine', icon: 'line' },
   { id: 'rect', label: 'toolRect', icon: 'rect' },
+  { id: 'ellipse', label: 'toolEllipse', icon: 'ellipse' },
+  { id: 'highlight', label: 'toolHighlight', icon: 'highlight' },
+  { id: 'step', label: 'toolStep', icon: 'step' },
   { id: 'text', label: 'toolText', icon: 'text' },
   { id: 'redact', label: 'toolRedact', icon: 'redact' },
 ];
@@ -335,7 +339,7 @@ export function Editor() {
     setExporting(true);
     setStatus({ key: 'exporting' });
     try {
-      const blob = await canvas.exportPng();
+      const blob = await canvas.exportPng(true);
       const name = buildFileName(
         product.name,
         new Date(),
@@ -417,69 +421,77 @@ export function Editor() {
   return (
     <div className="editor-shell">
       <header className="editor-bar">
-        <div role="toolbar" aria-label={t('toolbarLabel')} className="tool-row">
-          {tools.map((item) => (
-            <button
-              key={item.id}
-              aria-pressed={tool === item.id}
-              title={t(item.label)}
-              onClick={() => setTool(item.id)}
-            >
-              <Icon name={item.icon} />
-              <span>{t(item.label)}</span>
-            </button>
-          ))}
-          <ColorCombo
-            label={t('color')}
-            customLabel={t('colorCustom')}
-            pickLabel={t('colorPick')}
-            names={colorNames}
-            value={color}
-            disabled={tool === 'redact'}
-            onChange={setColor}
-          />
-          {tool === 'text' || selectedFont !== null ? (
-            <label className="inline-field">
-              <span>{t('font')}</span>
-              <select
-                value={selectedFont ?? font}
-                style={{ fontFamily: fontStack(selectedFont ?? font) }}
-                onChange={(event) => {
-                  if (!isFontId(event.target.value)) return;
-                  setFont(event.target.value);
-                  canvasRef.current?.setFont(event.target.value);
-                }}
+        <div
+          role="toolbar"
+          aria-label={t('toolbarLabel')}
+          className="tool-group"
+        >
+          <div className="tool-row">
+            {tools.map((item) => (
+              <button
+                key={item.id}
+                aria-pressed={tool === item.id}
+                title={t(item.label)}
+                onClick={() => setTool(item.id)}
               >
-                {FONTS.map((item) => (
-                  <option
-                    key={item.id}
-                    value={item.id}
-                    style={{ fontFamily: item.stack }}
-                  >
-                    {t(fontLabel[item.id])}
-                  </option>
-                ))}
-              </select>
-            </label>
-          ) : null}
-          {tool === 'redact' ? (
-            <label className="inline-field">
-              <span>{t('redactStyle')}</span>
-              <select
-                value={redactMode}
-                onChange={(event) => {
-                  if (isRedactMode(event.target.value))
-                    setRedactMode(event.target.value);
-                }}
-              >
-                {REDACT_MODES.map((mode) => (
-                  <option key={mode} value={mode}>
-                    {t(redactLabel[mode])}
-                  </option>
-                ))}
-              </select>
-            </label>
-          ) : null}
+                <Icon name={item.icon} />
+                <span>{t(item.label)}</span>
+              </button>
+            ))}
+          </div>
+          <div className="tool-row tool-options">
+            <ColorCombo
+              label={t('color')}
+              customLabel={t('colorCustom')}
+              pickLabel={t('colorPick')}
+              names={colorNames}
+              value={color}
+              disabled={tool === 'redact'}
+              onChange={setColor}
+            />
+            {tool === 'text' || selectedFont !== null ? (
+              <label className="inline-field">
+                <span>{t('font')}</span>
+                <select
+                  value={selectedFont ?? font}
+                  style={{ fontFamily: fontStack(selectedFont ?? font) }}
+                  onChange={(event) => {
+                    if (!isFontId(event.target.value)) return;
+                    setFont(event.target.value);
+                    canvasRef.current?.setFont(event.target.value);
+                  }}
+                >
+                  {FONTS.map((item) => (
+                    <option
+                      key={item.id}
+                      value={item.id}
+                      style={{ fontFamily: item.stack }}
+                    >
+                      {t(fontLabel[item.id])}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : null}
+            {tool === 'redact' ? (
+              <label className="inline-field">
+                <span>{t('redactStyle')}</span>
+                <select
+                  value={redactMode}
+                  onChange={(event) => {
+                    if (isRedactMode(event.target.value))
+                      setRedactMode(event.target.value);
+                  }}
+                >
+                  {REDACT_MODES.map((mode) => (
+                    <option key={mode} value={mode}>
+                      {t(redactLabel[mode])}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : null}
+          </div>
         </div>
         <div className="tool-row tool-actions">
           <button
@@ -550,6 +562,9 @@ export function Editor() {
             onCopy={(png) => void copyPng(png)}
             onClose={() => setExportOpen(false)}
             onSaveProject={() => void saveProject()}
+            hasRedaction={history.doc.annotations.some(
+              (a) => a.type === 'redact',
+            )}
           />
         ) : null}
         <div className="canvas-frame">

@@ -1,6 +1,6 @@
 {
   "name": "dotsnap",
-  "version": "0.6.2",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -22,7 +22,9 @@
     "test:m2": "node scripts/build-test.mjs && node scripts/verify-m2.mjs",
     "test:m3": "node scripts/build-test.mjs && node scripts/verify-m3.mjs",
     "test:m4": "node scripts/build-test.mjs && node scripts/verify-m4.mjs",
-    "test:m5": "node scripts/build-test.mjs && node scripts/verify-m5.mjs"
+    "test:m5": "node scripts/build-test.mjs && node scripts/verify-m5.mjs",
+    "test:tools": "node scripts/build-test.mjs && node scripts/verify-tools.mjs",
+    "test:extras": "node scripts/build-test.mjs && node scripts/verify-extras.mjs"
   },
   "dependencies": {
     "konva": "10.9.0",

@@ -4,12 +4,17 @@ import { product } from '../../shared/config/product';
 import {
   parseCaptureResponse,
   type CaptureErrorCode,
+  type Delay,
   type SelectionMode,
 } from '../../shared/messaging';
 import { Brand } from '../../shared/ui/Brand';
 import { Credits } from '../../shared/ui/Credits';
 import { Icon } from '../../shared/ui/Icon';
 import { History } from './History';
+import {
+  writePreferences,
+  DELAY_OPTIONS,
+} from '../../shared/storage/preferences';
 import { SettingsPanel } from '../../shared/ui/SettingsPanel';
 
 const selectionModes = ['region', 'element'] as const;
@@ -24,7 +29,10 @@ const errorKey: Record<CaptureErrorCode, MessageKey> = {
 };
 
 export function Popup() {
-  const { t } = usePreferences();
+  const { t, preferences } = usePreferences();
+  const delay: Delay | undefined =
+    preferences.captureDelay === 0 ? undefined : preferences.captureDelay;
+  const withDelay = <T extends object>(r: T) => (delay ? { ...r, delay } : r);
   const [tab, setTab] = useState<'capture' | 'history' | 'settings'>('capture');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<CaptureErrorCode | null>(null);
@@ -61,8 +69,8 @@ export function Popup() {
 
   async function run(
     request:
-      | { version: 1; type: 'capture-visible' }
-      | { version: 1; type: 'capture-fullpage' }
+      | { version: 1; type: 'capture-visible'; delay?: Delay }
+      | { version: 1; type: 'capture-fullpage'; delay?: Delay }
       | { version: 1; type: 'start-selection'; mode: SelectionMode },
   ) {
     setBusy(true);
@@ -133,7 +141,11 @@ export function Popup() {
               className="mode"
               disabled={busy}
               title={t('visibleHint')}
-              onClick={() => void run({ version: 1, type: 'capture-visible' })}
+              onClick={() =>
+                void run(
+                  withDelay({ version: 1, type: 'capture-visible' as const }),
+                )
+              }
             >
               <Icon name="visible" />
               <span className="mode-title">{t('visible')}</span>
@@ -158,12 +170,40 @@ export function Popup() {
               className="mode"
               disabled={busy}
               title={t('fullPageHint')}
-              onClick={() => void run({ version: 1, type: 'capture-fullpage' })}
+              onClick={() =>
+                void run(
+                  withDelay({ version: 1, type: 'capture-fullpage' as const }),
+                )
+              }
             >
               <Icon name="fullPage" />
               <span className="mode-title">{t('fullPage')}</span>
               <span className="hint">{t('fullPageHint')}</span>
             </button>
+          </div>
+          <div className="field delay-field">
+            <label htmlFor="capture-delay">{t('captureDelay')}</label>
+            <select
+              id="capture-delay"
+              value={preferences.captureDelay}
+              onChange={(event) =>
+                void writePreferences({
+                  ...preferences,
+                  captureDelay: Number(
+                    event.target.value,
+                  ) as (typeof DELAY_OPTIONS)[number],
+                }).catch(() => {})
+              }
+            >
+              {DELAY_OPTIONS.map((seconds) => (
+                <option key={seconds} value={seconds}>
+                  {seconds === 0
+                    ? t('captureDelayNone')
+                    : `${seconds} ${t('captureDelaySeconds')}`}
+                </option>
+              ))}
+            </select>
+            <span className="hint">{t('captureDelayHint')}</span>
           </div>
           <p role="alert" className={error ? 'status error' : 'status'}>
             {error ? t(errorKey[error]) : ''}

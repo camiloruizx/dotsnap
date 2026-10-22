@@ -158,6 +158,7 @@ describe('límites de confianza', () => {
         'defaultFormat',
         'defaultQuality',
         'fileNameTemplate',
+        'captureDelay',
       ].sort(),
     );
     expect(parsePreferences({ language: 'en', theme: 'dark' })).toMatchObject({

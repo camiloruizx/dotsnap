@@ -592,3 +592,27 @@ button.danger {
 button.danger:hover:not(:disabled) {
   background: color-mix(in srgb, var(--error) 14%, transparent);
 }
+
+.history-search,
+.history-rename {
+  width: 100%;
+  box-sizing: border-box;
+  margin: var(--space-3) 0;
+}
+.history-name {
+  overflow-wrap: anywhere;
+}
+
+.delay-field {
+  margin-top: var(--space-5);
+}
+
+.tool-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+/* Altura fija: al cambiar de herramienta el lienzo no se desplaza. */
+.tool-options {
+  min-height: var(--control-height);
+}

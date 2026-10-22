@@ -2,7 +2,16 @@ export interface Point {
   x: number;
   y: number;
 }
-export type Tool = 'select' | 'arrow' | 'rect' | 'text' | 'redact';
+export type Tool =
+  | 'select'
+  | 'arrow'
+  | 'line'
+  | 'rect'
+  | 'ellipse'
+  | 'highlight'
+  | 'step'
+  | 'text'
+  | 'redact';
 
 export const PALETTE = [
   { id: 'red', value: '#e5484d' },
@@ -40,6 +49,9 @@ export interface ArrowAnnotation extends Base {
   color: string;
   strokeWidth: number;
 }
+export interface LineAnnotation extends Omit<ArrowAnnotation, 'type'> {
+  type: 'line';
+}
 export interface RectAnnotation extends Base {
   type: 'rect';
   x: number;
@@ -48,6 +60,36 @@ export interface RectAnnotation extends Base {
   height: number;
   color: string;
   strokeWidth: number;
+}
+export interface EllipseAnnotation extends Omit<RectAnnotation, 'type'> {
+  type: 'ellipse';
+}
+/** Resaltador: rectángulo relleno translúcido (la opacidad es fija). */
+export const HIGHLIGHT_OPACITY = 0.35;
+export interface HighlightAnnotation extends Base {
+  type: 'highlight';
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: string;
+}
+/** Paso numerado: círculo con su número, centrado en (x, y). */
+export interface StepAnnotation extends Base {
+  type: 'step';
+  x: number;
+  y: number;
+  number: number;
+  radius: number;
+  color: string;
+}
+/** Color del número según el fondo, para mantener el contraste. */
+export function contrastOn(hex: string): string {
+  const n = parseInt(hex.slice(1), 16);
+  const lum =
+    (0.299 * ((n >> 16) & 255) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) /
+    255;
+  return lum > 0.6 ? '#000000' : '#ffffff';
 }
 /** Fuentes del sistema (sin descargas ni fuentes web): cada una con alternativas por plataforma. */
 export const FONTS = [
@@ -98,7 +140,14 @@ export interface RedactAnnotation extends Base {
   height: number;
 }
 export type Annotation =
-  ArrowAnnotation | RectAnnotation | TextAnnotation | RedactAnnotation;
+  | ArrowAnnotation
+  | LineAnnotation
+  | RectAnnotation
+  | EllipseAnnotation
+  | HighlightAnnotation
+  | StepAnnotation
+  | TextAnnotation
+  | RedactAnnotation;
 
 export interface Doc {
   annotations: readonly Annotation[];
@@ -266,7 +315,7 @@ export function parseAnnotations(value: unknown): Annotation[] | null {
       return null;
     ids.add(a.id);
     const color = a.color;
-    if (a.type === 'arrow') {
+    if (a.type === 'arrow' || a.type === 'line') {
       if (
         !keysOk(a, [
           'id',
@@ -289,7 +338,7 @@ export function parseAnnotations(value: unknown): Annotation[] | null {
         return null;
       out.push({
         id: a.id,
-        type: 'arrow',
+        type: a.type,
         x1: a.x1,
         y1: a.y1,
         x2: a.x2,
@@ -297,7 +346,7 @@ export function parseAnnotations(value: unknown): Annotation[] | null {
         color,
         strokeWidth: a.strokeWidth,
       });
-    } else if (a.type === 'rect') {
+    } else if (a.type === 'rect' || a.type === 'ellipse') {
       if (
         !keysOk(a, [
           'id',
@@ -320,13 +369,54 @@ export function parseAnnotations(value: unknown): Annotation[] | null {
         return null;
       out.push({
         id: a.id,
-        type: 'rect',
+        type: a.type,
         x: a.x,
         y: a.y,
         width: a.width,
         height: a.height,
         color,
         strokeWidth: a.strokeWidth,
+      });
+    } else if (a.type === 'highlight') {
+      if (
+        !keysOk(a, ['id', 'type', 'x', 'y', 'width', 'height', 'color']) ||
+        !num(a.x) ||
+        !num(a.y) ||
+        !num(a.width, 0) ||
+        !num(a.height, 0) ||
+        typeof color !== 'string' ||
+        !isHexColor(color)
+      )
+        return null;
+      out.push({
+        id: a.id,
+        type: 'highlight',
+        x: a.x,
+        y: a.y,
+        width: a.width,
+        height: a.height,
+        color,
+      });
+    } else if (a.type === 'step') {
+      if (
+        !keysOk(a, ['id', 'type', 'x', 'y', 'number', 'radius', 'color']) ||
+        !num(a.x) ||
+        !num(a.y) ||
+        !num(a.number, 1, 999) ||
+        !Number.isInteger(a.number) ||
+        !num(a.radius, 4, 500) ||
+        typeof color !== 'string' ||
+        !isHexColor(color)
+      )
+        return null;
+      out.push({
+        id: a.id,
+        type: 'step',
+        x: a.x,
+        y: a.y,
+        number: a.number,
+        radius: a.radius,
+        color,
       });
     } else if (a.type === 'text') {
       if (

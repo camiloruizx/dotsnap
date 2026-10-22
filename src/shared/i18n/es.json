@@ -179,8 +179,20 @@
   "toolArrow": {
     "message": "Flecha"
   },
+  "toolLine": {
+    "message": "Línea"
+  },
   "toolRect": {
     "message": "Rectángulo"
+  },
+  "toolEllipse": {
+    "message": "Elipse"
+  },
+  "toolHighlight": {
+    "message": "Resaltador"
+  },
+  "toolStep": {
+    "message": "Paso"
   },
   "toolText": {
     "message": "Texto"
@@ -535,5 +547,29 @@
   },
   "toastProjectOpened": {
     "message": "Proyecto abierto"
+  },
+  "historySearch": {
+    "message": "Buscar en el historial"
+  },
+  "historyRename": {
+    "message": "Renombrar"
+  },
+  "historyNoMatch": {
+    "message": "Ninguna captura coincide con la búsqueda."
+  },
+  "toastRenamed": {
+    "message": "Nombre actualizado."
+  },
+  "captureDelay": {
+    "message": "Temporizador"
+  },
+  "captureDelayNone": {
+    "message": "Sin espera"
+  },
+  "captureDelaySeconds": {
+    "message": "segundos"
+  },
+  "captureDelayHint": {
+    "message": "Para captura visible y página completa; la cuenta regresiva aparece en el icono de la extensión."
   }
 }

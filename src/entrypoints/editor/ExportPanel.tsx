@@ -30,6 +30,8 @@ interface Props {
   onCopy: (png: Blob) => void;
   onClose: () => void;
   onSaveProject: () => void;
+  /** Hay censuras: el proyecto conserva la imagen original, así que se advierte. */
+  hasRedaction: boolean;
 }
 
 const formatLabel: Record<ExportFormat, string> = {
@@ -285,7 +287,9 @@ export function ExportPanel(props: Props) {
       </p>
       <details className="export-project">
         <summary>{t('projectSave')}</summary>
-        <p className="hint">{t('projectWarning')}</p>
+        {props.hasRedaction ? (
+          <p className="hint">{t('projectWarning')}</p>
+        ) : null}
         <button onClick={props.onSaveProject}>{t('projectSave')}</button>
       </details>
       <div className="export-actions">

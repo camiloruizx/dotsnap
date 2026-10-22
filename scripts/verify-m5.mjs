@@ -257,13 +257,11 @@ try {
   assert.equal(pj.version, 1);
   assert.equal(pj.annotations.length, 1);
   assert.match(pj.image, /^data:image\/png;base64,/);
-  assert.match(
-    await editor2.locator('.export-project').innerText(),
-    /original|censura|redaction/i,
-  );
+  // Sin censuras no hay nada que ocultar: el aviso solo aparece cuando hay una censura.
+  assert.equal(await editor2.locator('.export-project .hint').count(), 0);
   await editor2.keyboard.press('Escape');
   ok(
-    'proyecto guardado (.dotsnap.json v1) con aviso de que contiene la imagen original',
+    'proyecto guardado (.dotsnap.json v1); sin censuras no se muestra el aviso',
   );
 
   await tabPopup('history');
