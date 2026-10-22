@@ -60,3 +60,10 @@ El worker puede suspenderse, normalmente tras 30s inactivo: ninguna operación v
 ## Compatibilidad y seguridad
 
 Sin promesa de captura universal. Edge comparte APIs Chromium, pero su instalación y funcionamiento no se han probado: compatibilidad Edge pendiente. Importaciones, nombres, páginas y mensajes son entradas no confiables (arquitectura.md). El nombre comercial requiere revisión antes de lanzamiento; este documento no ofrece dictamen de marcas.
+
+## Hallazgos de M3 (página completa)
+
+- La cola de 600 ms se verificó con tiempos reales: 5 tramos tardaron 3,4 s (DPR 1) y 4,0 s (DPR 2); el mínimo teórico es 2,4 s.
+- Con `captureVisibleTab` no hay forma de capturar fuera del viewport: se desplaza la página, así que fixed/sticky, contenido perezoso, animaciones y cambios de altura durante la captura afectan al resultado. Mitigaciones y límites en validacion-m3.md.
+- Presupuesto por parte: lado ≤ 8192 px y área ≤ 33 177 600 px (los mismos de M1). Una página de 20 000 px a 1000 px de ancho sale en 3 partes (8192 + 8192 + 3616). Topes de producto: 120 tramos y 12 partes por captura; por encima se rechaza antes de capturar (`tooLarge`).
+- El desplazamiento rápido repetido puede provocar `MAX_CAPTURE_VISIBLE_TAB_CALLS_PER_SECOND`: no ocurrió con la cola de 600 ms; los reintentos solo existen como defensa y no se han probado contra una cuota real.

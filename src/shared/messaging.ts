@@ -4,7 +4,8 @@ export const isSelectionMode = (value: unknown): value is SelectionMode =>
 export type Request =
   | { version: 1; type: 'health' }
   | { version: 1; type: 'capture-visible' }
-  | { version: 1; type: 'start-selection'; mode: SelectionMode };
+  | { version: 1; type: 'start-selection'; mode: SelectionMode }
+  | { version: 1; type: 'capture-fullpage' };
 
 export const captureErrorCodes = [
   'restricted',
@@ -30,7 +31,9 @@ export function parseRequest(value: unknown): Request | null {
       ? { version: 1, type: 'start-selection', mode: data.mode }
       : null;
   if (keys !== 2) return null;
-  return data.type === 'health' || data.type === 'capture-visible'
+  return data.type === 'health' ||
+    data.type === 'capture-visible' ||
+    data.type === 'capture-fullpage'
     ? { version: 1, type: data.type }
     : null;
 }
@@ -132,4 +135,66 @@ export function isTrustedUi(
       new URL('options.html', baseUrl).href,
     ].includes(sender.url ?? '')
   );
+}
+
+/** Página completa: mensajes del agente de la página hacia el worker. */
+export type FullPageMessage =
+  | { version: 1; type: 'fullpage-ready' }
+  | { version: 1; type: 'fullpage-cancel'; requestId: string };
+export function parseFullPageMessage(value: unknown): FullPageMessage | null {
+  if (typeof value !== 'object' || value === null) return null;
+  const d = value as Record<string, unknown>;
+  if (d.version !== 1) return null;
+  if (d.type === 'fullpage-ready')
+    return hasKeys(d, ['version', 'type'])
+      ? { version: 1, type: 'fullpage-ready' }
+      : null;
+  if (
+    d.type === 'fullpage-cancel' &&
+    hasKeys(d, ['version', 'type', 'requestId']) &&
+    typeof d.requestId === 'string' &&
+    requestIdPattern.test(d.requestId)
+  )
+    return { version: 1, type: 'fullpage-cancel', requestId: d.requestId };
+  return null;
+}
+
+/** Órdenes del worker al agente de la página (el agente valida remitente y requestId). */
+export type FullPageCommand =
+  | { version: 1; type: 'fp-measure'; requestId: string }
+  | {
+      version: 1;
+      type: 'fp-scroll';
+      requestId: string;
+      y: number;
+      hideFloating: boolean;
+    }
+  | { version: 1; type: 'fp-finish'; requestId: string };
+export function parseFullPageCommand(value: unknown): FullPageCommand | null {
+  if (typeof value !== 'object' || value === null) return null;
+  const d = value as Record<string, unknown>;
+  if (
+    d.version !== 1 ||
+    typeof d.requestId !== 'string' ||
+    !requestIdPattern.test(d.requestId)
+  )
+    return null;
+  if (d.type === 'fp-measure' || d.type === 'fp-finish')
+    return hasKeys(d, ['version', 'type', 'requestId'])
+      ? { version: 1, type: d.type, requestId: d.requestId }
+      : null;
+  if (
+    d.type === 'fp-scroll' &&
+    hasKeys(d, ['version', 'type', 'requestId', 'y', 'hideFloating']) &&
+    finite(d.y, 0) &&
+    typeof d.hideFloating === 'boolean'
+  )
+    return {
+      version: 1,
+      type: 'fp-scroll',
+      requestId: d.requestId,
+      y: d.y,
+      hideFloating: d.hideFloating,
+    };
+  return null;
 }

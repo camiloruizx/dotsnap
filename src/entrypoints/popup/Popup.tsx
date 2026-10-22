@@ -9,7 +9,6 @@ import {
 import { Brand } from '../../shared/ui/Brand';
 import { Icon } from '../../shared/ui/Icon';
 
-const futureModes = ['fullPage'] as const;
 const selectionModes = ['region', 'element'] as const;
 const errorKey: Record<CaptureErrorCode, MessageKey> = {
   restricted: 'errorRestricted',
@@ -32,6 +31,7 @@ export function Popup() {
   async function run(
     request:
       | { version: 1; type: 'capture-visible' }
+      | { version: 1; type: 'capture-fullpage' }
       | { version: 1; type: 'start-selection'; mode: SelectionMode },
   ) {
     setBusy(true);
@@ -85,20 +85,17 @@ export function Popup() {
               <span className="soon">{t('available')}</span>
             </button>
           ))}
-          {futureModes.map((mode) => (
-            <button
-              key={mode}
-              className="mode"
-              disabled
-              aria-describedby="availability"
-              title={t('soon')}
-            >
-              <Icon name={mode} />
-              <span className="mode-title">{t(mode)}</span>
-              <span className="hint">{t(`${mode}Hint` as MessageKey)}</span>
-              <span className="soon">{t('soon')}</span>
-            </button>
-          ))}
+          <button
+            className="mode"
+            disabled={busy}
+            title={t('fullPageHint')}
+            onClick={() => void run({ version: 1, type: 'capture-fullpage' })}
+          >
+            <Icon name="fullPage" />
+            <span className="mode-title">{t('fullPage')}</span>
+            <span className="hint">{t('fullPageHint')}</span>
+            <span className="soon">{t('available')}</span>
+          </button>
         </div>
         <p role="alert" className={error ? 'status error' : 'status'}>
           {error ? t(errorKey[error]) : ''}

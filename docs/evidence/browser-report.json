@@ -1,6 +1,6 @@
 {
-  "browser": "156.0.8078.48",
-  "extensionId": "lefccjfcjlmmbjgkaknikgcjbbcnbopf",
+  "browser": "141.0.7390.37",
+  "extensionId": "kjmkiheleepinckheccfgpmldlibihlj",
   "checks": [
     "8 vistas ES/EN × claro/oscuro × popup/opciones; axe WCAG AA sin infracciones; teclado, foco, mensajes health y sin desbordamiento horizontal",
     "Persistencia chrome.storage.local después de recargar opciones",

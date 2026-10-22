@@ -12,7 +12,7 @@
     "message": "Choose a capture mode"
   },
   "unavailable": {
-    "message": "Visible area, region and element are available. Full page arrives in a later milestone."
+    "message": "Visible area, region, element and full page are available."
   },
   "visible": {
     "message": "Visible area"
@@ -160,6 +160,12 @@
   },
   "errorFailed": {
     "message": "Couldn't capture. Reload the page and try again."
+  },
+  "errorFullPageTooLarge": {
+    "message": "This page is too long to capture in full. Try a region or the visible area."
+  },
+  "partOf": {
+    "message": "Part {n} of {total}"
   },
   "editorTitle": {
     "message": "Editor"

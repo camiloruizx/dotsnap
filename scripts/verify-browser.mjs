@@ -95,9 +95,12 @@ try {
           document.documentElement.dataset.theme === theme,
         { language, theme },
       );
-      assert.equal(await popup.locator('button:disabled').count(), 6);
-      assert.equal(await popup.locator('button:enabled').count(), 0);
-      await popup.keyboard.press('Tab');
+      // M3: solo Ajustes e Historial siguen deshabilitados (capturas: visible, región, elemento y página completa).
+      assert.equal(await popup.locator('button:disabled').count(), 2);
+      assert.equal(await popup.locator('button:enabled').count(), 4);
+      // Orden de tabulación: los cuatro modos de captura y después el enlace de preferencias.
+      await popup.keyboard.press('Tab', { delay: 0 });
+      for (let i = 0; i < 4; i++) await popup.keyboard.press('Tab');
       assert.equal(await popup.locator('a:focus').count(), 1);
       assert.equal(
         await popup

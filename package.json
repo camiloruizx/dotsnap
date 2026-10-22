@@ -1,6 +1,6 @@
 {
   "name": "dotsnap",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -19,7 +19,8 @@
     "icons": "node scripts/generate-icons.mjs",
     "format": "prettier --write .",
     "postinstall": "wxt prepare",
-    "test:m2": "node scripts/build-test.mjs && node scripts/verify-m2.mjs"
+    "test:m2": "node scripts/build-test.mjs && node scripts/verify-m2.mjs",
+    "test:m3": "node scripts/build-test.mjs && node scripts/verify-m3.mjs"
   },
   "dependencies": {
     "konva": "10.9.0",

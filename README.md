@@ -1,6 +1,6 @@
 # DotSnap · Fase 0 + M0 + M1
 
-Base local de una extensión Chrome MV3. Captura exactamente lo que necesitas, explica con claridad y exporta con control. **M1 implementa Área visible → editor (flecha, rectángulo, texto, censura) → PNG; M2 añade región y elemento inteligente.** Página completa, JPEG/WebP/PDF, historial y portapapeles siguen pendientes.
+Base local de una extensión Chrome MV3. Captura exactamente lo que necesitas, explica con claridad y exporta con control. **M1 implementa Área visible → editor (flecha, rectángulo, texto, censura) → PNG; M2 añade región y elemento inteligente; M3 añade página completa por segmentos.** JPEG/WebP/PDF, historial y portapapeles siguen pendientes.
 
 M0 incluye popup honesto con cuatro modos deshabilitados, Ajustes/Historial «Próximamente», enlace funcional a preferencias de idioma/tema, ES/EN, tema Sistema/Claro/Oscuro, ícono original de DotSnap, arquitectura y planificación. No usa CDN, fuentes remotas, cuentas ni analítica.
 
@@ -41,6 +41,7 @@ Permisos: activeTab y scripting para el flujo futuro bajo gesto; **storage añad
 | npm run lint         | ESLint y verificación Prettier                                                                                                                                                  |
 | npm run typecheck    | Tipos WXT + TypeScript estricto                                                                                                                                                 |
 | npm run test         | Vitest: geometría, confianza, preferencias e idiomas                                                                                                                            |
+| npm run test:m3      | Compila la variante de pruebas y verifica página completa (cola de 600 ms, fixed/sticky, lazy load, partes, cancelación, restauración) en Chromium/Chrome; tarda ~1,5 min       |
 | npm run test:m2      | Compila la variante de pruebas y verifica región y elemento inteligente (recorte, tiradores, Escape, scroll, iframes) en Chromium/Chrome; `DOTSNAP_CHROME` apunta a un Chromium |
 | npm run test:m1      | Compila la variante de pruebas y verifica M1 en Chromium/Chrome (captura, anotaciones, PNG, censura); `DOTSNAP_CHROME` apunta a un Chromium                                     |
 | npm run build:test   | Solo la variante de pruebas (`.output-test`, con `<all_urls>`); no es el paquete de producción                                                                                  |

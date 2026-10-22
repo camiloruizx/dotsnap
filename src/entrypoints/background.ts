@@ -2,6 +2,10 @@ import { defineBackground } from 'wxt/utils/define-background';
 import { isTrustedUi, parseRequest } from '../shared/messaging';
 import { captureVisible } from '../shared/capture/visible';
 import {
+  handleFullPageMessage,
+  startFullPage,
+} from '../shared/capture/fullpage';
+import {
   handleSelectionMessage,
   startSelection,
 } from '../shared/capture/selection';
@@ -14,9 +18,12 @@ export default defineBackground(() => {
       sender.id === chrome.runtime.id &&
       !sender.url?.startsWith(chrome.runtime.getURL('/'))
     ) {
-      void handleSelectionMessage(message, sender, chrome.runtime.id).then(
-        respond,
-      );
+      const type = (message as { type?: unknown } | null)?.type;
+      const handler =
+        typeof type === 'string' && type.startsWith('fullpage-')
+          ? handleFullPageMessage
+          : handleSelectionMessage;
+      void handler(message, sender, chrome.runtime.id).then(respond);
       return true;
     }
     if (!isTrustedUi(sender, chrome.runtime.id, chrome.runtime.getURL('/')))
@@ -29,6 +36,10 @@ export default defineBackground(() => {
     }
     if (request.type === 'start-selection') {
       void startSelection(request.mode).then(respond);
+      return true;
+    }
+    if (request.type === 'capture-fullpage') {
+      void startFullPage().then(respond);
       return true;
     }
     void captureVisible().then(respond);

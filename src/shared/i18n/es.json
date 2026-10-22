@@ -12,7 +12,7 @@
     "message": "Elige cómo capturar"
   },
   "unavailable": {
-    "message": "Área visible, región y elemento disponibles. Página completa llega en un próximo hito."
+    "message": "Área visible, región, elemento y página completa disponibles."
   },
   "visible": {
     "message": "Área visible"
@@ -160,6 +160,12 @@
   },
   "errorFailed": {
     "message": "No se pudo capturar. Recarga la página e inténtalo de nuevo."
+  },
+  "errorFullPageTooLarge": {
+    "message": "La página es demasiado larga para capturarla completa. Prueba con región o con el área visible."
+  },
+  "partOf": {
+    "message": "Parte {n} de {total}"
   },
   "editorTitle": {
     "message": "Editor"

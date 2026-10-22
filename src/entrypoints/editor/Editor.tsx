@@ -52,8 +52,24 @@ const colorLabel: Record<PaletteId, MessageKey> = {
   purple: 'colorPurple',
 };
 
+/** `part` y `parts` solo se aceptan como enteros pequeños y coherentes; si no, se ignoran. */
+function readPart(search: string): { part: number; parts: number } | null {
+  const params = new URLSearchParams(search);
+  const part = Number(params.get('part'));
+  const parts = Number(params.get('parts'));
+  return Number.isInteger(part) &&
+    Number.isInteger(parts) &&
+    parts >= 2 &&
+    parts <= 12 &&
+    part >= 1 &&
+    part <= parts
+    ? { part, parts }
+    : null;
+}
+
 export function Editor() {
   const { t } = usePreferences();
+  const partInfo = readPart(location.search);
   const colorNames = Object.fromEntries(
     PALETTE.map((item) => [item.id, t(colorLabel[item.id])]),
   ) as Record<PaletteId, string>;
@@ -80,7 +96,8 @@ export function Editor() {
 
   useEffect(() => {
     let alive = true;
-    const id = new URLSearchParams(location.search).get('capture');
+    const params = new URLSearchParams(location.search);
+    const id = params.get('capture');
     idRef.current = isCaptureId(id) ? id : null;
     void (async () => {
       try {
@@ -333,7 +350,14 @@ export function Editor() {
       </main>
       <footer className="editor-status">
         <span>
-          {load.bitmap.width} × {load.bitmap.height} px · {t('redactNote')}
+          {load.bitmap.width} × {load.bitmap.height} px
+          {partInfo
+            ? ` · ${t('partOf')
+                .replace('{n}', String(partInfo.part))
+                .replace('{total}', String(partInfo.parts))}`
+            : ''}
+          {' · '}
+          {t('redactNote')}
         </span>
         <span role="status" aria-live="polite" className="status-line">
           {status

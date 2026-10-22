@@ -1,0 +1,40 @@
+{
+  "browser": "141.0.7390.37",
+  "runs": [
+    {
+      "dpr": 1,
+      "scale": 1,
+      "parts": ["1000×8192", "1000×8192", "1000×3616"]
+    },
+    {
+      "dpr": 2,
+      "scale": 1
+    }
+  ],
+  "checks": [
+    "DPR 1: 5 tramos en 3360 ms (≥ 2400 ms: cola de 600 ms respetada)",
+    "DPR 1: imagen 1000×3000 = ancho útil × alto de página (escala medida 1)",
+    "DPR 1: 29 franjas de color correctas en el centro y los bordes, sin huecos ni solapes en las costuras",
+    "DPR 1: la imagen perezosa (carga con retraso) aparece cargada, no su marcador gris",
+    "DPR 1: header fixed, footer fixed y sticky aparecen una sola vez (primer tramo), no en cada tramo",
+    "DPR 1: scroll (250), visibilidad y estilos en línea restaurados; sin estado ni badge",
+    "DPR 1: página más corta que el viewport → un solo tramo del tamaño del viewport",
+    "página de 100 000 px: se rechaza antes de capturar (tooLarge), sin tocar el scroll y con aviso en el icono",
+    "el candado se libera tras el rechazo (captura visible posterior correcta)",
+    "durante la captura: progreso en el icono y capturas concurrentes rechazadas con busy",
+    "Escape cancela: sin editor, scroll y estilos restaurados, sin estado ni badge",
+    "navegar durante la captura la aborta con aviso y sin dejar estado ni editor",
+    "20 000 px → 3 partes numeradas (8192 + 8192 + 3616), cada una dentro del presupuesto, con costuras exactas",
+    "página restringida (chrome://) → restricted y sin estado",
+    "fullpage-cancel enviado desde la UI de extensión se ignora",
+    "DPR 2: 5 tramos en 4048 ms (≥ 2400 ms: cola de 600 ms respetada)",
+    "DPR 2: imagen 1000×3000 = ancho útil × alto de página (escala medida 1)",
+    "DPR 2: 29 franjas de color correctas en el centro y los bordes, sin huecos ni solapes en las costuras",
+    "DPR 2: la imagen perezosa (carga con retraso) aparece cargada, no su marcador gris",
+    "DPR 2: header fixed, footer fixed y sticky aparecen una sola vez (primer tramo), no en cada tramo",
+    "DPR 2: scroll (250), visibilidad y estilos en línea restaurados; sin estado ni badge",
+    "DPR 2: página más corta que el viewport → un solo tramo del tamaño del viewport",
+    "0 errores de consola"
+  ],
+  "consoleErrors": []
+}

@@ -37,3 +37,8 @@ Git no tenía identidad configurada en este entorno. El primer commit usa identi
 | Región cancelada por scroll; elemento revalidado | Una región en coordenadas de viewport deja de corresponder al contenido al desplazarse | Implementada; reversible |
 | `preventDefault` solo en eventos de ratón, no en pointer events | Cancelar `pointerdown` suprime los `mousedown/mouseup` posteriores | Implementada |
 | Lupa y temporizador fuera de M2 | La lupa necesitaría una captura previa de la pestaña; el temporizador no tiene versión asignada (C-05) | Aplazadas |
+| Fixed/sticky visibles solo en el primer tramo | Ocultarlos en todos los tramos perdería elementos que forman parte de la página; mostrarlos en todos los repetiría la cabecera. Se muestran donde el usuario los ve al inicio y se ocultan después | Implementada; reversible |
+| Salida en partes numeradas (≤ 8192 px) en lugar de una imagen enorme | Evita canvas gigantes y uniones silenciosas; cada parte se abre en su pestaña del editor | Implementada; reversible |
+| Estado de la captura larga en `storage.session` y el worker sin estado global mutable crítico | El worker puede suspenderse; el agente de la página se restaura solo a los 20 s sin señales | Implementada |
+| Progreso y errores de la captura larga en el badge del icono | El popup ya está cerrado durante la captura; no se necesita el permiso de notificaciones | Implementada |
+| Tope de 120 tramos y 12 partes | Acota el tiempo (≈ 84 s) y el número de pestañas | Implementada; ajustable |

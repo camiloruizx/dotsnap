@@ -1,5 +1,16 @@
 # Cambios
 
+## 0.4.0 — 2026-10-22
+
+M3: página completa por segmentos.
+
+- **Página completa:** se desplaza la página, se captura por tramos respetando una cola de 600 ms entre capturas y se compone sin huecos ni solapes. El ancho útil excluye la barra de desplazamiento.
+- Header y footer fixed y elementos sticky aparecen una sola vez; el contenido perezoso visible se espera antes de capturar.
+- Si la página no cabe en una imagen (lado ≤ 8192 px, área ≤ 33 177 600 px), sale en **partes numeradas** ("Parte 2 de 3"), cada una en su pestaña del editor; nunca se une en un canvas gigante.
+- Progreso en el icono (`3/8`), cancelación con Escape y aviso de error en el icono. La página queda como estaba (scroll y estilos exactos) al terminar, cancelar, fallar o navegar.
+- Límite de 120 tramos y 12 partes: por encima se rechaza antes de capturar.
+- Se corrigió la prueba de M0 (`test:browser`), que quedó desactualizada al habilitar los modos de captura en M2.
+
 ## 0.3.0 — 2026-10-22
 
 M2: región y elemento inteligente.

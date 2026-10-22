@@ -65,66 +65,115 @@ async function cropBlob(
   }
 }
 
+/** Candado global de capturas: storage.session cubre reinicios del worker, `running` la carrera interna. */
+export async function acquireCaptureLock(): Promise<
+  (() => Promise<void>) | null
+> {
+  if (running) return null;
+  running = true;
+  try {
+    const stored = await chrome.storage.session.get(lockKey);
+    const lock = stored[lockKey] as number | undefined;
+    if (typeof lock === 'number' && Date.now() - lock < lockTtlMs) {
+      running = false;
+      return null;
+    }
+    await chrome.storage.session.set({ [lockKey]: Date.now() });
+  } catch {
+    running = false;
+    return null;
+  }
+  return async () => {
+    try {
+      await chrome.storage.session.remove(lockKey);
+    } finally {
+      running = false;
+    }
+  };
+}
+/** Renueva el candado en operaciones largas para que no caduque a mitad. */
+export const refreshCaptureLock = () =>
+  chrome.storage.session.set({ [lockKey]: Date.now() });
+
+export type Grab =
+  | { ok: true; bitmap: ImageBitmap; blob: Blob; tab: chrome.tabs.Tab }
+  | { ok: false; code: Extract<CaptureResponse, { ok: false }>['code'] };
+
+/**
+ * Una captura del viewport respetando la cola (≥ 600 ms entre inicios). Reintenta de forma
+ * acotada solo ante cuota, esperando más cada vez y revalidando la pestaña en cada intento.
+ */
+export async function grabVisibleTab(
+  expectedTabId?: number,
+  retries = 0,
+): Promise<Grab> {
+  for (let attempt = 0; ; attempt++) {
+    const stored = await chrome.storage.session.get(lastKey);
+    const last = stored[lastKey] as number | undefined;
+    if (typeof last === 'number') {
+      const remaining = minIntervalMs - (Date.now() - last);
+      if (remaining > 0) await wait(remaining);
+    }
+    const tab = await activeTab();
+    if (!tab) return fail('noTab');
+    if (expectedTabId !== undefined && tab.id !== expectedTabId)
+      return fail('tabChanged');
+    let dataUrl: string;
+    try {
+      dataUrl = await chrome.tabs.captureVisibleTab(tab.windowId, {
+        format: 'png',
+      });
+    } catch (error) {
+      await chrome.storage.session.set({ [lastKey]: Date.now() });
+      const code = mapCaptureError(error instanceof Error ? error.message : '');
+      if (code === 'quota' && attempt < retries) {
+        await wait(1000 * (attempt + 1));
+        continue;
+      }
+      return fail(code);
+    }
+    await chrome.storage.session.set({ [lastKey]: Date.now() });
+    // Si el foco cambió durante la captura, el bitmap podría ser de otra pestaña.
+    if ((await activeTab())?.id !== tab.id) return fail('tabChanged');
+    const blob = decodeDataUrl(dataUrl);
+    return { ok: true, bitmap: await createImageBitmap(blob), blob, tab };
+  }
+}
+
 export async function captureVisible(
   options: CaptureOptions = {},
 ): Promise<CaptureResponse> {
-  if (running) return fail('busy');
-  running = true;
+  const release = await acquireCaptureLock();
+  if (!release) return fail('busy');
   try {
-    const stored = await chrome.storage.session.get([lockKey, lastKey]);
-    const lock = stored[lockKey] as number | undefined;
-    if (typeof lock === 'number' && Date.now() - lock < lockTtlMs)
-      return fail('busy');
-    await chrome.storage.session.set({ [lockKey]: Date.now() });
+    await purgeExpired();
+    const grab = await grabVisibleTab(options.tabId);
+    if (!grab.ok) return fail(grab.code);
+    const { bitmap, tab } = grab;
+    // Sin recorte se conserva el PNG original tal como lo entrega Chrome.
+    let blob: Blob;
     try {
-      const last = stored[lastKey] as number | undefined;
-      if (typeof last === 'number') {
-        const remaining = minIntervalMs - (Date.now() - last);
-        if (remaining > 0) await wait(remaining);
+      if (options.crop) {
+        const cropped = await cropBlob(bitmap, options.crop);
+        if (!cropped) return fail('failed');
+        blob = cropped;
+      } else {
+        if (!withinBudget(bitmap.width, bitmap.height)) return fail('tooLarge');
+        blob = grab.blob;
       }
-      await purgeExpired();
-      const tab = await activeTab();
-      if (!tab) return fail('noTab');
-      if (options.tabId !== undefined && tab.id !== options.tabId)
-        return fail('tabChanged');
-      let dataUrl: string;
-      try {
-        dataUrl = await chrome.tabs.captureVisibleTab(tab.windowId, {
-          format: 'png',
-        });
-      } catch (error) {
-        return fail(
-          mapCaptureError(error instanceof Error ? error.message : ''),
-        );
-      }
-      // Si el foco cambió durante la captura, el bitmap podría ser de otra pestaña.
-      if ((await activeTab())?.id !== tab.id) return fail('tabChanged');
-      let blob = decodeDataUrl(dataUrl);
-      const bitmap = await createImageBitmap(blob);
-      try {
-        if (options.crop) {
-          const cropped = await cropBlob(bitmap, options.crop);
-          if (!cropped) return fail('failed');
-          blob = cropped;
-        } else if (!withinBudget(bitmap.width, bitmap.height))
-          return fail('tooLarge');
-      } finally {
-        bitmap.close();
-      }
-      const id = await putCapture(blob);
-      await chrome.tabs.create({
-        url: chrome.runtime.getURL(`/editor.html?capture=${id}`),
-        index: tab.index + 1,
-        openerTabId: tab.id,
-      });
-      return { version: 1, ok: true };
     } finally {
-      await chrome.storage.session.set({ [lastKey]: Date.now() });
-      await chrome.storage.session.remove(lockKey);
+      bitmap.close();
     }
+    const id = await putCapture(blob);
+    await chrome.tabs.create({
+      url: chrome.runtime.getURL(`/editor.html?capture=${id}`),
+      index: tab.index + 1,
+      openerTabId: tab.id,
+    });
+    return { version: 1, ok: true };
   } catch {
     return fail('failed');
   } finally {
-    running = false;
+    await release();
   }
 }
