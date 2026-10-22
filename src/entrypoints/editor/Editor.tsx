@@ -10,6 +10,8 @@ import {
 import { Brand } from '../../shared/ui/Brand';
 import { Icon, type IconName } from '../../shared/ui/Icon';
 import { ColorCombo } from './ColorCombo';
+import { ExportPanel } from './ExportPanel';
+import type { ExportResult } from '../../shared/export/encode';
 import {
   DEFAULT_FONT,
   FONTS,
@@ -104,6 +106,7 @@ export function Editor() {
     extra?: string;
   } | null>(null);
   const [exporting, setExporting] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<EditorCanvas | null>(null);
@@ -211,6 +214,36 @@ export function Editor() {
     window.addEventListener('beforeunload', warn);
     return () => window.removeEventListener('beforeunload', warn);
   }, [history]);
+
+  const getFlat = useCallback(
+    () => canvasRef.current?.exportCanvas() ?? null,
+    [],
+  );
+  function saveResult(result: ExportResult) {
+    const name = buildFileName(product.name, new Date(), result.extension);
+    const url = URL.createObjectURL(result.blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = name;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setStatus({
+      key: 'exported',
+      extra: `${name} · ${result.width} × ${result.height} px · ${(result.blob.size / 1024).toFixed(0)} KB`,
+    });
+  }
+  async function copyPng(png: Blob) {
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': png }),
+      ]);
+      setStatus({ key: 'exportCopied' });
+    } catch {
+      setStatus({ key: 'exportCopyError' });
+    }
+  }
 
   async function download() {
     const canvas = canvasRef.current;
@@ -393,6 +426,12 @@ export function Editor() {
             <span>{t('downloadPng')}</span>
           </button>
           <button
+            aria-expanded={exportOpen}
+            onClick={() => setExportOpen((open) => !open)}
+          >
+            <span>{t('exportOpen')}…</span>
+          </button>
+          <button
             title={t('discardHint')}
             onClick={() => void discard()}
             onBlur={() => setConfirmDiscard(false)}
@@ -402,6 +441,16 @@ export function Editor() {
         </div>
       </header>
       <main className="editor-main">
+        {exportOpen ? (
+          <ExportPanel
+            getFlat={getFlat}
+            version={history}
+            sourceWidth={load.bitmap.width}
+            sourceHeight={load.bitmap.height}
+            onDownload={saveResult}
+            onCopy={(png) => void copyPng(png)}
+          />
+        ) : null}
         <div className="canvas-frame">
           <div
             ref={hostRef}

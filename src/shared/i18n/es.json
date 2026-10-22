@@ -282,7 +282,7 @@
     "message": "PNG generado:"
   },
   "exportError": {
-    "message": "No se pudo generar el PNG. Inténtalo de nuevo."
+    "message": "No se pudo generar la exportación. Inténtalo de nuevo."
   },
   "lastFailure": {
     "message": "Última captura de página completa: {message}"
@@ -328,5 +328,86 @@
   },
   "configure": {
     "message": "Configurar"
+  },
+  "exportTitle": {
+    "message": "Exportar"
+  },
+  "exportFormat": {
+    "message": "Formato"
+  },
+  "exportScale": {
+    "message": "Escala"
+  },
+  "exportQuality": {
+    "message": "Calidad"
+  },
+  "exportTarget": {
+    "message": "Peso objetivo (KB)"
+  },
+  "exportTargetNone": {
+    "message": "Sin objetivo"
+  },
+  "exportBackground": {
+    "message": "Fondo (transparencia)"
+  },
+  "pdfPage": {
+    "message": "Página del PDF"
+  },
+  "pdfOriginal": {
+    "message": "Tamaño de la imagen"
+  },
+  "pdfA4": {
+    "message": "A4"
+  },
+  "pdfLetter": {
+    "message": "Carta"
+  },
+  "pdfMargin": {
+    "message": "Margen"
+  },
+  "exportNotePng": {
+    "message": "PNG no pierde calidad y no tiene control de calidad: para pesar menos, reduce la escala."
+  },
+  "exportNotePdf": {
+    "message": "El PDF conserva la imagen sin pérdida. Las imágenes largas se reparten en varias páginas sin cortar filas."
+  },
+  "exportNoteLossy": {
+    "message": "JPEG y WebP pierden calidad al comprimir. El peso mostrado es el del archivo real. Con peso objetivo se busca la mayor calidad que cabe."
+  },
+  "exportCalculating": {
+    "message": "Calculando el peso real…"
+  },
+  "exportOriginal": {
+    "message": "Original"
+  },
+  "exportResult": {
+    "message": "Exportado"
+  },
+  "exportPages": {
+    "message": "páginas"
+  },
+  "exportTargetMet": {
+    "message": "objetivo alcanzado"
+  },
+  "exportTargetMissed": {
+    "message": "no se alcanzó el objetivo ni con la calidad mínima: reduce también la escala"
+  },
+  "exportUnsupported": {
+    "message": "Este navegador no puede generar ese formato."
+  },
+  "exportDownload": {
+    "message": "Descargar"
+  },
+  "exportCopy": {
+    "message": "Copiar PNG"
+  },
+  "exportOpen": {
+    "message": "Exportar"
+  },
+  "exportCopied": {
+    "message": "Copiado al portapapeles"
+  },
+  "exportCopyError": {
+    "message": "No se pudo copiar al portapapeles"
   }
 }

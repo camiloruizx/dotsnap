@@ -1,5 +1,15 @@
 # Cambios
 
+## 0.5.0 — 2026-10-22
+
+M4: formatos y peso.
+
+- **Exportar…** en el editor: PNG, JPEG, WebP y PDF; escala; calidad; **peso objetivo** (busca la mayor calidad que cabe y avisa si no se alcanza); fondo para aplanar transparencia; PDF en A4, Carta o tamaño de la imagen, con las capturas largas repartidas en varias páginas.
+- Se muestra el peso real del archivo junto al del PNG original. El formato se comprueba por su firma real.
+- **Copiar PNG** al portapapeles.
+- README bilingüe (`README.md` en inglés y `README.es.md`).
+- PDF propio, sin librerías nuevas.
+
 ## 0.4.2 — 2026-10-22
 
 - **Popup con pestañas:** Captura · Historial (próximamente) · Configurar. Configurar muestra idioma y tema dentro del mismo popup, sin abrir una pestaña a pantalla completa. Desaparecen «Ajustes», el enlace «Configurar idioma y tema», el texto «Disponible» y las líneas separadoras de las tarjetas; las tarjetas son más compactas.

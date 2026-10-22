@@ -1,66 +1,80 @@
-# DotSnap · Fase 0 + M0 + M1
+# DotSnap
 
-Base local de una extensión Chrome MV3. Captura exactamente lo que necesitas, explica con claridad y exporta con control. **M1 implementa Área visible → editor (flecha, rectángulo, texto, censura) → PNG; M2 añade región y elemento inteligente; M3 añade página completa por segmentos.** JPEG/WebP/PDF, historial y portapapeles siguen pendientes.
+**Capture. Explain. Share.** A Chrome extension to capture a page, annotate it and export it with control over format and size. Everything happens on your device: no accounts, no analytics, no remote services.
 
-M0 incluye popup honesto con cuatro modos deshabilitados, Ajustes/Historial «Próximamente», enlace funcional a preferencias de idioma/tema, ES/EN, tema Sistema/Claro/Oscuro, ícono original de DotSnap, arquitectura y planificación. No usa CDN, fuentes remotas, cuentas ni analítica.
+[Español](README.es.md) · [Changelog](CHANGELOG.md) · [Docs](docs/)
 
-## Compilación reproducible
+![Popup](docs/evidence/popup-en-dark.png)
+![Editor](docs/evidence/m1/editor-dpr1.png)
 
-Requiere Node 22.12+ o 24 y npm. Entorno verificado: Node 24.14.1, npm 11.19.0 en Windows. El lockfile fija las dependencias; usar npm ci, no actualizar paquetes durante la reproducción.
+## What it does
+
+- **Four ways to capture:** visible area, region (drag a rectangle and adjust it), smart element (hover and pick a block of the page) and full page (scrolls and stitches).
+- **Editor:** arrows, rectangles, text (nine system fonts), and redaction (solid, pixelate or blur). Select, move, resize, delete, undo and redo.
+- **Export:** PNG, JPEG, WebP and PDF; scale; JPEG/WebP quality; a **target size** that finds the highest quality that fits; a PDF with A4, Letter or image-size pages that splits long captures across pages without cutting rows. The size shown is that of the real file, next to the original PNG.
+- **Copy to the clipboard** as PNG, and download with a safe automatic file name.
+- Spanish and English, with System/Light/Dark theme.
+
+## Privacy and permissions
+
+| Permission  | Why                                                                               |
+| ----------- | --------------------------------------------------------------------------------- |
+| `activeTab` | Capture the tab you are on, only after you click the icon                         |
+| `scripting` | Inject the region, element or full-page helper in that tab, only after your click |
+| `storage`   | Language/theme preferences, and temporary captures (kept 24 h, on this device)    |
+
+No host permissions, no permanent content scripts, no `downloads`, no debugger, no network. Redaction is flattened into the exported image: **solid** leaves none of the hidden pixels; pixelate and blur are less safe, so use solid for sensitive data.
+
+## Install
+
+1. Build it (see below) or take the ZIP and unzip it.
+2. Open `chrome://extensions`, turn on **Developer mode** and click **Load unpacked**.
+3. Select the `.output/chrome-mv3` folder.
+4. After rebuilding, click **Reload** on the extension card.
+
+## Use
+
+Open a page, click the DotSnap icon and pick a mode. The editor opens in a new tab: annotate, then **Download PNG** for a quick save or **Export…** for other formats, scale and size. **Discard** closes the tab. In full-page capture the icon shows progress (`3/8`), Escape cancels, and a failure shows `!`; open the popup to read the cause and its technical detail.
+
+## Limits
+
+- Full page scrolls the document only: pages whose content scrolls inside a panel are captured as the visible area.
+- Fixed and sticky elements appear once, in the first segment. Content that changes while capturing (carousels, video, infinite scroll) is captured as it is when each segment passes.
+- Up to 120 segments and 12 parts per capture; above that it is refused before capturing. Each part stays within 8192 px per side.
+- Chrome pages (`chrome://`), the Chrome Web Store and other restricted pages cannot be captured.
+- History, full settings and shortcuts are not available yet. Edge and older Chrome versions have not been tested.
+
+## Build
+
+Requires Node 22.12+ and npm. The lockfile pins dependencies: use `npm ci`.
 
 ```powershell
 cd C:\Proyectos\dotsnap
 npm ci
 npm run build
-npm run lint
-npm run typecheck
-npm run test
 npm run zip
 ```
 
-La compilación genera `.output/chrome-mv3`; ZIP en `.output/`. No incluye sourcemaps ni servicios remotos. La instalación de dependencias requiere Internet, la extensión compilada funciona localmente. «Reproducible» significa mismo código y versiones mediante lockfile; no se promete ZIP idéntico byte a byte por timestamps.
+| Script                 | What it does                                                                                |
+| ---------------------- | ------------------------------------------------------------------------------------------- |
+| `npm run dev`          | WXT with development reload                                                                 |
+| `npm run build`        | Local icons + production extension in `.output/chrome-mv3`                                  |
+| `npm run zip`          | Icons and the installable ZIP in `.output/`                                                 |
+| `npm run lint`         | ESLint and Prettier check                                                                   |
+| `npm run typecheck`    | WXT types + strict TypeScript                                                               |
+| `npm run test`         | Vitest unit tests (geometry, stitching, export, PDF, preferences)                           |
+| `npm run test:m1`…`m4` | End-to-end checks in Chromium with a test build: capture, region/element, full page, export |
+| `npm run test:browser` | Installed Chrome, isolated profile, 8 views, axe, keyboard, persistence, console errors     |
 
-## Cargar descomprimida en Chrome
+End-to-end scripts need `DOTSNAP_CHROME` pointing to a Chromium. Validation notes and known limits per milestone are in `docs/validacion-m*.md`.
 
-1. Compila y abre `chrome://extensions`.
-2. Activa «Modo de desarrollador» y pulsa «Cargar descomprimida».
-3. Selecciona `C:\Proyectos\dotsnap\.output\chrome-mv3`.
-4. Abre el popup desde el icono. Los seis botones futuros están realmente deshabilitados.
-5. Usa «Configurar idioma y tema» para abrir opciones. Los selectores guardan automáticamente en este dispositivo.
-6. Después de recompilar, pulsa «Recargar» en la tarjeta de la extensión. Comprueba que no hay errores de manifest/runtime.
+## Project layout
 
-Permisos: activeTab y scripting para el flujo futuro bajo gesto; **storage añadido con autorización explícita del usuario** para las preferencias. Sin host_permissions, debugger, downloads ni content_scripts permanentes. El content script se empaqueta, pero M0 no lo inyecta. No hay captura funcional ni soporte universal de páginas.
+- `src/entrypoints/`: worker, popup, editor, options, and the on-demand helpers (region/element and full page).
+- `src/shared/`: capture, geometry, export (formats, PDF, encoding), i18n, theme and storage.
+- `src/editor/`: the Konva canvas and its model/history.
+- `docs/`: architecture, API risks, feature matrix, plan and validation.
 
-## Desarrollo y verificación
+## License
 
-| Script               | Resultado                                                                                                                                                                       |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| npm run dev          | WXT con recarga de desarrollo; usa un artefacto distinto de producción                                                                                                          |
-| npm run build        | Iconos locales + extensión Chrome de producción                                                                                                                                 |
-| npm run zip          | Iconos y ZIP WXT, sin publicación                                                                                                                                               |
-| npm run lint         | ESLint y verificación Prettier                                                                                                                                                  |
-| npm run typecheck    | Tipos WXT + TypeScript estricto                                                                                                                                                 |
-| npm run test         | Vitest: geometría, confianza, preferencias e idiomas                                                                                                                            |
-| npm run test:m3      | Compila la variante de pruebas y verifica página completa (cola de 600 ms, fixed/sticky, lazy load, partes, cancelación, restauración) en Chromium/Chrome; tarda ~1,5 min       |
-| npm run test:m2      | Compila la variante de pruebas y verifica región y elemento inteligente (recorte, tiradores, Escape, scroll, iframes) en Chromium/Chrome; `DOTSNAP_CHROME` apunta a un Chromium |
-| npm run test:m1      | Compila la variante de pruebas y verifica M1 en Chromium/Chrome (captura, anotaciones, PNG, censura); `DOTSNAP_CHROME` apunta a un Chromium                                     |
-| npm run build:test   | Solo la variante de pruebas (`.output-test`, con `<all_urls>`); no es el paquete de producción                                                                                  |
-| npm run test:browser | Chrome instalado, perfil nuevo aislado, 8 vistas, axe, persistencia, teclado, errores y screenshots                                                                             |
-
-La prueba de navegador requiere Chrome instalado y el comando CDP Extensions.loadUnpacked disponible. Usa únicamente un perfil de pruebas bajo `.browser-profile/` y habilita depuración de extensiones solo en ese proceso. No cambia tu perfil habitual ni instala en él la extensión. Genera evidencia real en `docs/evidence/`. No descarga otro navegador ni requiere cuenta.
-
-Estado de las pruebas, salidas reales y límites en [docs/validacion-m0.md](docs/validacion-m0.md). Capturas del popup se prueban como documentos de extensión en pestañas de Chrome headless, no como ventana del toolbar. Edge y Chrome anteriores a la versión verificada no se han probado. La revisión manual con lector de pantalla sigue pendiente.
-
-## Organización
-
-- `src/entrypoints/`: worker mínimo, popup, opciones y content script sin registro.
-- `src/shared/config/product.ts`: **única constante del nombre visible**. Cambiarla y recompilar actualiza UI y manifest/locales; los IDs técnicos y documentos se mantienen por separado.
-- `src/shared/i18n/{es,en}.json`: catálogo único para React y `_locales/*/messages.json` generado. Chrome usa el idioma del navegador para el manifest; React permite override.
-- `src/shared/theme/tokens.css`: única fuente de valores visuales de UI; `layout.css` compone con esos tokens.
-- `assets/dotsnap-icon.svg`: original editable del ícono (ver `assets/ICON.md`); `npm run icons` genera PNG 16/32/48/128 locales con resvg, sin copiar la marca DotPilot.
-- `docs/`: decisiones, riesgos de API con fuentes, arquitectura, matriz de funciones, hitos y propuesta de librerías.
-- `tests/`: pruebas puras. `scripts/verify-browser.mjs`: verificación real de la extensión compilada.
-
-DotPilot se inspeccionó solo en lectura; las fuentes y supuestos están en [docs/design-system.md](docs/design-system.md). No se instalaron librerías de editor/PDF/optimización. Nombre comercial, logo definitivo y licencia de distribución pendientes antes del lanzamiento. No se afirma disponibilidad de la marca.
-
-**Estado:** M1 implementado y verificado parcialmente (validacion-m1.md, con checklist manual del gesto real). **M2 no está autorizado ni iniciado.** Uso: abre una página web, pulsa el icono y elige «Área visible»; se abre el editor en una pestaña nueva. Las capturas temporales se conservan 24 h en este dispositivo; las anotaciones no se guardan al recargar.
+Not decided yet; the project is private until the distribution license is chosen.

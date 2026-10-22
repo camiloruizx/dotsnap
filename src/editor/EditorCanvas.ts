@@ -183,6 +183,16 @@ export class EditorCanvas {
    * el PNG resultante no contiene los píxeles ocultos.
    */
   async exportPng(): Promise<Blob> {
+    const canvas = await this.exportCanvas();
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, 'image/png'),
+    );
+    if (!blob || blob.type !== 'image/png') throw new Error('export');
+    return blob;
+  }
+
+  /** Lienzo aplanado a tamaño nativo (sin selección ni asas), base de todos los formatos. */
+  async exportCanvas(): Promise<HTMLCanvasElement> {
     const host = document.createElement('div');
     const stage = new Konva.Stage({
       container: host,
@@ -202,9 +212,7 @@ export class EditorCanvas {
         layer.add(createNode(a, this.bitmap));
       stage.add(layer);
       layer.draw();
-      const blob = await stage.toBlob({ mimeType: 'image/png', pixelRatio: 1 });
-      if (!blob || blob.type !== 'image/png') throw new Error('export');
-      return blob as Blob;
+      return stage.toCanvas({ pixelRatio: 1 }) as HTMLCanvasElement;
     } finally {
       stage.destroy();
     }

@@ -412,3 +412,33 @@ button:disabled:not(.mode) {
   color: var(--link);
   text-underline-offset: var(--space-1);
 }
+
+.export-panel {
+  margin: var(--space-5) 0;
+  padding: var(--space-8);
+  background: var(--surface-card);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-card);
+}
+.export-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-8);
+}
+.export-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--font-small);
+}
+.export-note,
+.export-result {
+  margin: var(--space-5) 0 0;
+  font-size: var(--font-small);
+}
+.export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin-top: var(--space-8);
+}

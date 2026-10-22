@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "PNG real 1000×600, 1745239 B",
+    "JPEG real, 293440 B (< PNG 1745239 B); el peso mostrado coincide con el archivo",
+    "WebP real, 311072 B",
+    "calidad 20 % pesa menos (40642 B < 311072 B)",
+    "escala 50 % → 500×300 y menos peso",
+    "peso objetivo 60 KB alcanzado con 60411 B",
+    "objetivo imposible (1 KB): se declara no alcanzado y se entrega el mínimo (4694 B)",
+    "PDF A4 de una página válido (pdfinfo)",
+    "PDF multipágina (3 páginas A4): filas 3000 exactas; primera y última franja con el color correcto al rasterizar",
+    "0 errores de consola y 0 peticiones externas"
+  ],
+  "clipboard": "Copied to clipboard"
+}

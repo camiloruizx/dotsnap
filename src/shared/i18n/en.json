@@ -282,7 +282,7 @@
     "message": "PNG generated:"
   },
   "exportError": {
-    "message": "Couldn't generate the PNG. Try again."
+    "message": "Couldn't generate the export. Try again."
   },
   "lastFailure": {
     "message": "Last full-page capture: {message}"
@@ -328,5 +328,86 @@
   },
   "configure": {
     "message": "Settings"
+  },
+  "exportTitle": {
+    "message": "Export"
+  },
+  "exportFormat": {
+    "message": "Format"
+  },
+  "exportScale": {
+    "message": "Scale"
+  },
+  "exportQuality": {
+    "message": "Quality"
+  },
+  "exportTarget": {
+    "message": "Target size (KB)"
+  },
+  "exportTargetNone": {
+    "message": "No target"
+  },
+  "exportBackground": {
+    "message": "Background (transparency)"
+  },
+  "pdfPage": {
+    "message": "PDF page"
+  },
+  "pdfOriginal": {
+    "message": "Image size"
+  },
+  "pdfA4": {
+    "message": "A4"
+  },
+  "pdfLetter": {
+    "message": "Letter"
+  },
+  "pdfMargin": {
+    "message": "Margin"
+  },
+  "exportNotePng": {
+    "message": "PNG is lossless and has no quality setting: lower the scale to make it smaller."
+  },
+  "exportNotePdf": {
+    "message": "The PDF keeps the image lossless. Long images are split across several pages without cutting rows."
+  },
+  "exportNoteLossy": {
+    "message": "JPEG and WebP lose quality when compressed. The size shown is the real file. With a target size, the highest quality that fits is used."
+  },
+  "exportCalculating": {
+    "message": "Calculating the real size…"
+  },
+  "exportOriginal": {
+    "message": "Original"
+  },
+  "exportResult": {
+    "message": "Exported"
+  },
+  "exportPages": {
+    "message": "pages"
+  },
+  "exportTargetMet": {
+    "message": "target met"
+  },
+  "exportTargetMissed": {
+    "message": "target not reached even at minimum quality: lower the scale too"
+  },
+  "exportUnsupported": {
+    "message": "This browser can't produce that format."
+  },
+  "exportDownload": {
+    "message": "Download"
+  },
+  "exportCopy": {
+    "message": "Copy PNG"
+  },
+  "exportOpen": {
+    "message": "Export"
+  },
+  "exportCopied": {
+    "message": "Copied to clipboard"
+  },
+  "exportCopyError": {
+    "message": "Couldn't copy to the clipboard"
   }
 }

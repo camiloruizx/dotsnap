@@ -229,11 +229,15 @@ export function defaultSizes(imageWidth: number) {
 
 const pad = (n: number) => String(n).padStart(2, '0');
 /** Nombre de descarga: solo caracteres seguros, sin rutas ni datos de la página. */
-export function buildFileName(prefix: string, date: Date): string {
+export function buildFileName(
+  prefix: string,
+  date: Date,
+  extension = 'png',
+): string {
   const safe =
     prefix
       .toLowerCase()
       .replace(/[^a-z0-9-]/g, '')
       .slice(0, 24) || 'captura';
-  return `${safe}-${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}-${pad(date.getHours())}${pad(date.getMinutes())}${pad(date.getSeconds())}.png`;
+  return `${safe}-${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}-${pad(date.getHours())}${pad(date.getMinutes())}${pad(date.getSeconds())}.${extension}`;
 }
