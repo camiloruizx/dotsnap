@@ -14,6 +14,7 @@ export default defineConfig({
   srcDir: 'src',
   outDir: testBuild ? '.output-test' : '.output',
   modules: ['@wxt-dev/module-react'],
+  vite: () => ({ define: { __DOTSNAP_TEST__: JSON.stringify(testBuild) } }),
   imports: false,
   manifest: ({ command }) => ({
     name: '__MSG_productName__',

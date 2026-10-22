@@ -1,5 +1,11 @@
 import type { CaptureResponse } from '../messaging';
 import { putCapture, purgeExpired } from '../storage/captures';
+import {
+  captureScale,
+  toPixelCrop,
+  type Rectangle,
+  type Size,
+} from '../geometry/crop';
 import { decodeDataUrl } from './dataUrl';
 import { mapCaptureError, withinBudget } from './errors';
 
@@ -23,7 +29,45 @@ async function activeTab() {
   return tab?.id !== undefined && tab.windowId !== undefined ? tab : undefined;
 }
 
-export async function captureVisible(): Promise<CaptureResponse> {
+export interface CaptureOptions {
+  /** Si se indica, la pestaña activa debe ser esta; si no, se descarta la captura. */
+  tabId?: number;
+  /** Región en px CSS del viewport; se recorta con la escala medida del bitmap. */
+  crop?: { region: Rectangle; viewport: Size };
+}
+
+/** Recorta el bitmap a la región; null si la geometría es inválida o queda vacía. */
+async function cropBlob(
+  bitmap: ImageBitmap,
+  crop: NonNullable<CaptureOptions['crop']>,
+): Promise<Blob | null> {
+  try {
+    const scale = captureScale(bitmap, crop.viewport);
+    const box = toPixelCrop(crop.region, scale, bitmap);
+    if (box.width < 1 || box.height < 1) return null;
+    const canvas = new OffscreenCanvas(box.width, box.height);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+    ctx.drawImage(
+      bitmap,
+      box.x,
+      box.y,
+      box.width,
+      box.height,
+      0,
+      0,
+      box.width,
+      box.height,
+    );
+    return await canvas.convertToBlob({ type: 'image/png' });
+  } catch {
+    return null;
+  }
+}
+
+export async function captureVisible(
+  options: CaptureOptions = {},
+): Promise<CaptureResponse> {
   if (running) return fail('busy');
   running = true;
   try {
@@ -41,6 +85,8 @@ export async function captureVisible(): Promise<CaptureResponse> {
       await purgeExpired();
       const tab = await activeTab();
       if (!tab) return fail('noTab');
+      if (options.tabId !== undefined && tab.id !== options.tabId)
+        return fail('tabChanged');
       let dataUrl: string;
       try {
         dataUrl = await chrome.tabs.captureVisibleTab(tab.windowId, {
@@ -53,11 +99,18 @@ export async function captureVisible(): Promise<CaptureResponse> {
       }
       // Si el foco cambió durante la captura, el bitmap podría ser de otra pestaña.
       if ((await activeTab())?.id !== tab.id) return fail('tabChanged');
-      const blob = decodeDataUrl(dataUrl);
+      let blob = decodeDataUrl(dataUrl);
       const bitmap = await createImageBitmap(blob);
-      const fits = withinBudget(bitmap.width, bitmap.height);
-      bitmap.close();
-      if (!fits) return fail('tooLarge');
+      try {
+        if (options.crop) {
+          const cropped = await cropBlob(bitmap, options.crop);
+          if (!cropped) return fail('failed');
+          blob = cropped;
+        } else if (!withinBudget(bitmap.width, bitmap.height))
+          return fail('tooLarge');
+      } finally {
+        bitmap.close();
+      }
       const id = await putCapture(blob);
       await chrome.tabs.create({
         url: chrome.runtime.getURL(`/editor.html?capture=${id}`),

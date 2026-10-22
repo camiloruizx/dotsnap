@@ -30,4 +30,10 @@ El lockfile fija las versiones resueltas. Instalación de herramientas npm requi
 
 No hay costes, servicios ni decisiones de privacidad pendientes que impidan M0. M1 fue autorizado por el usuario el 21/10/2026; M2 requiere aprobación explícita.
 
-Los logs de evidencia se conservan tal como salieron, incluido el espaciado de consola.
+Git no tenía identidad configurada en este entorno. El primer commit usa identidad técnica explícita «Codex <codex@localhost>» solo para ese comando, sin atribuirlo al usuario ni cambiar su configuración global. Decisión reversible; puede corregirse la autoría antes de publicar. Los logs de evidencia se conservan tal como salieron, incluido espaciado de consola.
+
+| Overlay de selección en shadow DOM con estilos por CSSOM | Una CSP estricta de la página bloquea `<style>` en línea pero no los estilos asignados por CSSOM; el shadow DOM aísla estilos | Implementada; reversible |
+| En modo elemento el overlay intercepta el puntero | Sobre un iframe el navegador no entrega eventos a la ventana padre; se usa `elementsFromPoint` y se descarta el propio host | Implementada; reversible |
+| Región cancelada por scroll; elemento revalidado | Una región en coordenadas de viewport deja de corresponder al contenido al desplazarse | Implementada; reversible |
+| `preventDefault` solo en eventos de ratón, no en pointer events | Cancelar `pointerdown` suprime los `mousedown/mouseup` posteriores | Implementada |
+| Lupa y temporizador fuera de M2 | La lupa necesitaría una captura previa de la pestaña; el temporizador no tiene versión asignada (C-05) | Aplazadas |

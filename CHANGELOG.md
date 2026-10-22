@@ -1,5 +1,14 @@
 # Cambios
 
+## 0.3.0 — 2026-10-22
+
+M2: región y elemento inteligente.
+
+- **Región:** arrastra un rectángulo sobre la página, ajústalo con ocho tiradores, muévelo arrastrando o con las flechas (Shift ×10, Ctrl redimensiona) y confirma con Enter o el botón; Escape cancela. Se muestra el tamaño en px CSS.
+- **Elemento inteligente:** el hover resalta el elemento sin alterar la página; ↑ elige el padre y ↓ vuelve al hijo; clic o Enter captura. Los iframes se seleccionan completos y se avisa de que no se puede entrar.
+- El recorte usa la escala medida del bitmap (válido con zoom y alta densidad). El script se inyecta solo tras el gesto y solo en esa pestaña; no hay `content_scripts` permanentes ni permisos de hosts.
+- Pendiente: lupa de la región y temporizador.
+
 ## 0.2.0 — 2026-10-21
 
 - Censura con tres estilos: sólido (predeterminado, el único que no deja rastro), pixelado y desenfocado. Pixelado y desenfoque usan bloques y radios proporcionales a la zona, con mínimos que impiden leer texto, y el resultado es siempre opaco. El estilo sólido sigue siendo el recomendado para datos sensibles.

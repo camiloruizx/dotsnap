@@ -12,7 +12,7 @@
     "message": "Choose a capture mode"
   },
   "unavailable": {
-    "message": "Visible area is available. Other modes arrive in later milestones."
+    "message": "Visible area, region and element are available. Full page arrives in a later milestone."
   },
   "visible": {
     "message": "Visible area"
@@ -31,6 +31,21 @@
   },
   "elementHint": {
     "message": "A block on the page"
+  },
+  "selectHintRegion": {
+    "message": "Drag to choose a region · arrows move it (Ctrl resizes) · Enter captures · Esc cancels"
+  },
+  "selectHintElement": {
+    "message": "Click an element · ↑ parent · ↓ child · Enter captures · Esc cancels"
+  },
+  "selectConfirm": {
+    "message": "Capture"
+  },
+  "selectCancel": {
+    "message": "Cancel"
+  },
+  "selectIframe": {
+    "message": "Embedded frame: it can't be entered; the whole frame is captured"
   },
   "fullPage": {
     "message": "Full page"

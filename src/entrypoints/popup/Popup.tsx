@@ -4,11 +4,13 @@ import { product } from '../../shared/config/product';
 import {
   parseCaptureResponse,
   type CaptureErrorCode,
+  type SelectionMode,
 } from '../../shared/messaging';
 import { Brand } from '../../shared/ui/Brand';
 import { Icon } from '../../shared/ui/Icon';
 
-const futureModes = ['region', 'element', 'fullPage'] as const;
+const futureModes = ['fullPage'] as const;
+const selectionModes = ['region', 'element'] as const;
 const errorKey: Record<CaptureErrorCode, MessageKey> = {
   restricted: 'errorRestricted',
   quota: 'errorQuota',
@@ -27,15 +29,16 @@ export function Popup() {
     document.title = product.name;
   }, []);
 
-  async function captureVisible() {
+  async function run(
+    request:
+      | { version: 1; type: 'capture-visible' }
+      | { version: 1; type: 'start-selection'; mode: SelectionMode },
+  ) {
     setBusy(true);
     setError(null);
     try {
       const response = parseCaptureResponse(
-        await chrome.runtime.sendMessage({
-          version: 1,
-          type: 'capture-visible',
-        }),
+        await chrome.runtime.sendMessage(request),
       );
       if (response.ok) window.close();
       else setError(response.code);
@@ -59,13 +62,29 @@ export function Popup() {
             className="mode"
             disabled={busy}
             title={t('visibleHint')}
-            onClick={() => void captureVisible()}
+            onClick={() => void run({ version: 1, type: 'capture-visible' })}
           >
             <Icon name="visible" />
             <span className="mode-title">{t('visible')}</span>
             <span className="hint">{t('visibleHint')}</span>
             <span className="soon">{t(busy ? 'capturing' : 'available')}</span>
           </button>
+          {selectionModes.map((mode) => (
+            <button
+              key={mode}
+              className="mode"
+              disabled={busy}
+              title={t(`${mode}Hint` as MessageKey)}
+              onClick={() =>
+                void run({ version: 1, type: 'start-selection', mode })
+              }
+            >
+              <Icon name={mode} />
+              <span className="mode-title">{t(mode)}</span>
+              <span className="hint">{t(`${mode}Hint` as MessageKey)}</span>
+              <span className="soon">{t('available')}</span>
+            </button>
+          ))}
           {futureModes.map((mode) => (
             <button
               key={mode}

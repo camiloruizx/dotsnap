@@ -12,7 +12,7 @@
     "message": "Elige cómo capturar"
   },
   "unavailable": {
-    "message": "Área visible disponible. Los demás modos llegan en próximos hitos."
+    "message": "Área visible, región y elemento disponibles. Página completa llega en un próximo hito."
   },
   "visible": {
     "message": "Área visible"
@@ -31,6 +31,21 @@
   },
   "elementHint": {
     "message": "Un bloque de la página"
+  },
+  "selectHintRegion": {
+    "message": "Arrastra para elegir una región · flechas la mueven (Ctrl las redimensiona) · Enter captura · Esc cancela"
+  },
+  "selectHintElement": {
+    "message": "Haz clic en un elemento · ↑ padre · ↓ hijo · Enter captura · Esc cancela"
+  },
+  "selectConfirm": {
+    "message": "Capturar"
+  },
+  "selectCancel": {
+    "message": "Cancelar"
+  },
+  "selectIframe": {
+    "message": "Marco incrustado: no se puede entrar; se captura el marco completo"
   },
   "fullPage": {
     "message": "Página completa"

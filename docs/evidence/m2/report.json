@@ -1,0 +1,48 @@
+{
+  "browser": "141.0.7390.37",
+  "runs": [
+    {
+      "dpr": 1,
+      "viewport": {
+        "w": 1000,
+        "h": 600
+      },
+      "regionScale": 1
+    },
+    {
+      "dpr": 2,
+      "viewport": {
+        "w": 1000,
+        "h": 600
+      },
+      "regionScale": 1
+    }
+  ],
+  "checks": [
+    "DPR 1: sin content scripts registrados ni overlay antes de iniciar",
+    "DPR 1: región dibujada con arrastre y lectura de tamaño en px CSS",
+    "DPR 1: tiradores, mover, flechas y Ctrl+flechas",
+    "DPR 1: Escape limpia overlay y estado, sin editor ni cambios en la página",
+    "DPR 1: recorte de región 300×240 coincide con la selección (escala medida 1)",
+    "DPR 1: el scroll cancela la región sin capturar",
+    "DPR 1: el hover resalta el elemento sin alterar layout ni DOM",
+    "DPR 1: ↑ elige el padre y ↓ vuelve al hijo",
+    "DPR 1: elemento 300×200 recortado exacto; la página no recibe el clic",
+    "DPR 1: iframe de otro origen se selecciona completo y muestra el límite",
+    "DPR 1: mensaje selection-done desde la UI de extensión se ignora",
+    "página restringida (chrome://) → restricted y sin estado",
+    "DPR 2: sin content scripts registrados ni overlay antes de iniciar",
+    "DPR 2: región dibujada con arrastre y lectura de tamaño en px CSS",
+    "DPR 2: tiradores, mover, flechas y Ctrl+flechas",
+    "DPR 2: Escape limpia overlay y estado, sin editor ni cambios en la página",
+    "DPR 2: recorte de región 300×240 coincide con la selección (escala medida 1)",
+    "DPR 2: el scroll cancela la región sin capturar",
+    "DPR 2: el hover resalta el elemento sin alterar layout ni DOM",
+    "DPR 2: ↑ elige el padre y ↓ vuelve al hijo",
+    "DPR 2: elemento 300×200 recortado exacto; la página no recibe el clic",
+    "DPR 2: iframe de otro origen se selecciona completo y muestra el límite",
+    "DPR 2: mensaje selection-done desde la UI de extensión se ignora",
+    "0 errores de consola"
+  ],
+  "consoleErrors": []
+}
