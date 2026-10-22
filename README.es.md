@@ -11,7 +11,10 @@
 - **Cuatro formas de capturar:** área visible, región (arrastra un rectángulo y ajústalo), elemento inteligente (pasa el cursor y elige un bloque de la página) y página completa (se desplaza y une los tramos).
 - **Editor:** flechas, rectángulos, texto (nueve fuentes del sistema) y censura (sólida, pixelada o desenfocada). Seleccionar, mover, redimensionar, borrar, deshacer y rehacer.
 - **Exportación:** PNG, JPEG, WebP y PDF; escala; calidad de JPEG/WebP; un **peso objetivo** que busca la mayor calidad que cabe; PDF en páginas A4, Carta o del tamaño de la imagen, que reparte las capturas largas en varias páginas sin cortar filas. El peso que se muestra es el del archivo real, junto al del PNG original.
-- **Copiar al portapapeles** como PNG y descarga con nombre de archivo automático y seguro.
+- **Copiar al portapapeles** como PNG y descarga con un nombre de archivo que puedes personalizar.
+- **Historial:** capturas recientes con miniatura; reábrelas con sus anotaciones, elimina una o todas. Se conservan 1, 7 o 30 días (tú eliges), nunca en incógnito, y se puede desactivar.
+- **Proyecto editable** (`.dotsnap.json`): guarda y reabre tu trabajo. Contiene la imagen original, así que no lo compartas como si fuera la exportación.
+- **Atajos de teclado:** Alt+Shift+V (visible), R (región), E (elemento), F (página completa).
 - Español e inglés, con tema Sistema/Claro/Oscuro.
 
 ## Privacidad y permisos
@@ -41,7 +44,7 @@ Abre una página, pulsa el icono de DotSnap y elige un modo. El editor se abre e
 - Los elementos fixed y sticky aparecen una vez, en el primer tramo. El contenido que cambia durante la captura (carruseles, vídeo, scroll infinito) se captura como está cuando pasa cada tramo.
 - Hasta 120 tramos y 12 partes por captura; por encima se rechaza antes de capturar. Cada parte respeta 8192 px por lado.
 - No se pueden capturar páginas `chrome://`, la Chrome Web Store ni otras páginas restringidas.
-- Historial, ajustes completos y atajos aún no están disponibles. Edge y versiones anteriores de Chrome no se han probado.
+- Edge y versiones anteriores de Chrome no se han probado.
 
 ## Compilación
 
@@ -62,7 +65,7 @@ npm run zip
 | `npm run lint`         | ESLint y verificación de Prettier                                                                                        |
 | `npm run typecheck`    | Tipos de WXT + TypeScript estricto                                                                                       |
 | `npm run test`         | Pruebas unitarias con Vitest (geometría, unión, exportación, PDF, preferencias)                                          |
-| `npm run test:m1`…`m4` | Pruebas de extremo a extremo en Chromium con variante de pruebas: captura, región/elemento, página completa, exportación |
+| `npm run test:m1`…`m5` | Pruebas de extremo a extremo en Chromium con variante de pruebas: captura, región/elemento, página completa, exportación |
 | `npm run test:browser` | Chrome instalado, perfil aislado, 8 vistas, axe, teclado, persistencia, errores de consola                               |
 
 Los scripts de extremo a extremo necesitan `DOTSNAP_CHROME` apuntando a un Chromium. Las notas de validación y los límites conocidos por hito están en `docs/validacion-m*.md`.

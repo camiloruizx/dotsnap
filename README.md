@@ -11,7 +11,10 @@
 - **Four ways to capture:** visible area, region (drag a rectangle and adjust it), smart element (hover and pick a block of the page) and full page (scrolls and stitches).
 - **Editor:** arrows, rectangles, text (nine system fonts), and redaction (solid, pixelate or blur). Select, move, resize, delete, undo and redo.
 - **Export:** PNG, JPEG, WebP and PDF; scale; JPEG/WebP quality; a **target size** that finds the highest quality that fits; a PDF with A4, Letter or image-size pages that splits long captures across pages without cutting rows. The size shown is that of the real file, next to the original PNG.
-- **Copy to the clipboard** as PNG, and download with a safe automatic file name.
+- **Copy to the clipboard** as PNG, and download with a file name you can template.
+- **History:** recent captures with thumbnails; reopen them with their annotations, delete one or all. Kept 1, 7 or 30 days (your choice), never in incognito, and it can be turned off.
+- **Editable project** (`.dotsnap.json`): save and reopen your work. It contains the original image, so don't share it as if it were the export.
+- **Keyboard shortcuts:** Alt+Shift+V (visible), R (region), E (element), F (full page).
 - Spanish and English, with System/Light/Dark theme.
 
 ## Privacy and permissions
@@ -41,7 +44,7 @@ Open a page, click the DotSnap icon and pick a mode. The editor opens in a new t
 - Fixed and sticky elements appear once, in the first segment. Content that changes while capturing (carousels, video, infinite scroll) is captured as it is when each segment passes.
 - Up to 120 segments and 12 parts per capture; above that it is refused before capturing. Each part stays within 8192 px per side.
 - Chrome pages (`chrome://`), the Chrome Web Store and other restricted pages cannot be captured.
-- History, full settings and shortcuts are not available yet. Edge and older Chrome versions have not been tested.
+- Edge and older Chrome versions have not been tested.
 
 ## Build
 
@@ -62,7 +65,7 @@ npm run zip
 | `npm run lint`         | ESLint and Prettier check                                                                   |
 | `npm run typecheck`    | WXT types + strict TypeScript                                                               |
 | `npm run test`         | Vitest unit tests (geometry, stitching, export, PDF, preferences)                           |
-| `npm run test:m1`…`m4` | End-to-end checks in Chromium with a test build: capture, region/element, full page, export |
+| `npm run test:m1`…`m5` | End-to-end checks in Chromium with a test build: capture, region/element, full page, export |
 | `npm run test:browser` | Installed Chrome, isolated profile, 8 views, axe, keyboard, persistence, console errors     |
 
 End-to-end scripts need `DOTSNAP_CHROME` pointing to a Chromium. Validation notes and known limits per milestone are in `docs/validacion-m*.md`.

@@ -66,7 +66,7 @@
     "message": "Idioma y apariencia"
   },
   "preferencesHint": {
-    "message": "Personaliza esta base. Los ajustes se guardan solo en este dispositivo."
+    "message": "Los ajustes se guardan solo en este dispositivo."
   },
   "openPreferences": {
     "message": "Configurar idioma y tema"
@@ -412,5 +412,110 @@
   },
   "exportClose": {
     "message": "Cerrar"
+  },
+  "historyTitle": {
+    "message": "Historial"
+  },
+  "historyEmpty": {
+    "message": "Aún no hay capturas guardadas."
+  },
+  "historyOff": {
+    "message": "El historial está desactivado en Configurar."
+  },
+  "historyIncognito": {
+    "message": "En incógnito no se guarda historial."
+  },
+  "historyOpen": {
+    "message": "Abrir"
+  },
+  "historyDelete": {
+    "message": "Eliminar"
+  },
+  "historyClear": {
+    "message": "Borrar todo"
+  },
+  "historyClearConfirm": {
+    "message": "¿Borrar todo? Pulsa de nuevo"
+  },
+  "historyEdited": {
+    "message": "con anotaciones"
+  },
+  "historyRetention": {
+    "message": "Se conservan {days} días en este dispositivo."
+  },
+  "openProject": {
+    "message": "Abrir proyecto…"
+  },
+  "projectInvalid": {
+    "message": "El archivo no es un proyecto de DotSnap válido."
+  },
+  "projectNewer": {
+    "message": "El proyecto es de una versión más nueva de DotSnap."
+  },
+  "projectTooLarge": {
+    "message": "El proyecto es demasiado grande."
+  },
+  "projectSave": {
+    "message": "Guardar proyecto editable (.dotsnap.json)"
+  },
+  "projectWarning": {
+    "message": "El proyecto contiene la imagen original: lo que está bajo una censura sigue dentro del archivo. No lo compartas como si fuera la imagen exportada."
+  },
+  "projectSaved": {
+    "message": "Proyecto guardado:"
+  },
+  "copyQuick": {
+    "message": "Copiar"
+  },
+  "settingsHistory": {
+    "message": "Historial"
+  },
+  "settingsHistoryOn": {
+    "message": "Guardar capturas recientes y sus anotaciones"
+  },
+  "settingsRetention": {
+    "message": "Conservar"
+  },
+  "retentionDays": {
+    "message": "{n} días"
+  },
+  "retentionDay": {
+    "message": "1 día"
+  },
+  "settingsExport": {
+    "message": "Exportación"
+  },
+  "settingsDefaultFormat": {
+    "message": "Formato predeterminado"
+  },
+  "settingsDefaultQuality": {
+    "message": "Calidad predeterminada (JPEG/WebP)"
+  },
+  "settingsFileName": {
+    "message": "Nombre de archivo"
+  },
+  "settingsFileNameHint": {
+    "message": "Usa {app}, {date} y {time}. Solo letras, números, guion y guion bajo."
+  },
+  "settingsShortcuts": {
+    "message": "Atajos de teclado"
+  },
+  "shortcutsNone": {
+    "message": "Sin asignar (puede haber un conflicto)"
+  },
+  "shortcutsChange": {
+    "message": "Cambiar atajos"
+  },
+  "cmdVisible": {
+    "message": "Capturar el área visible"
+  },
+  "cmdRegion": {
+    "message": "Capturar una región"
+  },
+  "cmdElement": {
+    "message": "Capturar un elemento"
+  },
+  "cmdFullpage": {
+    "message": "Capturar la página completa"
   }
 }

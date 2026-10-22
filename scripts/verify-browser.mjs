@@ -95,12 +95,12 @@ try {
           document.documentElement.dataset.theme === theme,
         { language, theme },
       );
-      // Pestañas: Captura y Configurar activas, Historial deshabilitada; cuatro modos de captura.
-      assert.equal(await popup.locator('button:disabled').count(), 1);
-      assert.equal(await popup.locator('button:enabled').count(), 6);
-      // Orden de tabulación: pestañas (Captura, Configurar) y después los cuatro modos.
+      // Tres pestañas (Captura, Historial, Configurar) y los cuatro modos de captura, todos activos.
+      assert.equal(await popup.locator('button:disabled').count(), 0);
+      assert.equal(await popup.locator('button:enabled').count(), 7);
+      // Orden de tabulación: las tres pestañas y después los cuatro modos.
       await popup.keyboard.press('Tab', { delay: 0 });
-      for (let i = 0; i < 5; i++) await popup.keyboard.press('Tab');
+      for (let i = 0; i < 6; i++) await popup.keyboard.press('Tab');
       assert.equal(await popup.locator('button.mode:focus').count(), 1);
       assert.equal(
         await popup

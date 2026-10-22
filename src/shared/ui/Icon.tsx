@@ -14,6 +14,7 @@ const paths = {
   redo: 'M15 7l5 5-5 5M20 12H9a5 5 0 0 0 0 10h3',
   trash: 'M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13',
   download: 'M12 4v11m-4-4l4 4 4-4M5 20h14',
+  copy: 'M9 9h11v11H9ZM5 15V4h11',
 } as const;
 export type IconName = keyof typeof paths;
 export function Icon({ name }: { name: IconName }) {

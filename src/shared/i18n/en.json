@@ -66,7 +66,7 @@
     "message": "Language and appearance"
   },
   "preferencesHint": {
-    "message": "Customize this foundation. Settings are saved only on this device."
+    "message": "Settings are saved only on this device."
   },
   "openPreferences": {
     "message": "Configure language and theme"
@@ -412,5 +412,110 @@
   },
   "exportClose": {
     "message": "Close"
+  },
+  "historyTitle": {
+    "message": "History"
+  },
+  "historyEmpty": {
+    "message": "No saved captures yet."
+  },
+  "historyOff": {
+    "message": "History is turned off in Settings."
+  },
+  "historyIncognito": {
+    "message": "History isn't saved in incognito."
+  },
+  "historyOpen": {
+    "message": "Open"
+  },
+  "historyDelete": {
+    "message": "Delete"
+  },
+  "historyClear": {
+    "message": "Delete all"
+  },
+  "historyClearConfirm": {
+    "message": "Delete all? Press again"
+  },
+  "historyEdited": {
+    "message": "with annotations"
+  },
+  "historyRetention": {
+    "message": "Kept {days} days on this device."
+  },
+  "openProject": {
+    "message": "Open project…"
+  },
+  "projectInvalid": {
+    "message": "The file isn't a valid DotSnap project."
+  },
+  "projectNewer": {
+    "message": "The project is from a newer DotSnap version."
+  },
+  "projectTooLarge": {
+    "message": "The project is too large."
+  },
+  "projectSave": {
+    "message": "Save editable project (.dotsnap.json)"
+  },
+  "projectWarning": {
+    "message": "The project contains the original image: whatever is under a redaction is still inside the file. Don't share it as if it were the exported image."
+  },
+  "projectSaved": {
+    "message": "Project saved:"
+  },
+  "copyQuick": {
+    "message": "Copy"
+  },
+  "settingsHistory": {
+    "message": "History"
+  },
+  "settingsHistoryOn": {
+    "message": "Save recent captures and their annotations"
+  },
+  "settingsRetention": {
+    "message": "Keep for"
+  },
+  "retentionDays": {
+    "message": "{n} days"
+  },
+  "retentionDay": {
+    "message": "1 day"
+  },
+  "settingsExport": {
+    "message": "Export"
+  },
+  "settingsDefaultFormat": {
+    "message": "Default format"
+  },
+  "settingsDefaultQuality": {
+    "message": "Default quality (JPEG/WebP)"
+  },
+  "settingsFileName": {
+    "message": "File name"
+  },
+  "settingsFileNameHint": {
+    "message": "Use {app}, {date} and {time}. Letters, numbers, hyphen and underscore only."
+  },
+  "settingsShortcuts": {
+    "message": "Keyboard shortcuts"
+  },
+  "shortcutsNone": {
+    "message": "Not assigned (there may be a conflict)"
+  },
+  "shortcutsChange": {
+    "message": "Change shortcuts"
+  },
+  "cmdVisible": {
+    "message": "Capture the visible area"
+  },
+  "cmdRegion": {
+    "message": "Capture a region"
+  },
+  "cmdElement": {
+    "message": "Capture an element"
+  },
+  "cmdFullpage": {
+    "message": "Capture the full page"
   }
 }

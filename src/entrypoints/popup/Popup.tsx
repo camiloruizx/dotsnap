@@ -9,6 +9,7 @@ import {
 import { Brand } from '../../shared/ui/Brand';
 import { Credits } from '../../shared/ui/Credits';
 import { Icon } from '../../shared/ui/Icon';
+import { History } from './History';
 import { SettingsPanel } from '../../shared/ui/SettingsPanel';
 
 const selectionModes = ['region', 'element'] as const;
@@ -24,7 +25,7 @@ const errorKey: Record<CaptureErrorCode, MessageKey> = {
 
 export function Popup() {
   const { t } = usePreferences();
-  const [tab, setTab] = useState<'capture' | 'settings'>('capture');
+  const [tab, setTab] = useState<'capture' | 'history' | 'settings'>('capture');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<CaptureErrorCode | null>(null);
   const [lastFailure, setLastFailure] = useState<{
@@ -82,7 +83,7 @@ export function Popup() {
   return (
     <div className="shell">
       <Brand />
-      <nav className="tabs" role="tablist" aria-label={t('phase')}>
+      <nav className="tabs" role="tablist" aria-label={product.name}>
         <button
           role="tab"
           id="tab-capture"
@@ -93,7 +94,13 @@ export function Popup() {
           <Icon name="visible" />
           <span>{t('captureTab')}</span>
         </button>
-        <button role="tab" disabled title={t('soon')}>
+        <button
+          role="tab"
+          id="tab-history"
+          aria-selected={tab === 'history'}
+          aria-controls="panel-history"
+          onClick={() => setTab('history')}
+        >
           <Icon name="history" />
           <span>{t('history')}</span>
         </button>
@@ -108,7 +115,9 @@ export function Popup() {
           <span>{t('configure')}</span>
         </button>
       </nav>
-      {tab === 'settings' ? (
+      {tab === 'history' ? (
+        <History />
+      ) : tab === 'settings' ? (
         <main
           id="panel-settings"
           role="tabpanel"

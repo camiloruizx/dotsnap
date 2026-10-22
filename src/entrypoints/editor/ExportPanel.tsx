@@ -29,6 +29,7 @@ interface Props {
   onDownload: (result: ExportResult) => void;
   onCopy: (png: Blob) => void;
   onClose: () => void;
+  onSaveProject: () => void;
 }
 
 const formatLabel: Record<ExportFormat, string> = {
@@ -49,9 +50,13 @@ const kb = (bytes: number) =>
     : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 
 export function ExportPanel(props: Props) {
-  const { t } = usePreferences();
+  const { t, preferences } = usePreferences();
   const { getFlat, version } = props;
-  const [options, setOptions] = useState<ExportOptions>(DEFAULT_OPTIONS);
+  const [options, setOptions] = useState<ExportOptions>(() => ({
+    ...DEFAULT_OPTIONS,
+    format: preferences.defaultFormat,
+    quality: preferences.defaultQuality / 100,
+  }));
   const [targetText, setTargetText] = useState('');
   const [preview, setPreview] = useState<Preview>({ state: 'busy' });
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -278,6 +283,11 @@ export function ExportPanel(props: Props) {
           ? ` · ${t('exportTargetMet')}`
           : ''}
       </p>
+      <details className="export-project">
+        <summary>{t('projectSave')}</summary>
+        <p className="hint">{t('projectWarning')}</p>
+        <button onClick={props.onSaveProject}>{t('projectSave')}</button>
+      </details>
       <div className="export-actions">
         <button
           className="primary"

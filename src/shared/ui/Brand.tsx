@@ -14,7 +14,7 @@ export function Brand() {
         <span className="brand-name">{product.name}</span>
         <p className="subtitle">{t('tagline')}</p>
       </div>
-      <span className="badge">{t('phase')}</span>
+      <span className="badge">v{chrome.runtime.getManifest().version}</span>
     </header>
   );
 }

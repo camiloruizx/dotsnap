@@ -1,5 +1,16 @@
 # Cambios
 
+## 0.6.0 — 2026-10-22
+
+M5: historial, proyecto editable, ajustes y atajos.
+
+- **Historial:** pestaña con las capturas recientes (miniatura, fecha, tamaño); abrir, eliminar y borrar todo. Las anotaciones se autoguardan y se restauran al reabrir. Retención de 1, 7 o 30 días y máximo de 60 capturas / 300 MB. No se guarda en incógnito y se puede desactivar.
+- **Proyecto editable** `.dotsnap.json`: guardar desde «Exportar…» (con aviso de que contiene la imagen original) y abrir desde el historial. Validación estricta; formato documentado.
+- **Configurar** dentro del popup: historial y retención, formato y calidad predeterminados, plantilla del nombre de archivo y lista de atajos.
+- **Atajos:** Alt+Shift+V (visible), R (región), E (elemento) y F (página completa).
+- Botón **Copiar** en la barra del editor.
+- La insignia del popup muestra la versión.
+
 ## 0.5.1 — 2026-10-22
 
 - El panel de exportación es ahora un **modal centrado** (Escape, ✕ o clic fuera lo cierran); los atajos del editor no se activan mientras está abierto.

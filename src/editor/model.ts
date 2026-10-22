@@ -171,6 +171,12 @@ export class History {
   get doc(): Doc {
     return this.current;
   }
+  /** Sustituye el documento (apertura de una captura guardada) y vacía deshacer/rehacer. */
+  load(doc: Doc): void {
+    this.current = doc;
+    this.undoStack = [];
+    this.redoStack = [];
+  }
   get canUndo(): boolean {
     return this.undoStack.length > 0;
   }
@@ -227,17 +233,204 @@ export function defaultSizes(imageWidth: number) {
   };
 }
 
+const MAX_ANNOTATIONS = 500;
+const MAX_COORD = 100_000;
+const num = (v: unknown, min = -MAX_COORD, max = MAX_COORD): v is number =>
+  typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max;
+
+/**
+ * Valida estrictamente anotaciones procedentes de almacenamiento o de un archivo de
+ * proyecto: tipos, claves exactas, números finitos acotados y colores hexadecimales.
+ * Devuelve null si algo no cumple (no se repara ni se acepta parcialmente).
+ */
+export function parseAnnotations(value: unknown): Annotation[] | null {
+  if (!Array.isArray(value) || value.length > MAX_ANNOTATIONS) return null;
+  const ids = new Set<string>();
+  const out: Annotation[] = [];
+  const keysOk = (o: Record<string, unknown>, keys: string[]) => {
+    const own = Object.keys(o);
+    return (
+      own.every((k) => keys.includes(k)) &&
+      keys.filter((k) => k !== 'fontFamily').every((k) => k in o)
+    );
+  };
+  for (const raw of value) {
+    if (typeof raw !== 'object' || raw === null) return null;
+    const a = raw as Record<string, unknown>;
+    if (
+      typeof a.id !== 'string' ||
+      a.id.length < 1 ||
+      a.id.length > 64 ||
+      ids.has(a.id)
+    )
+      return null;
+    ids.add(a.id);
+    const color = a.color;
+    if (a.type === 'arrow') {
+      if (
+        !keysOk(a, [
+          'id',
+          'type',
+          'x1',
+          'y1',
+          'x2',
+          'y2',
+          'color',
+          'strokeWidth',
+        ]) ||
+        !num(a.x1) ||
+        !num(a.y1) ||
+        !num(a.x2) ||
+        !num(a.y2) ||
+        typeof color !== 'string' ||
+        !isHexColor(color) ||
+        !num(a.strokeWidth, 0.5, 200)
+      )
+        return null;
+      out.push({
+        id: a.id,
+        type: 'arrow',
+        x1: a.x1,
+        y1: a.y1,
+        x2: a.x2,
+        y2: a.y2,
+        color,
+        strokeWidth: a.strokeWidth,
+      });
+    } else if (a.type === 'rect') {
+      if (
+        !keysOk(a, [
+          'id',
+          'type',
+          'x',
+          'y',
+          'width',
+          'height',
+          'color',
+          'strokeWidth',
+        ]) ||
+        !num(a.x) ||
+        !num(a.y) ||
+        !num(a.width, 0) ||
+        !num(a.height, 0) ||
+        typeof color !== 'string' ||
+        !isHexColor(color) ||
+        !num(a.strokeWidth, 0.5, 200)
+      )
+        return null;
+      out.push({
+        id: a.id,
+        type: 'rect',
+        x: a.x,
+        y: a.y,
+        width: a.width,
+        height: a.height,
+        color,
+        strokeWidth: a.strokeWidth,
+      });
+    } else if (a.type === 'text') {
+      if (
+        !keysOk(a, [
+          'id',
+          'type',
+          'x',
+          'y',
+          'text',
+          'color',
+          'fontSize',
+          'fontFamily',
+        ]) ||
+        !num(a.x) ||
+        !num(a.y) ||
+        typeof a.text !== 'string' ||
+        a.text.length > 2000 ||
+        typeof color !== 'string' ||
+        !isHexColor(color) ||
+        !num(a.fontSize, 4, 1000) ||
+        (a.fontFamily !== undefined &&
+          (typeof a.fontFamily !== 'string' || !isFontId(a.fontFamily)))
+      )
+        return null;
+      const item: TextAnnotation = {
+        id: a.id,
+        type: 'text',
+        x: a.x,
+        y: a.y,
+        text: a.text,
+        color,
+        fontSize: a.fontSize,
+      };
+      if (a.fontFamily !== undefined) item.fontFamily = a.fontFamily as FontId;
+      out.push(item);
+    } else if (a.type === 'redact') {
+      if (
+        !keysOk(a, ['id', 'type', 'mode', 'x', 'y', 'width', 'height']) ||
+        typeof a.mode !== 'string' ||
+        !isRedactMode(a.mode) ||
+        !num(a.x) ||
+        !num(a.y) ||
+        !num(a.width, 0) ||
+        !num(a.height, 0)
+      )
+        return null;
+      out.push({
+        id: a.id,
+        type: 'redact',
+        mode: a.mode,
+        x: a.x,
+        y: a.y,
+        width: a.width,
+        height: a.height,
+      });
+    } else return null;
+  }
+  return out;
+}
+
 const pad = (n: number) => String(n).padStart(2, '0');
+export const DEFAULT_FILE_TEMPLATE = '{app}-{date}-{time}';
+/** Plantilla de nombre: solo {app}, {date} y {time}; el resultado se limpia a caracteres seguros. */
+export function isValidFileTemplate(value: string): boolean {
+  return (
+    value.length >= 1 &&
+    value.length <= 60 &&
+    sanitizeName(expand(value, 'x', new Date(0))).length > 0
+  );
+}
+function expand(template: string, prefix: string, date: Date): string {
+  return template
+    .replaceAll('{app}', prefix)
+    .replaceAll(
+      '{date}',
+      `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}`,
+    )
+    .replaceAll(
+      '{time}',
+      `${pad(date.getHours())}${pad(date.getMinutes())}${pad(date.getSeconds())}`,
+    );
+}
+function sanitizeName(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9_-]/g, '')
+    .replace(/-{2,}/g, '-')
+    .slice(0, 60);
+}
 /** Nombre de descarga: solo caracteres seguros, sin rutas ni datos de la página. */
 export function buildFileName(
   prefix: string,
   date: Date,
   extension = 'png',
+  template = DEFAULT_FILE_TEMPLATE,
 ): string {
-  const safe =
+  const safePrefix =
     prefix
       .toLowerCase()
       .replace(/[^a-z0-9-]/g, '')
       .slice(0, 24) || 'captura';
-  return `${safe}-${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}-${pad(date.getHours())}${pad(date.getMinutes())}${pad(date.getSeconds())}.${extension}`;
+  const base =
+    sanitizeName(expand(template, safePrefix, date)) ||
+    sanitizeName(expand(DEFAULT_FILE_TEMPLATE, safePrefix, date));
+  return `${base}.${extension}`;
 }

@@ -4,9 +4,11 @@ import { product } from '../../shared/config/product';
 import { withinBudget } from '../../shared/capture/errors';
 import {
   deleteCapture,
-  getCapture,
+  getRecord,
   isCaptureId,
+  saveAnnotations,
 } from '../../shared/storage/captures';
+import { serializeProject } from '../../shared/export/project';
 import { Brand } from '../../shared/ui/Brand';
 import { Icon, type IconName } from '../../shared/ui/Icon';
 import { ColorCombo } from './ColorCombo';
@@ -17,6 +19,7 @@ import {
   FONTS,
   fontStack,
   isFontId,
+  parseAnnotations,
   type FontId,
 } from '../../editor/model';
 import { EditorCanvas } from '../../editor/EditorCanvas';
@@ -88,7 +91,7 @@ function readPart(search: string): { part: number; parts: number } | null {
 }
 
 export function Editor() {
-  const { t } = usePreferences();
+  const { t, preferences } = usePreferences();
   const partInfo = readPart(location.search);
   const colorNames = Object.fromEntries(
     PALETTE.map((item) => [item.id, t(colorLabel[item.id])]),
@@ -111,7 +114,14 @@ export function Editor() {
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<EditorCanvas | null>(null);
   const idRef = useRef<string | null>(null);
+  const blobRef = useRef<Blob | null>(null);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const persistRef = useRef(false);
   const [history] = useState(() => new History());
+  const preferencesRef = useRef(preferences);
+  useEffect(() => {
+    preferencesRef.current = preferences;
+  }, [preferences]);
 
   useEffect(() => {
     document.title = `${product.name} · ${t('editorTitle')}`;
@@ -125,8 +135,16 @@ export function Editor() {
     void (async () => {
       try {
         if (!isCaptureId(id)) throw new Error('missing');
-        const blob = await getCapture(id);
-        if (!blob) throw new Error('missing');
+        const record = await getRecord(id);
+        if (!record) throw new Error('missing');
+        const blob = record.blob;
+        blobRef.current = blob;
+        // El historial no se guarda en incógnito ni si el usuario lo desactivó.
+        persistRef.current =
+          preferencesRef.current.historyEnabled &&
+          !chrome.extension.inIncognitoContext;
+        const saved = parseAnnotations(record.annotations ?? []);
+        if (saved) history.load({ annotations: saved });
         const bitmap = await createImageBitmap(blob);
         if (!alive) return void bitmap.close();
         if (!withinBudget(bitmap.width, bitmap.height)) {
@@ -140,7 +158,7 @@ export function Editor() {
     return () => {
       alive = false;
     };
-  }, []);
+  }, [history]);
 
   const ready = load.kind === 'ready' ? load.bitmap : null;
   useEffect(() => {
@@ -150,6 +168,13 @@ export function Editor() {
     const canvas = new EditorCanvas(host, ready, history, {
       onChange: () => {
         setTick((value) => value + 1);
+        if (persistRef.current && idRef.current) {
+          const id = idRef.current;
+          if (saveTimer.current) clearTimeout(saveTimer.current);
+          saveTimer.current = setTimeout(() => {
+            void saveAnnotations(id, history.doc.annotations).catch(() => {});
+          }, 600);
+        }
         setSelectedFont(canvasRef.current?.selectedTextFont ?? null);
       },
       onSelection: (id) => {
@@ -226,7 +251,12 @@ export function Editor() {
     [],
   );
   function saveResult(result: ExportResult) {
-    const name = buildFileName(product.name, new Date(), result.extension);
+    const name = buildFileName(
+      product.name,
+      new Date(),
+      result.extension,
+      preferences.fileNameTemplate,
+    );
     const url = URL.createObjectURL(result.blob);
     const link = document.createElement('a');
     link.href = url;
@@ -239,6 +269,45 @@ export function Editor() {
       key: 'exported',
       extra: `${name} · ${result.width} × ${result.height} px · ${(result.blob.size / 1024).toFixed(0)} KB`,
     });
+  }
+  async function saveProject() {
+    const blob = blobRef.current;
+    const canvas = canvasRef.current;
+    if (!blob || !canvas) return;
+    try {
+      const project = await serializeProject(
+        blob,
+        history.doc.annotations,
+        canvas.width,
+        canvas.height,
+      );
+      const name = buildFileName(
+        product.name,
+        new Date(),
+        'dotsnap.json',
+        preferences.fileNameTemplate,
+      );
+      const url = URL.createObjectURL(project);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = name;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setStatus({ key: 'projectSaved', extra: name });
+    } catch {
+      setStatus({ key: 'exportError' });
+    }
+  }
+  async function copyCurrent() {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    try {
+      await copyPng(await canvas.exportPng());
+    } catch {
+      setStatus({ key: 'exportCopyError' });
+    }
   }
   async function copyPng(png: Blob) {
     try {
@@ -258,7 +327,12 @@ export function Editor() {
     setStatus({ key: 'exporting' });
     try {
       const blob = await canvas.exportPng();
-      const name = buildFileName(product.name, new Date());
+      const name = buildFileName(
+        product.name,
+        new Date(),
+        'png',
+        preferences.fileNameTemplate,
+      );
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -432,6 +506,13 @@ export function Editor() {
             <span>{t('downloadPng')}</span>
           </button>
           <button
+            disabled={exporting || typeof ClipboardItem === 'undefined'}
+            onClick={() => void copyCurrent()}
+          >
+            <Icon name="copy" />
+            <span>{t('copyQuick')}</span>
+          </button>
+          <button
             aria-expanded={exportOpen}
             onClick={() => setExportOpen((open) => !open)}
           >
@@ -456,6 +537,7 @@ export function Editor() {
             onDownload={saveResult}
             onCopy={(png) => void copyPng(png)}
             onClose={() => setExportOpen(false)}
+            onSaveProject={() => void saveProject()}
           />
         ) : null}
         <div className="canvas-frame">

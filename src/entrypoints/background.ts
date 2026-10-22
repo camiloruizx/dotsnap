@@ -10,7 +10,18 @@ import {
   startSelection,
 } from '../shared/capture/selection';
 
+/** Atajos de teclado: Chrome concede activeTab a la pestaña activa al pulsarlos. */
+const shortcuts: Record<string, () => Promise<unknown>> = {
+  'capture-visible': () => captureVisible(),
+  'capture-region': () => startSelection('region'),
+  'capture-element': () => startSelection('element'),
+  'capture-fullpage': () => startFullPage(),
+};
+
 export default defineBackground(() => {
+  chrome.commands.onCommand.addListener((command) => {
+    void shortcuts[command]?.().catch(() => {});
+  });
   chrome.runtime.onMessage.addListener((message: unknown, sender, respond) => {
     // Mensajes del content script (la página no puede enviarlos): remitente ligado a la pestaña de la selección.
     if (

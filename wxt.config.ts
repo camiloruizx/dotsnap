@@ -24,6 +24,26 @@ export default defineConfig({
     permissions: ['activeTab', 'scripting', 'storage'],
     ...(testBuild ? { host_permissions: ['<all_urls>'] } : {}),
     incognito: 'split',
+    // Máximo de cuatro atajos sugeridos; si chocan con otros, Chrome los deja sin asignar y la
+    // pantalla de Configurar lo muestra.
+    commands: {
+      'capture-visible': {
+        suggested_key: { default: 'Alt+Shift+V' },
+        description: '__MSG_cmdVisible__',
+      },
+      'capture-region': {
+        suggested_key: { default: 'Alt+Shift+R' },
+        description: '__MSG_cmdRegion__',
+      },
+      'capture-element': {
+        suggested_key: { default: 'Alt+Shift+E' },
+        description: '__MSG_cmdElement__',
+      },
+      'capture-fullpage': {
+        suggested_key: { default: 'Alt+Shift+F' },
+        description: '__MSG_cmdFullpage__',
+      },
+    },
     action: { default_title: '__MSG_productName__' },
     content_security_policy: {
       // Producción: sin conexiones de red. En `wxt` (serve) se omite connect-src

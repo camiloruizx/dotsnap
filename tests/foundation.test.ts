@@ -144,8 +144,23 @@ describe('límites de confianza', () => {
   it('normaliza preferencias corruptas sin propagar datos extra', () => {
     expect(
       parsePreferences({ language: 'fr', theme: '<script>', extra: true }),
-    ).toEqual({ language: 'system', theme: 'system' });
-    expect(parsePreferences({ language: 'en', theme: 'dark' })).toEqual({
+    ).toMatchObject({ language: 'system', theme: 'system' });
+    expect(
+      Object.keys(
+        parsePreferences({ language: 'fr', theme: '<script>', extra: true }),
+      ).sort(),
+    ).toEqual(
+      [
+        'language',
+        'theme',
+        'historyEnabled',
+        'retentionDays',
+        'defaultFormat',
+        'defaultQuality',
+        'fileNameTemplate',
+      ].sort(),
+    );
+    expect(parsePreferences({ language: 'en', theme: 'dark' })).toMatchObject({
       language: 'en',
       theme: 'dark',
     });
