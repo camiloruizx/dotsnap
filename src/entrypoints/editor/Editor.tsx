@@ -481,7 +481,7 @@ export function Editor() {
             </label>
           ) : null}
         </div>
-        <div className="tool-row">
+        <div className="tool-row tool-actions">
           <button
             title={`${t('undo')} (Ctrl+Z)`}
             disabled={!history.canUndo}
@@ -497,14 +497,6 @@ export function Editor() {
           >
             <Icon name="redo" />
             <span>{t('redo')}</span>
-          </button>
-          <button
-            title={`${t('deleteItem')} (Del)`}
-            disabled={!selected}
-            onClick={() => canvasRef.current?.deleteSelected()}
-          >
-            <Icon name="trash" />
-            <span>{t('deleteItem')}</span>
           </button>
           <button
             className="primary"
@@ -527,7 +519,18 @@ export function Editor() {
           >
             <span>{t('exportOpen')}…</span>
           </button>
+          <span className="tool-spacer" aria-hidden="true" />
           <button
+            className="danger"
+            title={`${t('deleteItem')} (Del)`}
+            disabled={!selected}
+            onClick={() => canvasRef.current?.deleteSelected()}
+          >
+            <Icon name="trash" />
+            <span>{t('deleteItem')}</span>
+          </button>
+          <button
+            className="danger"
             title={t('discardHint')}
             onClick={() => void discard()}
             onBlur={() => setConfirmDiscard(false)}

@@ -566,7 +566,6 @@ button:disabled:not(.mode) {
 }
 @keyframes toast-in {
   from {
-    opacity: 0;
     transform: translateY(8px);
   }
   to {
@@ -578,4 +577,18 @@ button:disabled:not(.mode) {
   .toast {
     animation: none;
   }
+}
+
+.tool-actions {
+  flex: 1 1 100%;
+}
+.tool-spacer {
+  flex: 1;
+}
+button.danger {
+  color: var(--error);
+  border-color: var(--error);
+}
+button.danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--error) 14%, transparent);
 }

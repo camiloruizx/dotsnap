@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.6.2 — 2026-10-22
+
+- Barra del editor reordenada: Deshacer y Rehacer, luego Descargar PNG, Copiar y Exportar…, y al final a la derecha **Eliminar** y **Descartar** en rojo, separados de las acciones seguras.
+
 ## 0.6.1 — 2026-10-22
 
 - **Avisos tipo toast** abajo a la derecha para confirmar acciones: copiar, descargar, exportar, guardar proyecto, eliminar/borrar historial, abrir un proyecto y guardar un ajuste; los errores se muestran en rojo y duran más. Se cierran solos o con ✕. Sustituyen a la línea de estado del pie del editor.
