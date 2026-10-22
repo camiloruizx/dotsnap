@@ -1,5 +1,12 @@
 # Cambios
 
+## Sin publicar — preparación de la tienda (M6)
+
+- Licencia **MIT** y política de privacidad bilingüe (`PRIVACY.md`).
+- Textos de la ficha, justificación de permisos y respuestas de privacidad en `store/ficha.md`.
+- Capturas 1280×800 y mosaicos promocionales en español e inglés (`npm run store:assets`).
+- Guía de publicación y pasos pendientes en `docs/publicacion.md`.
+
 ## 1.0.0 — 2026-10-22
 
 Primera versión estable. Reúne todo lo hecho desde 0.4.2 (M4, M5, avisos, barra reordenada) más las mejoras finales.

@@ -2,6 +2,9 @@
   "name": "dotsnap",
   "version": "1.0.0",
   "private": true,
+  "license": "MIT",
+  "author": "Juan Camilo Ruiz Gallegos",
+  "homepage": "https://github.com/camiloruizx/dotsnap",
   "type": "module",
   "engines": {
     "node": ">=22.12.0 <25"
@@ -24,6 +27,7 @@
     "test:m4": "node scripts/build-test.mjs && node scripts/verify-m4.mjs",
     "test:m5": "node scripts/build-test.mjs && node scripts/verify-m5.mjs",
     "test:tools": "node scripts/build-test.mjs && node scripts/verify-tools.mjs",
+    "store:assets": "node scripts/build-test.mjs && node scripts/store-assets.mjs",
     "test:extras": "node scripts/build-test.mjs && node scripts/verify-extras.mjs"
   },
   "dependencies": {

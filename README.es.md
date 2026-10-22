@@ -79,4 +79,4 @@ Los scripts de extremo a extremo necesitan `DOTSNAP_CHROME` apuntando a un Chrom
 
 ## Licencia
 
-Aún sin decidir; el proyecto es privado hasta elegir la licencia de distribución.
+[MIT](LICENSE) © 2026 Juan Camilo Ruiz Gallegos. Política de privacidad: [PRIVACY.md](PRIVACY.md).

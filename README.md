@@ -79,4 +79,4 @@ End-to-end scripts need `DOTSNAP_CHROME` pointing to a Chromium. Validation note
 
 ## License
 
-Not decided yet; the project is private until the distribution license is chosen.
+[MIT](LICENSE) © 2026 Juan Camilo Ruiz Gallegos. Privacy policy: [PRIVACY.md](PRIVACY.md).
