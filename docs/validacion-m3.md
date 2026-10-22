@@ -45,3 +45,7 @@ Estado: **verificado en Chromium 141 con la variante de pruebas; el gesto real d
 4. Pulsa Escape a mitad: la página debe volver exactamente a su posición y aspecto.
 5. Una página muy larga (varios miles de píxeles de alto): debe abrir varias pestañas "Parte n de N".
 6. Una página `chrome://` o la tienda: debe mostrar el error de página restringida.
+
+## Fallo "!" en Chrome real (0.4.1)
+
+En la primera prueba manual la captura de página completa terminó con el icono en «!». No se reprodujo en Chromium automatizado; desde 0.4.1 el popup muestra la causa y un detalle técnico (`ready-timeout`, `send:fp-scroll:…`, `grab`, etc.) para localizar el punto exacto.

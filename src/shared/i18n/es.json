@@ -283,5 +283,41 @@
   },
   "exportError": {
     "message": "No se pudo generar el PNG. Inténtalo de nuevo."
+  },
+  "lastFailure": {
+    "message": "Última captura de página completa: {message} (detalle técnico: {detail})"
+  },
+  "font": {
+    "message": "Fuente"
+  },
+  "fontSans": {
+    "message": "Sistema (Sans)"
+  },
+  "fontArial": {
+    "message": "Arial"
+  },
+  "fontVerdana": {
+    "message": "Verdana"
+  },
+  "fontTrebuchet": {
+    "message": "Trebuchet"
+  },
+  "fontSerif": {
+    "message": "Georgia (Serif)"
+  },
+  "fontTimes": {
+    "message": "Times New Roman"
+  },
+  "fontMono": {
+    "message": "Monoespaciada"
+  },
+  "fontHandwriting": {
+    "message": "Manuscrita"
+  },
+  "fontImpact": {
+    "message": "Impact"
+  },
+  "createdBy": {
+    "message": "Creado por"
   }
 }

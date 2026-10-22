@@ -7,6 +7,7 @@ import {
   type SelectionMode,
 } from '../../shared/messaging';
 import { Brand } from '../../shared/ui/Brand';
+import { Credits } from '../../shared/ui/Credits';
 import { Icon } from '../../shared/ui/Icon';
 
 const selectionModes = ['region', 'element'] as const;
@@ -24,9 +25,37 @@ export function Popup() {
   const { t } = usePreferences();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<CaptureErrorCode | null>(null);
+  const [lastFailure, setLastFailure] = useState<string | null>(null);
   useEffect(() => {
     document.title = product.name;
-  }, []);
+    // Un fallo de página completa ocurre con el popup cerrado: aquí se explica la causa.
+    void (async () => {
+      try {
+        const key = 'fullpage.lastFailure';
+        const stored = (await chrome.storage.session.get(key))[key] as
+          { code?: unknown; detail?: unknown; at?: unknown } | undefined;
+        if (
+          typeof stored?.code === 'string' &&
+          typeof stored.at === 'number' &&
+          Date.now() - stored.at < 600_000 &&
+          stored.code in errorKey
+        )
+          setLastFailure(
+            t('lastFailure')
+              .replace(
+                '{message}',
+                t(errorKey[stored.code as CaptureErrorCode]),
+              )
+              .replace(
+                '{detail}',
+                String(stored.detail ?? '').slice(0, 120) || stored.code,
+              ),
+          );
+      } catch {
+        /* sin almacenamiento de sesión */
+      }
+    })();
+  }, [t]);
 
   async function run(
     request:
@@ -100,6 +129,11 @@ export function Popup() {
         <p role="alert" className={error ? 'status error' : 'status'}>
           {error ? t(errorKey[error]) : ''}
         </p>
+        {lastFailure && !error ? (
+          <p className="hint" role="status">
+            {lastFailure}
+          </p>
+        ) : null}
         <nav className="future-nav" aria-label={t('phase')}>
           {(['settings', 'history'] as const).map((item) => (
             <button key={item} disabled title={t('soon')}>
@@ -120,7 +154,10 @@ export function Popup() {
           <span aria-hidden="true">↗</span>
         </a>
       </main>
-      <footer>{t('localOnly')}</footer>
+      <footer>
+        {t('localOnly')}
+        <Credits />
+      </footer>
     </div>
   );
 }

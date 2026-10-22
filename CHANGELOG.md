@@ -1,5 +1,12 @@
 # Cambios
 
+## 0.4.1 — 2026-10-22
+
+- Pie de créditos «Creado por Camilo Ruiz · acrocode.dev · GitHub» en el popup y las opciones (enlaces que abren en pestaña nueva; sin permisos nuevos).
+- Texto: combo de **fuente** con nueve fuentes del sistema (Sistema, Arial, Verdana, Trebuchet, Georgia, Times New Roman, monoespaciada, manuscrita, Impact), cada opción en su propia fuente. Aparece con la herramienta Texto o al seleccionar un texto, y cambiarla actualiza ese texto (se deshace con Ctrl+Z).
+- **Descartar** ahora cierra la pestaña del editor en lugar de dejar una pantalla con datos de la extensión.
+- Página completa: cuando falla, el popup muestra la causa y un detalle técnico del último fallo (el icono solo muestra «!»), para poder diagnosticarlo.
+
 ## 0.4.0 — 2026-10-22
 
 M3: página completa por segmentos.

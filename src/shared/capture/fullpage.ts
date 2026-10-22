@@ -47,10 +47,15 @@ interface Measure {
   scrollY: number;
 }
 
+/** Último fallo de página completa, para mostrarlo en el popup (el icono solo muestra «!»). */
+export const failureKey = 'fullpage.lastFailure';
 const fail = (code: CaptureErrorCode) =>
   ({ version: 1, ok: false, code }) as const;
 class Failure extends Error {
-  constructor(readonly code: CaptureErrorCode) {
+  constructor(
+    readonly code: CaptureErrorCode,
+    readonly detail = '',
+  ) {
     super(code);
   }
 }
@@ -74,11 +79,17 @@ async function send(
       { version: 1, requestId, ...command },
       { frameId: 0 },
     )) as Record<string, unknown> | undefined;
-    if (!response || response.ok !== true) throw new Failure('failed');
+    if (!response || response.ok !== true)
+      throw new Failure('failed', 'send-bad-response');
     return response;
   } catch (error) {
     // Una navegación o el cierre de la pestaña destruyen el agente.
-    throw error instanceof Failure ? error : new Failure('tabChanged');
+    throw error instanceof Failure
+      ? error
+      : new Failure(
+          'tabChanged',
+          `send:${String(command && (command as { type?: string }).type)}:${error instanceof Error ? error.message.slice(0, 80) : ''}`,
+        );
   }
 }
 
@@ -90,7 +101,17 @@ async function badge(text: string, color = '#0078d4'): Promise<void> {
     /* sin acción disponible */
   }
 }
-async function reportFailure(code: CaptureErrorCode): Promise<void> {
+async function reportFailure(
+  code: CaptureErrorCode,
+  detail = '',
+): Promise<void> {
+  try {
+    await chrome.storage.session.set({
+      [failureKey]: { code, detail, at: Date.now() },
+    });
+  } catch {
+    /* sin almacenamiento de sesión */
+  }
   const language = resolveLanguage(
     (await readPreferences()).language,
     chrome.i18n.getUILanguage(),
@@ -130,6 +151,7 @@ export async function startFullPage(): Promise<CaptureResponse> {
   const requestId = crypto.randomUUID();
   cancelled = false;
   let started = false;
+  await chrome.storage.session.remove(failureKey);
   try {
     await purgeExpired();
     await chrome.storage.session.set({
@@ -137,7 +159,7 @@ export async function startFullPage(): Promise<CaptureResponse> {
     });
     const ready = new Promise<string>((resolve, reject) => {
       readyWaiter = resolve;
-      setTimeout(() => reject(new Failure('failed')), 5000);
+      setTimeout(() => reject(new Failure('failed', 'ready-timeout')), 5000);
     });
     try {
       await chrome.scripting.executeScript({
@@ -145,7 +167,7 @@ export async function startFullPage(): Promise<CaptureResponse> {
         files: ['content-scripts/fullpage.js'],
       });
     } catch {
-      throw new Failure('restricted');
+      throw new Failure('restricted', 'inject-failed');
     }
     await ready;
     const raw = await send(tabId, requestId, { type: 'fp-measure' });
@@ -164,7 +186,7 @@ export async function startFullPage(): Promise<CaptureResponse> {
       m.viewportWidth < 1 ||
       m.viewportHeight < 1
     )
-      throw new Failure('failed');
+      throw new Failure('failed', 'measure-invalid');
     const pageHeight = Math.max(m.scrollHeight, m.clientHeight);
     if (tileCount(pageHeight, m.clientHeight) > MAX_TILES)
       throw new Failure('tooLarge');
@@ -178,7 +200,11 @@ export async function startFullPage(): Promise<CaptureResponse> {
     await finish(tabId, requestId);
     await release();
     const code = error instanceof Failure ? error.code : 'failed';
-    if (!started) await reportFailure(code);
+    if (!started)
+      await reportFailure(
+        code,
+        error instanceof Failure ? error.detail : 'start',
+      );
     return fail(code);
   }
 }
@@ -222,7 +248,7 @@ async function run(job: Job, release: () => Promise<void>): Promise<void> {
       source.getContext('2d')?.drawImage(canvas, 0, 0);
     }
     const blob = await source.convertToBlob({ type: 'image/png' });
-    if (!blob || blob.size === 0) throw new Failure('failed');
+    if (!blob || blob.size === 0) throw new Failure('failed', 'blob-empty');
     partIds.push(await putCapture(blob));
     canvas = null;
   };
@@ -239,10 +265,10 @@ async function run(job: Job, release: () => Promise<void>): Promise<void> {
         hideFloating: k > 0,
       });
       if (!finite(scroll.scrollY) || !finite(scroll.maxScroll))
-        throw new Failure('failed');
+        throw new Failure('failed', 'scroll-invalid');
       if (cancelled) throw new Cancelled();
       const grab = await grabVisibleTab(tabId, 3);
-      if (!grab.ok) throw new Failure(grab.code);
+      if (!grab.ok) throw new Failure(grab.code, 'grab');
       const { bitmap } = grab;
       try {
         const scale = captureScale(bitmap, viewport);
@@ -270,7 +296,7 @@ async function run(job: Job, release: () => Promise<void>): Promise<void> {
               canvas = new OffscreenCanvas(widthPx, range.end - range.start);
             }
             const ctx = canvas?.getContext('2d');
-            if (!ctx) throw new Failure('failed');
+            if (!ctx) throw new Failure('failed', 'no-context');
             ctx.drawImage(
               bitmap,
               0,
@@ -286,7 +312,8 @@ async function run(job: Job, release: () => Promise<void>): Promise<void> {
           written = tile.dstY + rows;
         }
       } catch (error) {
-        if (error instanceof RangeError) throw new Failure('failed');
+        if (error instanceof RangeError)
+          throw new Failure('failed', 'render-range');
         throw error;
       } finally {
         bitmap.close();
@@ -301,7 +328,7 @@ async function run(job: Job, release: () => Promise<void>): Promise<void> {
     }
     if (cancelled) throw new Cancelled();
     const last = parts[current];
-    if (!last || written <= 0) throw new Failure('failed');
+    if (!last || written <= 0) throw new Failure('failed', 'no-output');
     // La página pudo acortarse durante la captura: la última parte se recorta a lo escrito.
     await flush(Math.min(last.end, written) - last.start);
     const ids = partIds;
@@ -321,7 +348,13 @@ async function run(job: Job, release: () => Promise<void>): Promise<void> {
   } catch (error) {
     if (error instanceof Cancelled)
       await chrome.action.setBadgeText({ text: '' });
-    else await reportFailure(error instanceof Failure ? error.code : 'failed');
+    else
+      await reportFailure(
+        error instanceof Failure ? error.code : 'failed',
+        error instanceof Failure
+          ? error.detail
+          : `run:${error instanceof Error ? error.message.slice(0, 80) : 'unknown'}`,
+      );
   } finally {
     await finish(tabId, requestId);
     await release();

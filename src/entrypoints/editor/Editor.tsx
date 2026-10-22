@@ -10,6 +10,13 @@ import {
 import { Brand } from '../../shared/ui/Brand';
 import { Icon, type IconName } from '../../shared/ui/Icon';
 import { ColorCombo } from './ColorCombo';
+import {
+  DEFAULT_FONT,
+  FONTS,
+  fontStack,
+  isFontId,
+  type FontId,
+} from '../../editor/model';
 import { EditorCanvas } from '../../editor/EditorCanvas';
 import {
   History,
@@ -40,6 +47,17 @@ const redactLabel: Record<RedactMode, MessageKey> = {
   solid: 'redactSolid',
   pixelate: 'redactPixelate',
   blur: 'redactBlur',
+};
+const fontLabel: Record<FontId, MessageKey> = {
+  sans: 'fontSans',
+  arial: 'fontArial',
+  verdana: 'fontVerdana',
+  trebuchet: 'fontTrebuchet',
+  serif: 'fontSerif',
+  times: 'fontTimes',
+  mono: 'fontMono',
+  handwriting: 'fontHandwriting',
+  impact: 'fontImpact',
 };
 const colorLabel: Record<PaletteId, MessageKey> = {
   red: 'colorRed',
@@ -79,6 +97,8 @@ export function Editor() {
   const [redactMode, setRedactMode] = useState<RedactMode>('solid');
   const [tick, setTick] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
+  const [font, setFont] = useState<FontId>(DEFAULT_FONT);
+  const [selectedFont, setSelectedFont] = useState<FontId | null>(null);
   const [status, setStatus] = useState<{
     key: MessageKey;
     extra?: string;
@@ -125,8 +145,14 @@ export function Editor() {
     if (!ready || !host) return;
     host.dataset.textLabel = t('textFieldLabel');
     const canvas = new EditorCanvas(host, ready, history, {
-      onChange: () => setTick((value) => value + 1),
-      onSelection: setSelected,
+      onChange: () => {
+        setTick((value) => value + 1);
+        setSelectedFont(canvasRef.current?.selectedTextFont ?? null);
+      },
+      onSelection: (id) => {
+        setSelected(id);
+        setSelectedFont(canvasRef.current?.selectedTextFont ?? null);
+      },
     });
     canvasRef.current = canvas;
     return () => {
@@ -146,6 +172,9 @@ export function Editor() {
   useEffect(() => {
     canvasRef.current?.setColor(color);
   }, [color, ready]);
+  useEffect(() => {
+    canvasRef.current?.setFont(font);
+  }, [font, ready]);
 
   void tick;
 
@@ -219,6 +248,16 @@ export function Editor() {
     canvasRef.current = null;
     if (idRef.current) await deleteCapture(idRef.current).catch(() => {});
     ready?.close();
+    // Cierra esta pestaña; si el navegador no lo permite, queda el aviso de descartada.
+    try {
+      const current = await chrome.tabs.getCurrent();
+      if (current?.id !== undefined) {
+        await chrome.tabs.remove(current.id);
+        return;
+      }
+    } catch {
+      /* se muestra el aviso */
+    }
     setLoad({ kind: 'discarded' });
   }
 
@@ -277,6 +316,30 @@ export function Editor() {
             disabled={tool === 'redact'}
             onChange={setColor}
           />
+          {tool === 'text' || selectedFont !== null ? (
+            <label className="inline-field">
+              <span>{t('font')}</span>
+              <select
+                value={selectedFont ?? font}
+                style={{ fontFamily: fontStack(selectedFont ?? font) }}
+                onChange={(event) => {
+                  if (!isFontId(event.target.value)) return;
+                  setFont(event.target.value);
+                  canvasRef.current?.setFont(event.target.value);
+                }}
+              >
+                {FONTS.map((item) => (
+                  <option
+                    key={item.id}
+                    value={item.id}
+                    style={{ fontFamily: item.stack }}
+                  >
+                    {t(fontLabel[item.id])}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
           {tool === 'redact' ? (
             <label className="inline-field">
               <span>{t('redactStyle')}</span>

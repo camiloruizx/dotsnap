@@ -49,6 +49,27 @@ export interface RectAnnotation extends Base {
   color: string;
   strokeWidth: number;
 }
+/** Fuentes del sistema (sin descargas ni fuentes web): cada una con alternativas por plataforma. */
+export const FONTS = [
+  { id: 'sans', stack: 'system-ui, "Segoe UI", Roboto, Arial, sans-serif' },
+  { id: 'arial', stack: 'Arial, Helvetica, sans-serif' },
+  { id: 'verdana', stack: 'Verdana, Geneva, sans-serif' },
+  { id: 'trebuchet', stack: '"Trebuchet MS", Tahoma, sans-serif' },
+  { id: 'serif', stack: 'Georgia, "Times New Roman", serif' },
+  { id: 'times', stack: '"Times New Roman", Times, serif' },
+  { id: 'mono', stack: '"Courier New", Consolas, monospace' },
+  {
+    id: 'handwriting',
+    stack: '"Comic Sans MS", "Segoe Print", "Bradley Hand", cursive',
+  },
+  { id: 'impact', stack: 'Impact, "Arial Narrow Bold", sans-serif' },
+] as const;
+export type FontId = (typeof FONTS)[number]['id'];
+export const DEFAULT_FONT: FontId = 'sans';
+export const isFontId = (value: string): value is FontId =>
+  FONTS.some((font) => font.id === value);
+export const fontStack = (id: FontId | undefined): string =>
+  (FONTS.find((font) => font.id === id) ?? FONTS[0]).stack;
 export interface TextAnnotation extends Base {
   type: 'text';
   x: number;
@@ -56,6 +77,8 @@ export interface TextAnnotation extends Base {
   text: string;
   color: string;
   fontSize: number;
+  /** Ausente = fuente predeterminada (anotaciones anteriores). */
+  fontFamily?: FontId;
 }
 /** 'solid' es el único modo que no deja rastro; los otros dos conservan una versión borrosa. */
 export type RedactMode = 'solid' | 'pixelate' | 'blur';

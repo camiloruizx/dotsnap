@@ -3,12 +3,15 @@ import {
   History,
   addCommand,
   clampPoint,
+  DEFAULT_FONT,
   defaultSizes,
+  fontStack,
   isMeaningfulArrow,
   isMeaningfulRect,
   normalizeRect,
   removeCommand,
   type Annotation,
+  type FontId,
   type Point,
   type RedactMode,
   type Tool,
@@ -40,6 +43,7 @@ export class EditorCanvas {
   private handles: Konva.Circle[] = [];
   private tool: Tool = 'select';
   private colorValue = '#e5484d';
+  private fontValue: FontId = DEFAULT_FONT;
   private redactMode: RedactMode = 'solid';
   private selectedId: string | null = null;
   private draft: { start: Point; node: Konva.Shape } | null = null;
@@ -115,6 +119,26 @@ export class EditorCanvas {
   }
   setColor(value: string): void {
     this.colorValue = value;
+  }
+  /** Fuente para el texto nuevo; si hay un texto seleccionado, también se la aplica. */
+  setFont(value: FontId): void {
+    this.fontValue = value;
+    const target = this.selectedId ? this.find(this.selectedId) : undefined;
+    if (
+      target?.type !== 'text' ||
+      (target.fontFamily ?? DEFAULT_FONT) === value
+    )
+      return;
+    this.history.execute({
+      kind: 'update',
+      before: target,
+      after: { ...target, fontFamily: value },
+    });
+    this.changed();
+  }
+  get selectedTextFont(): FontId | null {
+    const target = this.selectedId ? this.find(this.selectedId) : undefined;
+    return target?.type === 'text' ? (target.fontFamily ?? DEFAULT_FONT) : null;
   }
   get selection(): string | null {
     return this.selectedId;
@@ -493,6 +517,10 @@ export class EditorCanvas {
     const fontSize =
       existing?.type === 'text' ? existing.fontSize : this.sizes.fontSize;
     const color = existing?.type === 'text' ? existing.color : this.colorValue;
+    const font =
+      existing?.type === 'text'
+        ? (existing.fontFamily ?? DEFAULT_FONT)
+        : this.fontValue;
     if (existingId) this.layer.findOne(`#${existingId}`)?.hide();
     this.layer.batchDraw();
     const area = document.createElement('textarea');
@@ -506,6 +534,7 @@ export class EditorCanvas {
     area.style.top = `${origin.y * this.scale}px`;
     area.style.fontSize = `${fontSize * this.scale}px`;
     area.style.color = color;
+    area.style.fontFamily = fontStack(font);
     this.container.appendChild(area);
     this.textarea = area;
     area.focus();
@@ -517,7 +546,8 @@ export class EditorCanvas {
       const value = area.value.replace(/\s+$/g, '');
       this.closeTextarea();
       if (existingId) this.layer.findOne(`#${existingId}`)?.show();
-      if (commit) this.commitText(existing, origin, value, fontSize, color);
+      if (commit)
+        this.commitText(existing, origin, value, fontSize, color, font);
       else this.layer.batchDraw();
     };
     area.addEventListener('keydown', (event) => {
@@ -541,6 +571,7 @@ export class EditorCanvas {
     value: string,
     fontSize: number,
     color: string,
+    font: FontId,
   ): void {
     if (existing?.type === 'text') {
       if (value === '') {
@@ -566,6 +597,7 @@ export class EditorCanvas {
         text: value,
         color,
         fontSize,
+        fontFamily: font,
       }),
     );
     this.changed();

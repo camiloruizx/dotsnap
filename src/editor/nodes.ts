@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import { REDACT_FILL, type Annotation } from './model';
+import { REDACT_FILL, fontStack, type Annotation } from './model';
 import { renderRedaction } from './redaction';
 
 /** Único constructor de nodos: lo usan la vista y la exportación, para que ambas dibujen igual. */
@@ -38,7 +38,7 @@ export function createNode(a: Annotation, source: ImageBitmap): Konva.Shape {
         y: a.y,
         text: a.text,
         fontSize: a.fontSize,
-        fontFamily: 'system-ui, sans-serif',
+        fontFamily: fontStack(a.fontFamily),
         lineHeight: 1.2,
         fill: a.color,
       });

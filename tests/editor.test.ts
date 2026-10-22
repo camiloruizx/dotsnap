@@ -183,3 +183,16 @@ describe('captura: datos y errores', () => {
     expect(parseCaptureResponse(undefined).ok).toBe(false);
   });
 });
+
+describe('fuentes del texto', () => {
+  it('cada fuente tiene id único y pila no vacía; lo desconocido cae en la predeterminada', async () => {
+    const { FONTS, fontStack, isFontId, DEFAULT_FONT } =
+      await import('../src/editor/model');
+    expect(new Set(FONTS.map((f) => f.id)).size).toBe(FONTS.length);
+    expect(FONTS.every((f) => f.stack.length > 0)).toBe(true);
+    expect(isFontId('mono')).toBe(true);
+    expect(isFontId('comic')).toBe(false);
+    expect(fontStack(undefined)).toBe(fontStack(DEFAULT_FONT));
+    expect(fontStack('mono')).toContain('Courier');
+  });
+});

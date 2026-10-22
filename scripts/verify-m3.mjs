@@ -96,7 +96,13 @@ async function launch(dpr) {
     acceptDownloads: true,
     ignoreDefaultArgs: ['--disable-extensions'],
     args: executablePath
-      ? [`--disable-extensions-except=${output}`, `--load-extension=${output}`]
+      ? [
+          `--disable-extensions-except=${output}`,
+          `--load-extension=${output}`,
+          ...(process.env.DOTSNAP_FORCE_DPR
+            ? [`--force-device-scale-factor=${dpr}`]
+            : []),
+        ]
       : ['--enable-unsafe-extension-debugging'],
   });
   let id;
@@ -160,7 +166,7 @@ const px = (img, x, y) =>
   );
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-for (const dpr of [1, 2]) {
+for (const dpr of (process.env.DOTSNAP_DPRS ?? '1,2').split(',').map(Number)) {
   const { context, id } = await launch(dpr);
   try {
     report.browser = context.browser().version();
