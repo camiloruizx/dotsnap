@@ -5,7 +5,6 @@
 [Español](README.es.md) · [Changelog](CHANGELOG.md) · [Docs](docs/)
 
 ![Popup](docs/evidence/popup-en-dark.png)
-![Editor](docs/evidence/m1/editor-dpr1.png)
 
 ## What it does
 

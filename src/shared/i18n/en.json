@@ -409,5 +409,8 @@
   },
   "exportCopyError": {
     "message": "Couldn't copy to the clipboard"
+  },
+  "exportClose": {
+    "message": "Close"
   }
 }

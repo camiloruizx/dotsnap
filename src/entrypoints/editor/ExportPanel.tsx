@@ -28,6 +28,7 @@ interface Props {
   sourceHeight: number;
   onDownload: (result: ExportResult) => void;
   onCopy: (png: Blob) => void;
+  onClose: () => void;
 }
 
 const formatLabel: Record<ExportFormat, string> = {
@@ -53,6 +54,7 @@ export function ExportPanel(props: Props) {
   const [options, setOptions] = useState<ExportOptions>(DEFAULT_OPTIONS);
   const [targetText, setTargetText] = useState('');
   const [preview, setPreview] = useState<Preview>({ state: 'busy' });
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const original = useRef<{ version: unknown; bytes: number } | null>(null);
   const set = (value: Partial<ExportOptions>) =>
     setOptions((previous) => ({ ...previous, ...value }));
@@ -67,6 +69,11 @@ export function ExportPanel(props: Props) {
     ...options,
     targetBytes: lossy ? targetBytes : null,
   };
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (dialog && !dialog.open) dialog.showModal();
+  }, []);
 
   useEffect(() => {
     let stale = false;
@@ -130,7 +137,26 @@ export function ExportPanel(props: Props) {
   }
 
   return (
-    <section className="export-panel" aria-label={t('exportTitle')}>
+    <dialog
+      ref={dialogRef}
+      className="export-panel"
+      aria-labelledby="export-title"
+      onClose={props.onClose}
+      onClick={(event) => {
+        if (event.target === dialogRef.current) dialogRef.current?.close();
+      }}
+    >
+      <div className="export-head">
+        <h2 id="export-title">{t('exportTitle')}</h2>
+        <button
+          className="export-close"
+          aria-label={t('exportClose')}
+          title={t('exportClose')}
+          onClick={() => dialogRef.current?.close()}
+        >
+          ✕
+        </button>
+      </div>
       <div className="export-grid">
         <label>
           {t('exportFormat')}
@@ -269,6 +295,6 @@ export function ExportPanel(props: Props) {
           {t('exportCopy')}
         </button>
       </div>
-    </section>
+    </dialog>
   );
 }

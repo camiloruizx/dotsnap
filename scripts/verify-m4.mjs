@@ -205,6 +205,39 @@ try {
   ok('PDF A4 de una página válido (pdfinfo)');
   await editor.screenshot({ path: resolve(evidence, 'panel-pdf.png') });
 
+  // --- el panel es un modal centrado: Escape lo cierra y no dispara atajos del editor
+  const dialog = editor.locator('dialog.export-panel');
+  assert.equal(await dialog.evaluate((d) => d.matches(':modal')), true);
+  const box = await dialog.boundingBox();
+  const vp = editor.viewportSize();
+  assert.ok(
+    Math.abs(box.x + box.width / 2 - vp.width / 2) < 4,
+    'centrado horizontal',
+  );
+  assert.ok(
+    Math.abs(box.y + box.height / 2 - vp.height / 2) < vp.height * 0.2,
+    'centrado vertical',
+  );
+  await pick(editor, 'Formato', 'jpeg').catch(() =>
+    pick(editor, 'Format', 'jpeg'),
+  );
+  await editor.locator('.export-grid input[type=number]').press('Backspace');
+  await editor.keyboard.press('Escape');
+  await dialog.waitFor({ state: 'detached' });
+  await editor
+    .getByRole('button', { name: /Exportar…|Export…/ })
+    .first()
+    .click();
+  await editor.locator('dialog.export-panel').waitFor();
+  await editor.locator('.export-close').click();
+  await editor.locator('dialog.export-panel').waitFor({ state: 'detached' });
+  await editor
+    .getByRole('button', { name: /Exportar…|Export…/ })
+    .first()
+    .click();
+  await editor.locator('dialog.export-panel').waitFor();
+  ok('el panel de exportación es un modal centrado; Escape y ✕ lo cierran');
+
   // --- PDF multipágina desde una página larga
   const tall = await openEditor('/tall', 'capture-fullpage');
   await pick(tall, 'Formato', 'pdf').catch(() => pick(tall, 'Format', 'pdf'));

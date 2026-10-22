@@ -414,11 +414,29 @@ button:disabled:not(.mode) {
 }
 
 .export-panel {
-  margin: var(--space-5) 0;
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  margin: auto;
   padding: var(--space-8);
+  color: var(--text);
   background: var(--surface-card);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-card);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 35%);
+}
+.export-panel::backdrop {
+  background: rgb(0 0 0 / 55%);
+}
+.export-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-8);
+}
+.export-head h2 {
+  margin: 0;
+  font-size: var(--font-label);
 }
 .export-grid {
   display: grid;

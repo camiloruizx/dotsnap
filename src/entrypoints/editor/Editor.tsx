@@ -183,7 +183,13 @@ export function Editor() {
 
   const onKey = useCallback((event: KeyboardEvent) => {
     const canvas = canvasRef.current;
-    if (!canvas || (event.target as HTMLElement)?.tagName === 'TEXTAREA')
+    const target = event.target as HTMLElement | null;
+    if (
+      !canvas ||
+      target?.tagName === 'TEXTAREA' ||
+      target?.tagName === 'INPUT' ||
+      target?.closest?.('dialog')
+    )
       return;
     const mod = event.ctrlKey || event.metaKey;
     const key = event.key.toLowerCase();
@@ -449,6 +455,7 @@ export function Editor() {
             sourceHeight={load.bitmap.height}
             onDownload={saveResult}
             onCopy={(png) => void copyPng(png)}
+            onClose={() => setExportOpen(false)}
           />
         ) : null}
         <div className="canvas-frame">

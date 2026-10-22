@@ -5,7 +5,6 @@
 [English](README.md) · [Cambios](CHANGELOG.md) · [Documentación](docs/)
 
 ![Popup](docs/evidence/popup-es-dark.png)
-![Editor](docs/evidence/m1/editor-dpr1.png)
 
 ## Qué hace
 

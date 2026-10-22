@@ -409,5 +409,8 @@
   },
   "exportCopyError": {
     "message": "No se pudo copiar al portapapeles"
+  },
+  "exportClose": {
+    "message": "Cerrar"
   }
 }

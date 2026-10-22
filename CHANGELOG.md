@@ -1,5 +1,10 @@
 # Cambios
 
+## 0.5.1 — 2026-10-22
+
+- El panel de exportación es ahora un **modal centrado** (Escape, ✕ o clic fuera lo cierran); los atajos del editor no se activan mientras está abierto.
+- README: se quitó la imagen del editor.
+
 ## 0.5.0 — 2026-10-22
 
 M4: formatos y peso.
