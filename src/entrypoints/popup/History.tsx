@@ -7,6 +7,7 @@ import {
   matchesQuery,
   renameCapture,
   MAX_NAME,
+  MAX_BYTES,
   putCapture,
   type HistoryItem,
 } from '../../shared/storage/captures';
@@ -214,10 +215,17 @@ export function History() {
             <p className="hint">{t('historyNoMatch')}</p>
           ) : null}
           <p className="hint">
-            {t('historyRetention').replace(
-              '{days}',
-              String(preferences.retentionDays),
-            )}
+            {t(
+              preferences.retentionDays === 1
+                ? 'historyRetentionOne'
+                : 'historyRetention',
+            ).replace('{days}', String(preferences.retentionDays))}
+          </p>
+          <p className="hint history-total">
+            {t('historyTotal')
+              .replace('{n}', String(items.length))
+              .replace('{size}', kb(items.reduce((s, i) => s + i.bytes, 0)))
+              .replace('{max}', kb(MAX_BYTES))}
           </p>
         </>
       )}

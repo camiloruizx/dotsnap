@@ -168,7 +168,7 @@ describe('preferencias ampliadas', () => {
     const d = parsePreferences(undefined);
     expect(d).toMatchObject({
       historyEnabled: true,
-      retentionDays: 7,
+      retentionDays: 1,
       defaultFormat: 'png',
       defaultQuality: 92,
     });

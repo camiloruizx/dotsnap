@@ -455,6 +455,12 @@
   "historyRetention": {
     "message": "Se conservan {days} días en este dispositivo."
   },
+  "historyRetentionOne": {
+    "message": "Se conserva 1 día en este dispositivo."
+  },
+  "historyTotal": {
+    "message": "Capturas guardadas: {n} · {size} de {max} como máximo"
+  },
   "openProject": {
     "message": "Abrir proyecto…"
   },

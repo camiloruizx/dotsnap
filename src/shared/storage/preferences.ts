@@ -24,7 +24,7 @@ export const defaults: Readonly<Preferences> = {
   language: 'system',
   theme: 'system',
   historyEnabled: true,
-  retentionDays: 7,
+  retentionDays: 1,
   defaultFormat: 'png',
   defaultQuality: 92,
   fileNameTemplate: DEFAULT_FILE_TEMPLATE,
@@ -49,9 +49,9 @@ export function parsePreferences(value: unknown): Preferences {
     historyEnabled:
       typeof data.historyEnabled === 'boolean' ? data.historyEnabled : true,
     retentionDays:
-      data.retentionDays === 1 || data.retentionDays === 30
+      data.retentionDays === 7 || data.retentionDays === 30
         ? data.retentionDays
-        : 7,
+        : 1,
     defaultFormat:
       format === 'jpeg' || format === 'webp' || format === 'pdf'
         ? format
