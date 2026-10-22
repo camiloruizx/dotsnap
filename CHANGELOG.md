@@ -1,5 +1,9 @@
 # Cambios
 
+## Sin publicar
+
+- Hoja de ruta mensual en `docs/hoja-de-ruta.md`.
+
 ## 1.0.1 — 2026-10-22
 
 - El historial conserva las capturas **1 día por defecto** (antes 7); se puede subir a 7 o 30 días en Configurar. Quien ya tenía guardado un plazo de 7 o 30 días lo conserva.

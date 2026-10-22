@@ -67,10 +67,10 @@ Estados posibles: Pendiente · Implementado · Probado.
 
 ## §12 Tienda
 
-| ID   | Función                                                           | Versión / hito | Implementación | Pruebas   | Nota |
-| ---- | ----------------------------------------------------------------- | -------------- | -------------- | --------- | ---- |
-| S-01 | Paquete, política de privacidad, inventario de permisos y guías   | V1 / M6        | Pendiente      | Pendiente |      |
-| S-02 | Nombre y marca revisados; icono definitivo; licencias y changelog | V1 / M6        | Pendiente      | Pendiente |      |
+| ID   | Función                                                           | Versión / hito | Implementación | Pruebas                                                                    | Nota |
+| ---- | ----------------------------------------------------------------- | -------------- | -------------- | -------------------------------------------------------------------------- | ---- |
+| S-01 | Paquete, política de privacidad, inventario de permisos y guías   | V1 / M6        | Implementado   | Revisado: PRIVACY.md, ficha, permisos justificados (`docs/publicacion.md`) |      |
+| S-02 | Nombre y marca revisados; icono definitivo; licencias y changelog | V1 / M6        | Parcial        | MIT, icono conservado, changelog; falta revisar el nombre en la tienda     |      |
 
 ## §13 Versiones posteriores
 
