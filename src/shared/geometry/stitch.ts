@@ -54,7 +54,11 @@ export function nextTile(
   const bottom = Math.round((scrollY + tileHeight) * scale);
   if (bottom <= top) return null;
   const srcY = top - Math.round(scrollY * scale);
-  if (srcY < 0) throw new RangeError('gap');
+  // El navegador puede aterrizar unas fracciones de píxel CSS más abajo de lo pedido (zoom o
+  // pantallas de alta densidad): hasta unas filas de desfase se absorben; más es un hueco real.
+  const slack = Math.ceil(scale) + 1;
+  if (srcY < -slack) throw new RangeError('gap');
+  if (srcY < 0) return { srcY: 0, dstY: top, rows: bottom - top };
   return { srcY, dstY: top, rows: bottom - top };
 }
 

@@ -95,16 +95,16 @@ try {
           document.documentElement.dataset.theme === theme,
         { language, theme },
       );
-      // M3: solo Ajustes e Historial siguen deshabilitados (capturas: visible, región, elemento y página completa).
-      assert.equal(await popup.locator('button:disabled').count(), 2);
-      assert.equal(await popup.locator('button:enabled').count(), 4);
-      // Orden de tabulación: los cuatro modos de captura y después el enlace de preferencias.
+      // Pestañas: Captura y Configurar activas, Historial deshabilitada; cuatro modos de captura.
+      assert.equal(await popup.locator('button:disabled').count(), 1);
+      assert.equal(await popup.locator('button:enabled').count(), 6);
+      // Orden de tabulación: pestañas (Captura, Configurar) y después los cuatro modos.
       await popup.keyboard.press('Tab', { delay: 0 });
-      for (let i = 0; i < 4; i++) await popup.keyboard.press('Tab');
-      assert.equal(await popup.locator('a:focus').count(), 1);
+      for (let i = 0; i < 5; i++) await popup.keyboard.press('Tab');
+      assert.equal(await popup.locator('button.mode:focus').count(), 1);
       assert.equal(
         await popup
-          .locator('a:focus')
+          .locator('button:focus')
           .evaluate((element) => getComputedStyle(element).outlineWidth),
         '2px',
       );
@@ -219,13 +219,17 @@ try {
   report.checks.push(
     'Persistencia chrome.storage.local después de recargar opciones',
   );
-  const opened = popup.waitForEvent('popup');
-  await popup.locator('a.preferences-link').click();
-  const linkedOptions = await opened;
-  await linkedOptions.locator('#language:enabled').waitFor();
-  assert.equal(linkedOptions.url(), `${base}/options.html`);
-  await linkedOptions.close();
-  report.checks.push('Enlace de preferencias abre la página real de opciones');
+  // Configurar es una pestaña dentro del popup: no abre otra ventana ni pestaña.
+  const pagesBefore = context.pages().length;
+  await popup.locator('#tab-settings').click();
+  await popup.locator('#language:enabled').waitFor();
+  assert.equal(context.pages().length, pagesBefore);
+  assert.equal(popup.url(), `${base}/popup.html`);
+  await popup.locator('#tab-capture').click();
+  await popup.locator('button.mode').first().waitFor();
+  report.checks.push(
+    'Configurar abre las preferencias dentro del popup, sin salir de la ventana',
+  );
   await options.locator('#theme').selectOption('system');
   await options.waitForFunction(
     () => document.documentElement.dataset.theme === 'system',

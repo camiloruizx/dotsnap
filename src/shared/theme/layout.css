@@ -135,11 +135,25 @@ svg {
   font-size: var(--font-badge);
   color: var(--muted);
 }
-.mode .soon {
-  border-top: var(--border-width) solid var(--border);
-  padding-top: var(--space-3);
-  margin-top: auto;
-  width: 100%;
+.tabs {
+  display: flex;
+  gap: var(--space-2);
+  border-bottom: var(--border-width) solid var(--border);
+  padding: 0 var(--space-8);
+  margin-bottom: var(--space-8);
+}
+.tabs button {
+  flex: 1;
+  background: transparent;
+  border-color: transparent;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  font-size: var(--font-small);
+  box-shadow: none;
+}
+.tabs button[aria-selected='true'] {
+  border-bottom-color: var(--accent);
+  font-weight: var(--weight-strong);
 }
 .future-nav {
   display: grid;

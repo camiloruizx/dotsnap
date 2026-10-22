@@ -4,7 +4,7 @@
   "checks": [
     "8 vistas ES/EN × claro/oscuro × popup/opciones; axe WCAG AA sin infracciones; teclado, foco, mensajes health y sin desbordamiento horizontal",
     "Persistencia chrome.storage.local después de recargar opciones",
-    "Enlace de preferencias abre la página real de opciones",
+    "Configurar abre las preferencias dentro del popup, sin salir de la ventana",
     "storage.onChanged actualiza un popup abierto al cambiar tema desde opciones",
     "Tema Sistema responde a prefers-color-scheme e idioma Sistema a chrome.i18n.getUILanguage",
     "chrome://extensions: DotSnap, ENABLED, UNPACKED; 0 errores de runtime/manifest",

@@ -313,7 +313,10 @@ async function run(job: Job, release: () => Promise<void>): Promise<void> {
         }
       } catch (error) {
         if (error instanceof RangeError)
-          throw new Failure('failed', 'render-range');
+          throw new Failure(
+            'failed',
+            `render-range:${error.message.slice(0, 40)}`,
+          );
         throw error;
       } finally {
         bitmap.close();

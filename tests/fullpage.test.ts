@@ -64,6 +64,15 @@ describe('composición por tramos', () => {
       expect(parts.every((p) => p.end - p.start <= part)).toBe(true);
     });
 
+  it('absorbe un aterrizaje unas fracciones más abajo de lo pedido y rechaza un hueco real', () => {
+    // Zoom/alta densidad: pedido 600, aterriza en 600.4 con escala 1.25 → srcY = 750 - 751 = -1.
+    expect(nextTile(600, 600.4, 600, 1.25)).toEqual({
+      srcY: 0,
+      dstY: 750,
+      rows: Math.round(1200.4 * 1.25) - 750,
+    });
+    expect(() => nextTile(600, 640, 600, 1)).toThrow('gap');
+  });
   it('la página más corta que el viewport es un único tramo', () => {
     expect(tileCount(300, 600)).toBe(1);
     expect(tileCount(600, 600)).toBe(1);

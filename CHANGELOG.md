@@ -1,5 +1,12 @@
 # Cambios
 
+## 0.4.2 — 2026-10-22
+
+- **Popup con pestañas:** Captura · Historial (próximamente) · Configurar. Configurar muestra idioma y tema dentro del mismo popup, sin abrir una pestaña a pantalla completa. Desaparecen «Ajustes», el enlace «Configurar idioma y tema», el texto «Disponible» y las líneas separadoras de las tarjetas; las tarjetas son más compactas.
+
+- **Página completa:** corregido el fallo `render-range` que aparecía al terminar la captura en pantallas con escala o zoom (p. ej. 125 %): el navegador aterrizaba unas fracciones de píxel más abajo de lo pedido y la unión lo tomaba por un hueco. Ahora se absorben desfases de unas filas; un hueco real sigue rechazándose.
+- El popup muestra el motivo del último fallo y, aparte, una línea «Detalle técnico (compártelo si reportas el problema)» con un código más preciso.
+
 ## 0.4.1 — 2026-10-22
 
 - Pie de créditos «Creado por Camilo Ruiz · acrocode.dev · GitHub» en el popup y las opciones (enlaces que abren en pestaña nueva; sin permisos nuevos).

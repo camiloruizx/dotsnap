@@ -285,7 +285,10 @@
     "message": "No se pudo generar el PNG. Inténtalo de nuevo."
   },
   "lastFailure": {
-    "message": "Última captura de página completa: {message} (detalle técnico: {detail})"
+    "message": "Última captura de página completa: {message}"
+  },
+  "technicalDetail": {
+    "message": "Detalle técnico (compártelo si reportas el problema): {detail}"
   },
   "font": {
     "message": "Fuente"
@@ -319,5 +322,11 @@
   },
   "createdBy": {
     "message": "Creado por"
+  },
+  "captureTab": {
+    "message": "Captura"
+  },
+  "configure": {
+    "message": "Configurar"
   }
 }

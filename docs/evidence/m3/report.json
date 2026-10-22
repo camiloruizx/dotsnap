@@ -12,7 +12,7 @@
     }
   ],
   "checks": [
-    "DPR 1: 5 tramos en 3360 ms (≥ 2400 ms: cola de 600 ms respetada)",
+    "DPR 1: 5 tramos en 3342 ms (≥ 2400 ms: cola de 600 ms respetada)",
     "DPR 1: imagen 1000×3000 = ancho útil × alto de página (escala medida 1)",
     "DPR 1: 29 franjas de color correctas en el centro y los bordes, sin huecos ni solapes en las costuras",
     "DPR 1: la imagen perezosa (carga con retraso) aparece cargada, no su marcador gris",
@@ -27,7 +27,7 @@
     "20 000 px → 3 partes numeradas (8192 + 8192 + 3616), cada una dentro del presupuesto, con costuras exactas",
     "página restringida (chrome://) → restricted y sin estado",
     "fullpage-cancel enviado desde la UI de extensión se ignora",
-    "DPR 2: 5 tramos en 4048 ms (≥ 2400 ms: cola de 600 ms respetada)",
+    "DPR 2: 5 tramos en 4078 ms (≥ 2400 ms: cola de 600 ms respetada)",
     "DPR 2: imagen 1000×3000 = ancho útil × alto de página (escala medida 1)",
     "DPR 2: 29 franjas de color correctas en el centro y los bordes, sin huecos ni solapes en las costuras",
     "DPR 2: la imagen perezosa (carga con retraso) aparece cargada, no su marcador gris",
